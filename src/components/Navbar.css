@@ -1,0 +1,96 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--navy);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 62px;
+}
+
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.navbar__logomark {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.navbar__wordmark {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.navbar__link {
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.65);
+  transition: var(--transition);
+}
+.navbar__link:hover          { color: #fff; background: rgba(255,255,255,0.08); }
+.navbar__link--active        { color: #fff; background: rgba(255,255,255,0.1); }
+
+.navbar__cta {
+  margin-left: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.navbar__hamburger {
+  display: none;
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition: var(--transition);
+}
+.navbar__hamburger:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+/* ─── Mobile ─── */
+@media (max-width: 768px) {
+  .navbar__hamburger { display: flex; }
+
+  .navbar__links {
+    display: none;
+    position: absolute;
+    top: 62px;
+    left: 0; right: 0;
+    background: var(--navy);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem 1.5rem 1.5rem;
+    gap: 0.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .navbar__links--open { display: flex; }
+  .navbar__link { padding: 0.65rem 0.75rem; }
+  .navbar__cta  { margin-left: 0; margin-top: 0.5rem; text-align: center; justify-content: center; }
+}
