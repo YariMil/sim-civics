@@ -2,7 +2,7 @@
 // Add new documents here. The `file` path is relative to /public/documents/
 // Set `file: null` for placeholders while documents are being uploaded.
 
-export type DocCategory = 'agenda' | 'minutes' | 'report' | 'motion' | 'notice' | 'new';
+export type DocCategory = 'agenda' | 'ordinances' | 'report' | 'motion' | 'notice' | 'new';
 
 export interface CouncilDocument {
   id: string;
@@ -18,43 +18,43 @@ export interface CouncilDocument {
 export const documents: CouncilDocument[] = [
   {
     id: 'doc-001',
-    title: 'Council Agenda — Session 4, Cycle 2',
-    description: 'Official agenda for the upcoming full council session including all motions on the floor.',
+    title: '1/15 Agenda',
+    description: 'Official agenda for the 1/15 council session including all motions on the floor.',
     category: 'agenda',
-    uploadedAt: '2026-06-04',
-    sessionLabel: 'Session 4 · Cycle 2',
-    file: 'agenda-s4c2.pdf',
-    fileSize: '210 KB',
+    uploadedAt: '2026-01-16',
+    sessionLabel: 'Session 1 · Cycle 1',
+    file: 'agenda-1_15.pdf',
+    fileSize: '89 KB',
   },
   {
     id: 'doc-002',
-    title: 'Housing Committee Meeting Minutes',
-    description: 'Approved minutes from the Housing & Homelessness Committee, May 28 session.',
-    category: 'minutes',
-    uploadedAt: '2026-05-30',
-    sessionLabel: 'Session 4 · Cycle 1',
-    file: 'minutes-housing-0528.pdf',
-    fileSize: '340 KB',
+    title: 'Ordinance 1 - Wimbishville Rules of Procedure',
+    description: 'Ordinance establishing rules of procedure for the Wimbishville City Council. Passed January 15, 2026.',
+    category: 'ordinances',
+    uploadedAt: '2026-01-16',
+    sessionLabel: 'Session 1 · Cycle 1',
+    file: 'ordinance_1_rules_of_procedure.pdf',
+    fileSize: '94 KB',
   },
   {
     id: 'doc-003',
-    title: 'Budget Allocation Report — FY2026',
-    description: 'Fiscal year overview and departmental allocation figures presented to the full council.',
-    category: 'report',
-    uploadedAt: '2026-05-15',
-    sessionLabel: 'Session 3 · Cycle 4',
-    file: 'budget-fy2026.pdf',
-    fileSize: '1.2 MB',
+    title: 'Ordinance 2 - Treasury Act',
+    description: 'An ordinance to establish rules for inattendance and a Wimbishville Treasury. Passed January 15, 2026.',
+    category: 'ordinances',
+    uploadedAt: '2026-01-16',
+    sessionLabel: 'Session 1 · Cycle 1',
+    file: null,
+    fileSize: undefined,
   },
   {
     id: 'doc-004',
-    title: 'Motion 26-041 — Transportation Infrastructure',
-    description: 'Proposed motion to authorize study of expanded bike lane network across Districts 4, 5, and 11.',
-    category: 'motion',
-    uploadedAt: '2026-06-06',
-    sessionLabel: 'Session 4 · Cycle 2',
-    file: null,
-    fileSize: undefined,
+    title: 'Ordinance 3 - Wimbishville Electoral Code',
+    description: 'Ordinance establishing an electoral code for elections within the Wimbishville City Council',
+    category: 'ordinances',
+    uploadedAt: '2026-01-16',
+    sessionLabel: 'Session 1 · Cycle 1',
+    file: 'ordinance_3_electoral_code',
+    fileSize: '83 KB',
   },
   {
     id: 'doc-005',
@@ -71,7 +71,7 @@ export const documents: CouncilDocument[] = [
 // ─── Category display config ─────────────────────────────────────
 export const categoryMeta: Record<DocCategory, { label: string; cssClass: string }> = {
   agenda:  { label: 'Agenda',  cssClass: 'badge--agenda'  },
-  minutes: { label: 'Minutes', cssClass: 'badge--minutes' },
+  ordinances: { label: 'Ordinances', cssClass: 'badge--ordinances' },
   report:  { label: 'Report',  cssClass: 'badge--report'  },
   motion:  { label: 'Motion',  cssClass: 'badge--new'     },
   notice:  { label: 'Notice',  cssClass: 'badge--report'  },

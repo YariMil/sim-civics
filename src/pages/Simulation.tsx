@@ -10,7 +10,7 @@ type FilterOption = 'all' | DocCategory;
 const filterOptions: { value: FilterOption; label: string }[] = [
   { value: 'all',     label: 'All documents' },
   { value: 'agenda',  label: 'Agendas' },
-  { value: 'minutes', label: 'Minutes' },
+  { value: 'ordinances', label: 'Ordinances' },
   { value: 'motion',  label: 'Motions' },
   { value: 'report',  label: 'Reports' },
   { value: 'notice',  label: 'Notices' },
@@ -99,14 +99,6 @@ export default function Simulation() {
                 ? sorted.map((doc) => <DocumentCard key={doc.id} doc={doc} />)
                 : <p className="body-sm" style={{ padding: '2rem 0', color: 'var(--text-muted)' }}>No documents in this category yet.</p>
               }
-            </div>
-
-            <div className="sim-upload-note">
-              <p className="label">
-                Documents are published by the Sim-Civics host. Drop your PDF files into{' '}
-                <code>public/documents/</code> and update{' '}
-                <code>src/data/documents.ts</code> to add them to the board.
-              </p>
             </div>
           </section>
         )}

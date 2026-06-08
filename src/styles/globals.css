@@ -106,7 +106,7 @@ img { max-width: 100%; display: block; }
   letter-spacing: 0.04em;
 }
 .badge--agenda   { background: var(--gold-dim);   color: #7a5010; }
-.badge--minutes  { background: #dff0e3;            color: #1e6b38; }
+.badge--ordinances  { background: #dff0e3;            color: #1e6b38; }
 .badge--report   { background: #dce9f8;            color: #1a4d8f; }
 .badge--new      { background: var(--navy-dim);    color: var(--navy); }
 .badge--explainer { background: var(--navy-dim);   color: var(--navy); }
