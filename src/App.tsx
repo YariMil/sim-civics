@@ -4,6 +4,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Simulation from './pages/Simulation';
 import Resources from './pages/Resources';
+import ModuleViewer from './pages/ModuleViewer';
 import Contact from './pages/Contact';
 import './styles/globals.css';
 
@@ -18,19 +19,24 @@ function ScrollToTop() {
 }
 
 function AppInner() {
+  const { pathname } = useLocation();
+  // ModuleViewer is full-screen — hide the shared nav/footer
+  const isViewer = pathname.startsWith('/resources/');
+
   return (
     <>
       <ScrollToTop />
-      <Navbar />
+      {!isViewer && <Navbar />}
       <Routes>
-        <Route path="/"            element={<Home />} />
-        <Route path="/simulation"  element={<Simulation />} />
-        <Route path="/resources"   element={<Resources />} />
-        <Route path="/contact"     element={<Contact />} />
+        <Route path="/"                      element={<Home />} />
+        <Route path="/simulation"            element={<Simulation />} />
+        <Route path="/resources"             element={<Resources />} />
+        <Route path="/resources/:moduleId"   element={<ModuleViewer />} />
+        <Route path="/contact"              element={<Contact />} />
         {/* Catch-all → home */}
-        <Route path="*"            element={<Home />} />
+        <Route path="*"                      element={<Home />} />
       </Routes>
-      <Footer />
+      {!isViewer && <Footer />}
     </>
   );
 }

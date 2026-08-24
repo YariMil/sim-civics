@@ -297,6 +297,29 @@
   border-color: var(--navy);
 }
 
+.res-module__start-row {
+  padding: 0 1.75rem 1rem;
+  display: flex;
+}
+
+.res-module__start-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  font-weight: 500;
+  background: var(--mod-color, var(--gold));
+  color: #fff;
+  transition: var(--transition);
+}
+.res-module__start-btn:hover {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
 /* ─── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 860px) {
   .res-layout {

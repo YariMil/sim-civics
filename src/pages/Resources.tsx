@@ -1,7 +1,8 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BookOpen, Map, Play, ClipboardCheck, PenLine,
-  ChevronRight, ChevronDown, Lock,
+  ChevronRight, ChevronDown, Lock, PlayCircle,
 } from 'lucide-react';
 import { modules, categoryMeta, type ResourceCategory } from '../data/resources';
 import './Resources.css';
@@ -128,6 +129,19 @@ export default function Resources() {
                     />
                   </div>
                 </button>
+
+                {/* Start button — sits just below the header, outside the accordion toggle */}
+                <div className="res-module__start-row">
+                  <Link
+                    to={`/resources/${mod.id}`}
+                    className="res-module__start-btn"
+                    style={{ '--mod-color': mod.color } as React.CSSProperties}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <PlayCircle size={15} aria-hidden="true" />
+                    Start module
+                  </Link>
+                </div>
 
                 {/* Module body */}
                 {isOpen && (
