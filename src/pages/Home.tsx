@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import SimCivicsNav from '../components/SimCivicsNav';
 import './Home.css';
 
 /*
   Home page — built from the Figma "Home Page" frame (Sim-Civics — Home).
 
   Links:
+    • Top tabs: Home · Simulation · Resources ("Ordinance Refiner" is a placeholder for later)
     • "City Council Simulation" → /simulation
     • "Contact Us!"            → /contact
   The other buttons (Sign Up!, Ordinance Refiner, Learn More) are placeholders
@@ -18,6 +20,9 @@ export default function Home() {
     <main className="sc-home">
       {/* ── Header: brand · logo · tagline ── */}
       <section className="sc-home__header">
+        {/* Tab navigation — Figma "nav-bar", top right of the header */}
+        <SimCivicsNav active="home" className="sc-home__nav" />
+
         <div className="sc-home__brand">
           <p className="sc-home__brand-name">Sim-Civics</p>
           <p className="sc-home__brand-subtitle">Local government, simplified</p>

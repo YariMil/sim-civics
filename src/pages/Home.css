@@ -25,6 +25,15 @@
   overflow: hidden;
 }
 
+/* Tab navigation (Figma nav-bar): top right, 65px from the edge on the 1920 frame */
+.sc-home .sc-home__nav {
+  --u: min(1px, calc(100vw / 1920));
+  position: absolute;
+  top: 0;
+  right: 3.3854%;            /* 65 / 1920 */
+  z-index: 1;
+}
+
 .sc-home__brand {
   position: absolute;
   top: 56px;
@@ -205,6 +214,12 @@
     position: static;
     width: auto;
   }
+  .sc-home .sc-home__nav {
+    position: static;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .sc-home .sc-nav__tab { min-width: 0; }
   .sc-home__brand { height: auto; }
   .sc-home__logo  { width: 335px; height: 335px; max-width: 100%; }
   .sc-home__tagline { max-width: 614px; }

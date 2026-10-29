@@ -30,41 +30,12 @@
   color: #fff;
 }
 
-/* ── Tab navigation (Figma "nav-bar") ── */
+/* ── Tab navigation (markup + tab styles live in SimCivicsNav) ── */
 .sc-top__nav {
   position: absolute;
   top: 0;
   right: calc(var(--u) * 57);
-  display: flex;
-  align-items: flex-start;
 }
-.sc-top__tab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-  height: 48px;
-  padding: 4px 12px;
-  border-bottom: 1px solid #b2b2b2;
-  border-radius: 4px 4px 0 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.4;
-  color: #fdfdfd;
-  white-space: nowrap;
-  text-decoration: none;
-}
-.sc-top__tab--home       { min-width: calc(var(--u) * 81); }
-.sc-top__tab--refiner    { min-width: calc(var(--u) * 180); }
-.sc-top__tab--simulation { min-width: calc(var(--u) * 150); }
-.sc-top__tab--resources  { min-width: calc(var(--u) * 151); }
-
-/* current page = the Figma "selected" tab (darker underline) */
-.sc-top__tab--active { border-bottom-color: #303030; }
-a.sc-top__tab:hover { background: rgba(255, 255, 255, 0.1); }
-a.sc-top__tab:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
-.sc-top__tab--inert { cursor: default; }
 
 /* ── Logo ── */
 .sc-top__logo {
@@ -96,7 +67,7 @@ a.sc-top__tab:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
     max-width: 100%;
     flex-wrap: wrap;
   }
-  .sc-top__tab { min-width: 0; }
+  .sc-top .sc-nav__tab { min-width: 0; }
 
   .sc-top__title {
     order: 2;

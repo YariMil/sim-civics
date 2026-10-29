@@ -1,0 +1,39 @@
+/* ═══════════════════════════════════════════════════════════
+   Sim-Civics tab navigation (Figma "nav-bar").
+   --u is "one Figma pixel" — parents can override it
+   (Top uses the 2378px Contact canvas, Home uses its 1920px canvas).
+   ═══════════════════════════════════════════════════════════ */
+
+.sc-nav {
+  --u: min(1px, calc(100vw / 2378));
+  display: flex;
+  align-items: flex-start;
+}
+.sc-nav__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 48px;
+  padding: 4px 12px;
+  border-bottom: 1px solid #b2b2b2;
+  border-radius: 4px 4px 0 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #fdfdfd;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.sc-nav__tab--home       { min-width: calc(var(--u) * 81); }
+.sc-nav__tab--refiner    { min-width: calc(var(--u) * 180); }
+.sc-nav__tab--simulation { min-width: calc(var(--u) * 150); }
+.sc-nav__tab--resources  { min-width: calc(var(--u) * 151); }
+.sc-nav__tab--contact-us  { min-width: calc(var(--u) * 154); }
+
+/* current page = the Figma "selected" tab (darker underline) */
+.sc-nav__tab--active { border-bottom-color: #303030; }
+a.sc-nav__tab:hover { background: rgba(255, 255, 255, 0.1); }
+a.sc-nav__tab:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+.sc-nav__tab--inert { cursor: default; }

@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { MapPin, Mail, Send, CheckCircle } from 'lucide-react';
+import { Send, CheckCircle } from 'lucide-react';
+import SimCivicsTop from '../components/SimCivicsTop';
+import SimCivicsBottom from '../components/SimCivicsBottom';
 import './Contact.css';
+
+/*
+  Contact Us — built from the Figma "Contact Us Page" frame:
+  blue top band, blue body with the intro text, red bottom band.
+  The partnership message form (not in the Figma frame) is kept to the right of the intro.
+*/
 
 type PartnerType = 'school' | 'community' | 'city-agency' | 'media' | 'individual' | 'other';
 
@@ -44,59 +52,29 @@ export default function Contact() {
   };
 
   return (
-    <main>
-      <div className="contact-hero">
-        <div className="container contact-hero__inner">
-          <p className="eyebrow">Get in touch</p>
-          <h1 className="display-sm contact-hero__title">Partnerships &amp; collaboration</h1>
-          <p className="body-lg contact-hero__sub">
-            Sim-Civics partners with schools, nonprofits, and city agencies to bring civic 
-            education to more Angelenos. Reach out to start a conversation.
-          </p>
-        </div>
-      </div>
+    <>
+      <SimCivicsTop title="Contact Us!" />
 
-      <div className="container">
-        <div className="contact-layout">
+      <main className="sc-contact">
+        <div className="sc-contact__layout">
 
-          {/* Info panel */}
-          <aside className="contact-info">
-            <h2 className="heading">Work with Sim-Civics</h2>
-            <p className="body-sm contact-info__body">
-              Whether you're a high school teacher looking to bring the simulation to your 
-              classroom, a community org working on local advocacy, or a city department 
-              exploring civic engagement — we'd love to talk.
+          {/* Intro text (Figma "contact-body") */}
+          <div className="sc-contact__intro">
+            <p>Interested in what we’re doing?</p>
+            <p>
+              We’re always looking for partners to bring civic education to more Angelenos.
+              Whether you’re a high school teacher or a community organizer, we’d love to talk.
             </p>
-
-            <div className="contact-info__details">
-              <div className="contact-detail">
-                <MapPin size={16} className="contact-detail__icon" />
-                <span>Los Angeles, California</span>
-              </div>
-              <div className="contact-detail">
-                <Mail size={16} className="contact-detail__icon" />
-                <a href="mailto:hello@simcivics.org">hello@simcivics.org</a>
-              </div>
-            </div>
-
-            <div className="contact-partnerships">
-              <p className="eyebrow contact-partnerships__label">We partner with</p>
-              <ul className="contact-partnerships__list">
-                {['K–12 schools & educators', 'Community organizations', 'City & county agencies', 'Universities & civic programs', 'Local media & journalists'].map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          </aside>
+          </div>
 
           {/* Form */}
-          <div className="contact-form-wrap">
+          <div className="sc-contact__form-wrap">
             {!submitted ? (
-              <form className="contact-form" onSubmit={handleSubmit} noValidate>
-                <h2 className="heading contact-form__title">Send us a message</h2>
+              <form className="sc-contact__form" onSubmit={handleSubmit} noValidate>
+                <h2 className="sc-contact__form-title">Send us a message</h2>
 
-                <div className="cf-row">
-                  <div className="cf-field">
+                <div className="sc-cf-row">
+                  <div className="sc-cf-field">
                     <label htmlFor="name">Name <span aria-hidden="true">*</span></label>
                     <input
                       id="name" name="name" type="text"
@@ -105,7 +83,7 @@ export default function Contact() {
                       required
                     />
                   </div>
-                  <div className="cf-field">
+                  <div className="sc-cf-field">
                     <label htmlFor="email">Email <span aria-hidden="true">*</span></label>
                     <input
                       id="email" name="email" type="email"
@@ -116,8 +94,8 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="cf-row">
-                  <div className="cf-field">
+                <div className="sc-cf-row">
+                  <div className="sc-cf-field">
                     <label htmlFor="org">Organization</label>
                     <input
                       id="org" name="org" type="text"
@@ -125,7 +103,7 @@ export default function Contact() {
                       value={form.org} onChange={handleChange}
                     />
                   </div>
-                  <div className="cf-field">
+                  <div className="sc-cf-field">
                     <label htmlFor="partnerType">Type of partnership</label>
                     <select id="partnerType" name="partnerType" value={form.partnerType} onChange={handleChange}>
                       <option value="">Select one…</option>
@@ -136,7 +114,7 @@ export default function Contact() {
                   </div>
                 </div>
 
-                <div className="cf-field">
+                <div className="sc-cf-field">
                   <label htmlFor="message">Message <span aria-hidden="true">*</span></label>
                   <textarea
                     id="message" name="message"
@@ -147,26 +125,25 @@ export default function Contact() {
                   />
                 </div>
 
-                {error && <p className="cf-error" role="alert">{error}</p>}
+                {error && <p className="sc-cf-error" role="alert">{error}</p>}
 
-                <button type="submit" className="btn btn-primary cf-submit">
-                  Send message <Send size={15} />
+                <button type="submit" className="sc-contact__btn">
+                  Send message <Send size={15} aria-hidden="true" />
                 </button>
 
-                <p className="label cf-disclaimer">
+                <p className="sc-cf-disclaimer">
                   We typically respond within 2–3 business days.
                 </p>
               </form>
             ) : (
-              <div className="cf-success" role="status">
-                <CheckCircle size={40} className="cf-success__icon" />
-                <h2 className="heading">Message received!</h2>
-                <p className="body-sm">
+              <div className="sc-contact__form sc-cf-success" role="status">
+                <CheckCircle size={40} className="sc-cf-success__icon" aria-hidden="true" />
+                <h2 className="sc-contact__form-title">Message received!</h2>
+                <p className="sc-cf-success__text">
                   Thanks for reaching out, {form.name}. We'll be in touch at {form.email} within a few business days.
                 </p>
                 <button
-                  className="btn btn-secondary"
-                  style={{ marginTop: '1.5rem' }}
+                  className="sc-contact__btn sc-contact__btn--outline"
                   onClick={() => { setSubmitted(false); setForm({ name: '', org: '', email: '', partnerType: '', message: '' }); }}
                 >
                   Send another message
@@ -176,7 +153,9 @@ export default function Contact() {
           </div>
 
         </div>
-      </div>
-    </main>
+      </main>
+
+      <SimCivicsBottom />
+    </>
   );
 }

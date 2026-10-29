@@ -2,18 +2,20 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, Map, Play, ClipboardCheck, PenLine,
-  ChevronRight, ChevronDown, Lock, PlayCircle,
+  ChevronRight, ChevronDown, PlayCircle,
 } from 'lucide-react';
+import SimCivicsTop from '../components/SimCivicsTop';
+import SimCivicsBottom from '../components/SimCivicsBottom';
 import { modules, categoryMeta, type ResourceCategory } from '../data/resources';
 import './Resources.css';
 
 // ─── Icon map ────────────────────────────────────────────────────
 const iconMap: Record<ResourceCategory, JSX.Element> = {
-  explainer: <BookOpen  size={13} aria-hidden="true" />,
-  guide:     <Map       size={13} aria-hidden="true" />,
-  video:     <Play      size={13} aria-hidden="true" />,
-  quiz:      <ClipboardCheck size={13} aria-hidden="true" />,
-  activity:  <PenLine   size={13} aria-hidden="true" />,
+  explainer: <BookOpen  size={14} aria-hidden="true" />,
+  guide:     <Map       size={14} aria-hidden="true" />,
+  video:     <Play      size={14} aria-hidden="true" />,
+  quiz:      <ClipboardCheck size={14} aria-hidden="true" />,
+  activity:  <PenLine   size={14} aria-hidden="true" />,
 };
 
 // ─── Total item count helper ─────────────────────────────────────
@@ -48,151 +50,156 @@ export default function Resources() {
   const totalItems = modules.reduce((sum, m) => sum + m.items.length, 0);
 
   return (
-    <main>
-      {/* ── Hero ── */}
-      <div className="res-hero">
-        <div className="container res-hero__inner">
-          <p className="eyebrow">Educational Resources</p>
-          <h1 className="display-sm res-hero__title">Civic Education Curriculum</h1>
-          <p className="body-lg res-hero__sub">
+    <>
+      {/* ── Top band (page title lives here, as on the other redesigned pages) ── */}
+      <SimCivicsTop title="Civic Education Curriculum" active="resources" />
+
+      <main className="sc-res">
+        {/* ── Intro ── */}
+        <div className="sc-res__intro">
+          <p className="sc-res__eyebrow">Educational Resources</p>
+          <p className="sc-res__sub">
             A structured curriculum for understanding Los Angeles city government —
             from how the Council works to how you can shape local policy.
           </p>
-          <div className="res-meta-row">
-            <span className="res-meta-chip">{modules.length} modules</span>
-            <span className="res-meta-chip">{totalItems} resources</span>
-            <span className="res-meta-chip">Self-paced</span>
+          <div className="sc-res__chips">
+            <span className="sc-tag sc-tag--blue">{modules.length} modules</span>
+            <span className="sc-tag sc-tag--green">{totalItems} resources</span>
+            <span className="sc-tag sc-tag--red">Self-paced</span>
           </div>
         </div>
-      </div>
 
-      {/* ── Layout ── */}
-      <div className="container res-layout">
+        {/* ── Layout ── */}
+        <div className="sc-res__layout">
 
-        {/* Sidebar */}
-        <aside className="res-sidebar" aria-label="Module navigation">
-          <p className="res-sidebar__heading">Curriculum</p>
-          <nav>
-            {modules.map((mod) => (
-              <button
-                key={mod.id}
-                className={`res-sidebar__item ${activeModule === mod.id ? 'res-sidebar__item--active' : ''}`}
-                onClick={() => jumpTo(mod.id)}
-                style={{ '--mod-color': mod.color } as React.CSSProperties}
-              >
-                <span className="res-sidebar__num" aria-hidden="true">
-                  {String(mod.number).padStart(2, '0')}
-                </span>
-                <span className="res-sidebar__info">
-                  <span className="res-sidebar__title">{mod.title}</span>
-                  <span className="res-sidebar__count">{itemCount(mod.items.length)}</span>
-                </span>
-              </button>
-            ))}
-          </nav>
-        </aside>
-
-        {/* Module list */}
-        <div className="res-modules">
-          {modules.map((mod) => {
-            const isOpen = openModules.has(mod.id);
-            return (
-              <section
-                key={mod.id}
-                id={mod.id}
-                className="res-module"
-                aria-labelledby={`${mod.id}-heading`}
-                style={{ '--mod-color': mod.color } as React.CSSProperties}
-              >
-                {/* Module header — click to collapse */}
+          {/* Sidebar */}
+          <aside className="sc-res__sidebar" aria-label="Module navigation">
+            <p className="sc-res__sidebar-heading">Curriculum</p>
+            <nav>
+              {modules.map((mod) => (
                 <button
-                  className="res-module__header"
-                  onClick={() => toggleModule(mod.id)}
-                  aria-expanded={isOpen}
-                  aria-controls={`${mod.id}-body`}
+                  key={mod.id}
+                  className={`sc-res__nav-item ${activeModule === mod.id ? 'sc-res__nav-item--active' : ''}`}
+                  onClick={() => jumpTo(mod.id)}
+                  style={{ '--mod-color': mod.color } as React.CSSProperties}
                 >
-                  <div className="res-module__header-left">
-                    <span className="res-module__eyebrow">
-                      Module {mod.number}
-                    </span>
-                    <h2 className="res-module__title" id={`${mod.id}-heading`}>
-                      {mod.title}
-                    </h2>
-                    <p className="res-module__subtitle">{mod.subtitle}</p>
-                  </div>
-                  <div className="res-module__header-right">
-                    <span className="res-module__count">{itemCount(mod.items.length)}</span>
-                    <ChevronDown
-                      size={18}
-                      className={`res-module__chevron ${isOpen ? 'res-module__chevron--open' : ''}`}
-                      aria-hidden="true"
-                    />
-                  </div>
+                  <span className="sc-res__nav-num" aria-hidden="true">
+                    {String(mod.number).padStart(2, '0')}
+                  </span>
+                  <span className="sc-res__nav-info">
+                    <span className="sc-res__nav-title">{mod.title}</span>
+                    <span className="sc-res__nav-count">{itemCount(mod.items.length)}</span>
+                  </span>
                 </button>
+              ))}
+            </nav>
+          </aside>
 
-                {/* Start button — sits just below the header, outside the accordion toggle */}
-                <div className="res-module__start-row">
-                  <Link
-                    to={`/resources/${mod.id}`}
-                    className="res-module__start-btn"
-                    style={{ '--mod-color': mod.color } as React.CSSProperties}
-                    onClick={(e) => e.stopPropagation()}
+          {/* Module list */}
+          <div className="sc-res__modules">
+            {modules.map((mod) => {
+              const isOpen = openModules.has(mod.id);
+              return (
+                <section
+                  key={mod.id}
+                  id={mod.id}
+                  className="sc-module"
+                  aria-labelledby={`${mod.id}-heading`}
+                  style={{ '--mod-color': mod.color } as React.CSSProperties}
+                >
+                  {/* Module header — click to collapse */}
+                  <button
+                    className="sc-module__header"
+                    onClick={() => toggleModule(mod.id)}
+                    aria-expanded={isOpen}
+                    aria-controls={`${mod.id}-body`}
                   >
-                    <PlayCircle size={15} aria-hidden="true" />
-                    Start module
-                  </Link>
-                </div>
+                    <span className="sc-module__header-left">
+                      <span className="sc-module__eyebrow">
+                        Module {mod.number}
+                      </span>
+                      <h2 className="sc-module__title" id={`${mod.id}-heading`}>
+                        {mod.title}
+                      </h2>
+                      <span className="sc-module__subtitle">{mod.subtitle}</span>
+                    </span>
+                    <span className="sc-module__header-right">
+                      <span className="sc-module__count">{itemCount(mod.items.length)}</span>
+                      <ChevronDown
+                        size={22}
+                        className={`sc-module__chevron ${isOpen ? 'sc-module__chevron--open' : ''}`}
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </button>
 
-                {/* Module body */}
-                {isOpen && (
-                  <div className="res-module__body" id={`${mod.id}-body`}>
-                    <p className="res-module__desc body-sm">{mod.description}</p>
-
-                    <ol className="res-item-list" aria-label={`Items in ${mod.title}`}>
-                      {mod.items.map((item, idx) => {
-                        const meta = categoryMeta[item.category];
-                        return (
-                          <li key={item.id} className="res-item">
-                            <div className="res-item__index" aria-hidden="true">
-                              {String(idx + 1).padStart(2, '0')}
-                            </div>
-                            <div className="res-item__body">
-                              <div className="res-item__meta">
-                                <span className={`badge ${meta.cssClass} res-item__badge`}>
-                                  {iconMap[item.category]}
-                                  {meta.label}
-                                </span>
-                                {item.isNew && (
-                                  <span className="res-item__new">New</span>
-                                )}
-                                {item.readTime && (
-                                  <span className="res-item__time">{item.readTime}</span>
-                                )}
-                              </div>
-                              <h3 className="res-item__title">{item.title}</h3>
-                              <p className="res-item__desc body-sm">{item.description}</p>
-                            </div>
-                            <button
-                              className="res-item__cta"
-                              aria-label={`Open: ${item.title}`}
-                            >
-                              {item.href
-                                ? <><span>Open</span><ChevronRight size={14} aria-hidden="true" /></>
-                                : <><span>Coming soon</span><Lock size={13} aria-hidden="true" /></>
-                              }
-                            </button>
-                          </li>
-                        );
-                      })}
-                    </ol>
+                  {/* Start button — sits just below the header, outside the accordion toggle */}
+                  <div className="sc-module__start-row">
+                    <Link
+                      to={`/resources/${mod.id}`}
+                      className="sc-btn-blue"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <PlayCircle size={16} aria-hidden="true" />
+                      Start module
+                    </Link>
                   </div>
-                )}
-              </section>
-            );
-          })}
-        </div>
 
-      </div>
-    </main>
+                  {/* Module body */}
+                  {isOpen && (
+                    <div className="sc-module__body" id={`${mod.id}-body`}>
+                      <p className="sc-module__desc">{mod.description}</p>
+
+                      <ol className="sc-item-list" aria-label={`Items in ${mod.title}`}>
+                        {mod.items.map((item, idx) => {
+                          const meta = categoryMeta[item.category];
+                          return (
+                            <li key={item.id} className="sc-item">
+                              <div className="sc-item__index" aria-hidden="true">
+                                {String(idx + 1).padStart(2, '0')}
+                              </div>
+                              <div className="sc-item__body">
+                                <div className="sc-item__meta">
+                                  <span className="sc-tag sc-tag--blue sc-tag--sm">
+                                    {iconMap[item.category]}
+                                    {meta.label}
+                                  </span>
+                                  {item.isNew && (
+                                    <span className="sc-tag sc-tag--red sc-tag--sm">New</span>
+                                  )}
+                                  {item.readTime && (
+                                    <span className="sc-item__time">{item.readTime}</span>
+                                  )}
+                                </div>
+                                <h3 className="sc-item__title">{item.title}</h3>
+                                <p className="sc-item__desc">{item.description}</p>
+                              </div>
+                              {/* Items without an href show no button */}
+                              {item.href && (
+                                <a
+                                  href={item.href}
+                                  className="sc-btn-blue sc-item__cta"
+                                  aria-label={`Open: ${item.title}`}
+                                >
+                                  <span>Open</span>
+                                  <ChevronRight size={14} aria-hidden="true" />
+                                </a>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ol>
+                    </div>
+                  )}
+                </section>
+              );
+            })}
+          </div>
+
+        </div>
+      </main>
+
+      <SimCivicsBottom />
+    </>
   );
 }

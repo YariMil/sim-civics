@@ -1,162 +1,132 @@
-.contact-hero {
-  background: var(--navy);
-  padding: 3.5rem 0 3rem;
-}
-.contact-hero__inner { max-width: 580px; }
-.contact-hero__title { color: #fff; margin-top: 0.5rem; margin-bottom: 0.75rem; }
-.contact-hero__sub   { color: rgba(255,255,255,0.6); }
+/* ═══════════════════════════════════════════════════════════
+   Contact Us — Figma "Contact Us Page" (2378px-wide canvas).
+   Blue body with white Inclusive Sans intro text; the message form
+   sits to the right as a white card. Top and bottom bands live in
+   SimCivicsTop / SimCivicsBottom. Classes are namespaced (sc-contact / sc-cf).
+   ═══════════════════════════════════════════════════════════ */
 
-/* ─── Layout ─── */
-.contact-layout {
+.sc-contact {
+  --u: min(1px, calc(100vw / 2378));
+  --sc-blue: #004aad;
+  --sc-red: #ce5555;
+
+  min-height: calc(var(--u) * 597);          /* Figma: contact-body is 597px tall */
+  background: var(--sc-blue);
+  color: #fff;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  padding: max(40px, calc(var(--u) * 131)) max(24px, calc(var(--u) * 30)) max(56px, calc(var(--u) * 100));
+}
+
+.sc-contact__layout {
   display: grid;
-  grid-template-columns: 340px 1fr;
-  gap: 4rem;
-  padding: 3rem 0 5rem;
+  grid-template-columns: minmax(0, max(calc(var(--u) * 1057), 480px)) minmax(0, 760px);
+  justify-content: start;
+  gap: max(32px, calc(var(--u) * 110));
   align-items: start;
 }
 
-/* ─── Info panel ─── */
-.contact-info { position: sticky; top: 90px; }
+/* ── Intro text (Figma: 50px, tracking -1.5px, line-height 1.2) ── */
+.sc-contact__intro {
+  font-size: max(22px, calc(var(--u) * 50));
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
 
-.contact-info .heading { margin-bottom: 0.75rem; }
-
-.contact-info__body { margin-bottom: 1.5rem; }
-
-.contact-info__details {
+/* ── Form card ── */
+.sc-contact__form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2rem;
+  gap: 18px;
+  padding: clamp(22px, 2.4vw, 40px);
+  background: #fff;
+  border-radius: 8px;
+  color: #1e1e1e;
+}
+.sc-contact__form-title {
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--sc-blue);
 }
 
-.contact-detail {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
-.contact-detail__icon { color: var(--gold); flex-shrink: 0; }
-.contact-detail a { color: var(--navy); font-weight: 500; }
-.contact-detail a:hover { color: var(--gold); }
-
-.contact-partnerships__label { margin-bottom: 0.6rem; }
-
-.contact-partnerships__list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.contact-partnerships__list li {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  padding-left: 1rem;
-  position: relative;
-}
-.contact-partnerships__list li::before {
-  content: '—';
-  position: absolute;
-  left: 0;
-  color: var(--gold);
-  font-size: 0.7rem;
-}
-
-/* ─── Form ─── */
-.contact-form-wrap {
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xl);
-  padding: 2.25rem;
-}
-
-.contact-form__title { margin-bottom: 1.5rem; }
-
-.cf-row {
+.sc-cf-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 18px;
+}
+.sc-cf-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.sc-cf-field label {
+  font-size: 17px;
+  letter-spacing: -0.01em;
+  color: #1e1e1e;
+}
+.sc-cf-field label span { color: #b53535; }
+.sc-cf-field input,
+.sc-cf-field select,
+.sc-cf-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: #f6f0f0;
+  border: 1px solid #070707;
+  border-radius: 8px;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-size: 17px;
+  color: #1e1e1e;
+}
+.sc-cf-field textarea { resize: vertical; min-height: 120px; }
+.sc-cf-field input::placeholder,
+.sc-cf-field textarea::placeholder { color: #6b6b6b; }
+.sc-cf-field input:focus,
+.sc-cf-field select:focus,
+.sc-cf-field textarea:focus {
+  outline: 3px solid var(--sc-blue);
+  outline-offset: 1px;
+  background: #fff;
 }
 
-.cf-field {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  margin-bottom: 1rem;
-}
-.cf-field:last-child { margin-bottom: 0; }
-
-.cf-field label {
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: var(--text-secondary);
-}
-.cf-field label span { color: var(--gold); }
-
-.cf-field input,
-.cf-field select,
-.cf-field textarea {
-  padding: 0.6rem 0.9rem;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-md);
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--text-primary);
-  background: var(--cream);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  outline: none;
-  resize: vertical;
-}
-.cf-field input:focus,
-.cf-field select:focus,
-.cf-field textarea:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 3px rgba(201,146,42,0.15);
-  background: var(--white);
+.sc-cf-error {
+  padding: 10px 14px;
+  background: rgba(208, 63, 63, 0.15);
+  border: 1px solid #d03f3f;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #8f2a2a;
 }
 
-.cf-error {
-  font-size: 0.82rem;
-  color: #b83434;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  background: #fdf0f0;
-  border-radius: var(--radius-sm);
-  border-left: 3px solid #b83434;
-}
-
-.cf-submit { width: 100%; justify-content: center; padding: 0.75rem; margin-top: 1.25rem; }
-
-.cf-disclaimer {
-  margin-top: 0.75rem;
-  text-align: center;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-
-/* ─── Success state ─── */
-.cf-success {
-  display: flex;
-  flex-direction: column;
+/* Blue button (same as the Home/Ordinance Refiner buttons) */
+.sc-contact__btn {
+  align-self: flex-start;
+  display: inline-flex;
   align-items: center;
-  text-align: center;
-  padding: 3rem 2rem;
-  gap: 0.75rem;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 20px;
+  background: var(--sc-blue);
+  border: 2px solid var(--sc-blue);
+  border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
 }
-.cf-success__icon { color: #2a8f4e; }
+.sc-contact__btn:hover { background: #003a8a; border-color: #003a8a; }
+.sc-contact__btn:focus-visible { outline: 3px solid #1e1e1e; outline-offset: 3px; }
+.sc-contact__btn--outline { background: transparent; color: var(--sc-blue); }
+.sc-contact__btn--outline:hover { background: rgba(0, 74, 173, 0.08); color: var(--sc-blue); border-color: var(--sc-blue); }
 
-/* ─── Responsive ─── */
-@media (max-width: 900px) {
-  .contact-layout {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  .contact-info { position: static; }
-}
+.sc-cf-disclaimer { font-size: 15px; color: #55606f; }
 
-@media (max-width: 560px) {
-  .cf-row { grid-template-columns: 1fr; }
-  .contact-form-wrap { padding: 1.5rem; }
+/* ── Success state ── */
+.sc-cf-success { align-items: flex-start; }
+.sc-cf-success__icon { color: var(--sc-blue); }
+.sc-cf-success__text { font-size: 18px; line-height: 1.4; color: #333; }
+
+/* ── Narrow screens ── */
+@media (max-width: 1100px) {
+  .sc-contact__layout { grid-template-columns: minmax(0, 1fr); }
+  .sc-contact__form-wrap { max-width: 760px; }
 }
