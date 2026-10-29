@@ -22,9 +22,10 @@ function AppInner() {
   const { pathname } = useLocation();
   // ModuleViewer is full-screen — hide the shared nav/footer
   const isViewer = pathname.startsWith('/resources/');
-  // The redesigned home page is a standalone layout (no shared nav/footer)
-  const isHome = pathname === '/';
-  const hideChrome = isViewer || isHome;
+  // Redesigned pages (Home, Simulation) bring their own top/bottom — hide the shared nav/footer
+  const path = pathname.replace(/\/+$/, '') || '/';
+  const hasOwnChrome = path === '/' || path === '/simulation';
+  const hideChrome = isViewer || hasOwnChrome;
 
   return (
     <>

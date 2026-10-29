@@ -1,184 +1,236 @@
-/* ─── Hero ─── */
-.sim-hero {
-  background: var(--navy);
-  padding: 3.5rem 0 3rem;
-}
-.sim-hero__inner { max-width: 600px; }
-.sim-hero__title { color: #fff; margin-top: 0.5rem; margin-bottom: 0.75rem; }
-.sim-hero__sub   { color: rgba(255,255,255,0.6); }
+/* ═══════════════════════════════════════════════════════════
+   City Council Simulation — red / blue theme (matches Home + Contact Us).
+   Top and bottom bands live in SimCivicsTop / SimCivicsBottom.
+   All classes are namespaced (sc-sim / sc-leader); the .doc-card
+   overrides are scoped under .sc-sim so DocumentCard stays untouched.
+   ═══════════════════════════════════════════════════════════ */
 
-/* ─── Tabs ─── */
-.sim-tabs {
-  display: flex;
-  gap: 4px;
-  border-bottom: 1px solid var(--border);
-  margin: 2rem 0 0;
-  padding-bottom: 0;
+.sc-sim {
+  --u: min(1px, calc(100vw / 2378));
+  --sc-blue: #004aad;
+  --sc-red: #ce5555;
+  --sc-blue-tint: #dce7f8;
+  --sc-red-tint: #fbe3e3;
+
+  background: var(--sc-blue);
+  color: #fff;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  padding: max(40px, calc(var(--u) * 100)) max(24px, calc(var(--u) * 53)) max(64px, calc(var(--u) * 120));
+}
+.sc-sim__inner { max-width: 1700px; }
+
+/* Intro — same treatment as the Contact Us body text */
+.sc-sim__intro {
+  max-width: max(calc(var(--u) * 1057), 560px);
+  font-size: max(22px, calc(var(--u) * 50));
+  line-height: 1.2;
+  letter-spacing: -0.03em;
 }
 
-.sim-tab {
+/* ── Tabs ── */
+.sc-sim__tabs {
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 56px;
+}
+.sc-sim__tab {
+  display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 0.6rem 1.1rem;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  font-size: 0.875rem;
-  font-weight: 400;
+  gap: 10px;
+  padding: 14px 28px;
   background: transparent;
-  border: 1px solid transparent;
-  border-bottom: none;
-  color: var(--text-secondary);
-  transition: var(--transition);
-  position: relative;
-  bottom: -1px;
+  border: 2px solid #fff;
+  border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  color: #fff;
   cursor: pointer;
 }
-.sim-tab:hover { color: var(--navy); background: var(--navy-dim); }
-.sim-tab--active {
-  color: var(--navy);
-  background: var(--cream);
-  border-color: var(--border);
-  font-weight: 500;
+.sc-sim__tab:hover { background: rgba(255, 255, 255, 0.14); }
+.sc-sim__tab--active,
+.sc-sim__tab--active:hover {
+  background: #fff;
+  color: var(--sc-blue);
 }
+.sc-sim__tab:focus-visible,
+.sc-sim__pill:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
 
-/* ─── Section ─── */
-.sim-section { padding: 2rem 0 4rem; }
-
-.sim-bulletin-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  padding-bottom: 1.25rem;
-  border-bottom: 2px solid var(--gold);
-  margin-bottom: 1.25rem;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-/* ─── Filters ─── */
-.sim-filters {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  margin-bottom: 1.25rem;
-}
-
-.sim-filter-pill {
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.78rem;
-  border: 1px solid var(--border);
-  background: var(--white);
-  color: var(--text-secondary);
-  transition: var(--transition);
-  cursor: pointer;
-}
-.sim-filter-pill:hover { border-color: var(--navy); color: var(--navy); }
-.sim-filter-pill--active {
-  background: var(--navy);
-  border-color: var(--navy);
+/* ── Section header ── */
+.sc-sim__section { margin-top: 48px; }
+.sc-sim__heading {
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: max(34px, calc(var(--u) * 64));
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   color: #fff;
 }
+.sc-sim__sub {
+  margin-top: 8px;
+  max-width: 900px;
+  font-size: 18px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
 
-/* ─── Document list ─── */
-.sim-doc-list {
+/* ── Filter pills ── */
+.sc-sim__filters {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px 0 32px;
+}
+.sc-sim__pill {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #fff;
+  cursor: pointer;
+}
+.sc-sim__pill:hover { background: rgba(255, 255, 255, 0.14); }
+.sc-sim__pill--active,
+.sc-sim__pill--active:hover {
+  background: #fff;
+  border-color: #fff;
+  color: var(--sc-blue);
 }
 
-.sim-upload-note {
-  margin-top: 2rem;
-  padding: 1rem 1.25rem;
-  background: var(--navy-dim);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--navy);
-}
-.sim-upload-note code {
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem;
-  background: rgba(13,34,64,0.08);
-  padding: 1px 5px;
-  border-radius: 3px;
-}
-
-/* ─── Leadership grid ─── */
-.sim-leadership-grid {
+/* ── Document list / roster grids ── */
+.sc-sim__doc-list,
+.sc-sim__leader-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  gap: 20px;
 }
+.sc-sim__leader-grid { margin-top: 32px; }
+.sc-sim__empty { padding: 1rem 0; font-size: 18px; }
 
-.leader-card {
-  display: flex;
-  gap: 1rem;
-  background: var(--white);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  transition: var(--transition);
+/* ── Document cards (DocumentCard.tsx, restyled from here) ── */
+.sc-sim .doc-card {
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 18px 20px;
+  box-shadow: none;
 }
-.leader-card:not(.leader-card--vacant):hover {
-  box-shadow: var(--shadow-md);
+.sc-sim .doc-card:not(.doc-card--pending):hover {
+  border-color: var(--sc-red);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
   transform: translateY(-2px);
 }
-.leader-card--vacant { opacity: 0.6; }
+.sc-sim .doc-card:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+.sc-sim .doc-card--pending { opacity: 1; background: #e9eef7; }
+.sc-sim .doc-card__icon {
+  background: var(--sc-blue-tint);
+  color: var(--sc-blue);
+}
+.sc-sim .doc-card__title {
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  color: var(--sc-blue);
+  white-space: normal;
+}
+.sc-sim .doc-card__desc { font-size: 0.95rem; color: #333; }
+.sc-sim .doc-card__session,
+.sc-sim .doc-card__date,
+.sc-sim .doc-card__size,
+.sc-sim .doc-card__pending-label { color: #55606f; }
+.sc-sim .doc-card__action { color: var(--sc-blue); }
+.sc-sim .doc-card:not(.doc-card--pending):hover .doc-card__action { color: var(--sc-red); }
 
-.leader-card__avatar {
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
+/* Badges → red tint on this page */
+.sc-sim .badge {
+  background: var(--sc-red-tint);
+  color: #8f2a2a;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+
+/* ── Leadership cards ── */
+.sc-leader {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 22px;
+  background: #fff;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: #1e1e1e;
+}
+.sc-leader__avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--navy);
   flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--sc-blue-tint);
+  color: var(--sc-blue);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
 }
-
-.leader-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
+.sc-leader--alt .sc-leader__avatar {
+  background: var(--sc-red-tint);
+  color: #8f2a2a;
 }
-
-.leader-card__role {
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+.sc-leader__body { flex: 1; min-width: 0; }
+.sc-leader__role {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--sc-red-text, #a83a3a);
 }
-
-.leader-card__name {
+.sc-leader__name {
+  margin-top: 2px;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--sc-blue);
+}
+.sc-leader__subtitle {
+  margin-top: 2px;
   font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--navy);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  color: #55606f;
 }
-.leader-card__name em {
-  font-style: italic;
-  font-weight: 300;
-  color: var(--text-muted);
+.sc-leader__desc {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
 }
+.sc-leader__badge { margin-top: 12px; }
 
-.leader-card__subtitle {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  margin-bottom: 4px;
+.sc-leader--vacant {
+  background: transparent;
+  border: 2px dashed rgba(255, 255, 255, 0.8);
+  color: #fff;
 }
-
-.leader-card__desc {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
-  line-height: 1.55;
+.sc-leader--vacant .sc-leader__avatar {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
+.sc-leader--vacant .sc-leader__role,
+.sc-leader--vacant .sc-leader__name,
+.sc-leader--vacant .sc-leader__subtitle,
+.sc-leader--vacant .sc-leader__desc { color: #fff; }
 
-@media (max-width: 640px) {
-  .sim-leadership-grid { grid-template-columns: 1fr; }
+@media (max-width: 800px) {
+  .sc-sim__tab { font-size: 17px; padding: 12px 20px; }
+  .sc-leader { padding: 18px; }
 }

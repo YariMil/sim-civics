@@ -1,0 +1,113 @@
+/* ═══════════════════════════════════════════════════════════
+   Sim-Civics Top — Figma "Contact Us Page" (2378px-wide canvas).
+   --u is "one Figma pixel": it scales every measurement with the
+   viewport (1px at 2378px wide and above), so the band keeps the
+   same proportions as the design at any desktop width.
+   ═══════════════════════════════════════════════════════════ */
+
+.sc-top {
+  --u: min(1px, calc(100vw / 2378));
+  --sc-blue: #004aad;
+  --sc-red: #ce5555;
+
+  position: relative;
+  height: max(calc(var(--u) * 389), 280px);
+  background: var(--sc-blue);
+  color: #fff;
+  overflow: hidden;
+}
+
+.sc-top__title {
+  position: absolute;
+  top: calc(var(--u) * 105);
+  left: calc(var(--u) * 53);
+  width: calc(var(--u) * 1900);
+  font-family: 'IM Fell French Canon', Georgia, serif;
+  font-weight: 400;
+  font-size: calc(var(--u) * 150);
+  line-height: 1.2;
+  letter-spacing: calc(var(--u) * -4.5);
+  color: #fff;
+}
+
+/* ── Tab navigation (Figma "nav-bar") ── */
+.sc-top__nav {
+  position: absolute;
+  top: 0;
+  right: calc(var(--u) * 57);
+  display: flex;
+  align-items: flex-start;
+}
+.sc-top__tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  height: 48px;
+  padding: 4px 12px;
+  border-bottom: 1px solid #b2b2b2;
+  border-radius: 4px 4px 0 0;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #fdfdfd;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.sc-top__tab--home       { min-width: calc(var(--u) * 81); }
+.sc-top__tab--refiner    { min-width: calc(var(--u) * 180); }
+.sc-top__tab--simulation { min-width: calc(var(--u) * 150); }
+.sc-top__tab--resources  { min-width: calc(var(--u) * 151); }
+
+/* current page = the Figma "selected" tab (darker underline) */
+.sc-top__tab--active { border-bottom-color: #303030; }
+a.sc-top__tab:hover { background: rgba(255, 255, 255, 0.1); }
+a.sc-top__tab:focus-visible { outline: 2px solid #fff; outline-offset: -2px; }
+.sc-top__tab--inert { cursor: default; }
+
+/* ── Logo ── */
+.sc-top__logo {
+  position: absolute;
+  top: max(calc(var(--u) * 62), 52px);
+  right: calc(var(--u) * 58);
+  width: calc(var(--u) * 305);
+  height: calc(var(--u) * 305);
+  max-width: none;
+  object-fit: cover;
+}
+
+/* ── Narrow screens: stack the band ── */
+@media (max-width: 1100px) {
+  .sc-top {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 12px 24px 32px;
+  }
+  .sc-top__nav,
+  .sc-top__title,
+  .sc-top__logo { position: static; }
+
+  .sc-top__nav {
+    order: 1;
+    max-width: 100%;
+    flex-wrap: wrap;
+  }
+  .sc-top__tab { min-width: 0; }
+
+  .sc-top__title {
+    order: 2;
+    width: auto;
+    font-size: clamp(44px, 10vw, 96px);
+    letter-spacing: -0.03em;
+  }
+  .sc-top__logo {
+    order: 3;
+    width: 160px;
+    height: 160px;
+    align-self: flex-end;
+  }
+}
