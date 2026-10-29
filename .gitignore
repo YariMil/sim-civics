@@ -46,3 +46,7 @@ Desktop.ini
 # Temporary files
 tmp/
 temp/
+
+# Other stuff
+.wrangler/
+.dev.vars
