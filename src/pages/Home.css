@@ -1,240 +1,237 @@
-/* ─── Hero ─── */
-.hero {
-  background: var(--navy);
+/* ═══════════════════════════════════════════════════════════
+   Home page — matches the Figma "Sim-Civics — Home" frame (1920 wide).
+   All classes are namespaced (sc-home / sc-btn) so nothing leaks
+   into the other pages.
+   ═══════════════════════════════════════════════════════════ */
+
+.sc-home {
+  --sc-blue:       #004aad;
+  --sc-red:        #ce5555;   /* Figma: sim-civics-red */
+  --sc-coral:      #fc4f4f;   /* mission background */
+  --sc-mission-hd: #0f28ec;
+  --sc-ink:        #1e1e1e;
+  --sc-btn-bg:     #2c2c2c;
+
+  background: #fff;
   color: #fff;
-  padding-bottom: 0;
+  line-height: normal;
 }
 
-.hero__inner {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3rem;
+/* ── Header (353px) ── */
+.sc-home__header {
+  position: relative;
+  height: 353px;
+  background: var(--sc-blue);
+  overflow: hidden;
+}
+
+.sc-home__brand {
+  position: absolute;
+  top: 56px;
+  left: 0;
+  width: 34.1146%;           /* 655 / 1920 */
+  height: 268px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  padding-top: 4.5rem;
-  padding-bottom: 4rem;
+  justify-content: center;
+  gap: 8px;
+  color: var(--sc-red);
+  white-space: nowrap;
+}
+.sc-home__brand-name {
+  font-family: 'Inria Serif', Georgia, serif;
+  font-weight: 700;
+  font-size: 72px;
+}
+.sc-home__brand-subtitle {
+  font-family: 'Jacques Francois', Georgia, serif;
+  font-weight: 400;
+  font-size: 28px;
 }
 
-.hero__content { max-width: 560px; }
+.sc-home__logo {
+  position: absolute;
+  top: 15px;
+  left: 41.3021%;            /* 793 / 1920 */
+  width: 335px;
+  height: 335px;
+}
+.sc-home__logo img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+}
 
-.hero__heading {
+.sc-home__tagline {
+  position: absolute;
+  top: 143px;
+  left: 66.3542%;            /* 1274 / 1920 */
+  width: 31.9792%;           /* 614 / 1920 */
+  font-family: 'Inria Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: 60px;
   color: #fff;
-  margin-top: 0.75rem;
-  margin-bottom: 1.25rem;
 }
-.hero__heading em {
+.sc-home__tagline em {
   font-style: italic;
-  color: var(--gold);
 }
 
-.hero__sub {
-  color: rgba(255,255,255,0.65);
-  margin-bottom: 2rem;
-  max-width: 480px;
-}
-
-.hero__actions {
+/* ── Hero (376px) ── */
+.sc-home__hero {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 32px;
+  height: 376px;               /* Figma: fixed 376px; actions sit 21px from the bottom */
+  padding: 72px 120px 21px;
+  background: var(--sc-blue);
 }
-
-.hero__location {
+.sc-home__hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  height: 149px;
+  flex-shrink: 0;
+  color: #fff;
+}
+.sc-home__hero-title {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1.2;
+  letter-spacing: -2.16px;
+}
+.sc-home__hero-description {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.4;
+}
+.sc-home__hero-actions {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.35);
-  margin-top: 1.5rem;
+  gap: 16px;
 }
 
-/* ── Decorative seal ── */
-.hero__decoration {
+/* ── Mission (578px) ── */
+.sc-home__mission {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  padding: 72px 120px;
+  background: var(--sc-coral);
+}
+.sc-home__mission-title {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 72px;
+  line-height: 1.2;
+  letter-spacing: -2.16px;
+  color: var(--sc-mission-hd);
+}
+.sc-home__mission-body {
+  width: 100%;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.2;
+  letter-spacing: -0.96px;
+  color: var(--sc-ink);
+}
+.sc-home__mission-actions {
+  display: flex;
+  align-items: center;
+  gap: 49px;
+}
+
+/* ── Buttons (Figma "Button" component: Primary / Medium) ── */
+.sc-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  gap: 8px;
+  padding: 12px;
+  overflow: hidden;
+  background: var(--sc-btn-bg);
+  border: 1px solid var(--sc-btn-bg);
+  border-radius: 8px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  letter-spacing: -0.48px;
+  color: #f5f5f5;
+  white-space: nowrap;
+  text-align: center;
+  text-decoration: none;
+}
+/* Buttons with no behavior yet shouldn't look clickable */
+.sc-btn--inert { cursor: default; }
+
+/* Hero row — 102px tall */
+.sc-btn--sign-up,
+.sc-btn--ordinance,
+.sc-btn--simulation { height: 102px; }
+.sc-btn--sign-up    { width: 165px; color: #fffdfd; }
+.sc-btn--ordinance  { width: 248px; }
+.sc-btn--simulation { width: 284px; }
+
+/* Mission row — 68px tall, red label */
+.sc-btn--mission {
+  width: 165px;
+  height: 68px;
+  color: var(--sc-red);
 }
 
-.hero__seal {
-  position: relative;
-  width: 180px;
-  height: 180px;
-}
-
-.hero__seal-outer {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 2px dashed rgba(201,146,42,0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: rotateSeal 30s linear infinite;
-}
-
-.hero__seal-inner {
-  width: 130px;
-  height: 130px;
-  border-radius: 50%;
-  background: rgba(201,146,42,0.1);
-  border: 1.5px solid rgba(201,146,42,0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-.hero__seal-inner span {
-  font-size: 0.6rem;
-  letter-spacing: 0.18em;
-  color: var(--gold);
-  font-weight: 500;
-}
-
-@keyframes rotateSeal {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-/* ── Stats bar ── */
-.hero__stats {
-  background: rgba(255,255,255,0.05);
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-
-.hero__stats-inner {
-  display: flex;
-  gap: 0;
-  padding: 1.25rem 0;
-}
-
-.hero__stat {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 0 2.5rem 0 0;
-  border-right: 1px solid rgba(255,255,255,0.1);
-  margin-right: 2.5rem;
-}
-.hero__stat:last-child { border-right: none; }
-
-.hero__stat-value {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  color: var(--gold);
-  line-height: 1;
-}
-
-.hero__stat-label {
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.02em;
-}
-
-/* ─── Features ─── */
-.home-features__header {
-  margin-bottom: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.home-features__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.25rem;
-}
-
-.home-feature-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.home-feature-card__icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
-  background: var(--navy-dim);
-  color: var(--navy);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.home-feature-card__body {
-  flex: 1;
-}
-
-.home-feature-card__link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--gold);
-  margin-top: 0.25rem;
-  transition: gap 0.15s;
-}
-.home-feature-card__link:hover { gap: 8px; }
-
-/* ─── Mission ─── */
-.home-mission {
-  background: var(--navy);
-  padding: 5rem 0;
-}
-
-.home-mission__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
-}
-
-.home-mission__text .eyebrow { color: var(--gold); }
-.home-mission__text .display-sm { color: #fff; margin-top: 0.5rem; margin-bottom: 1rem; }
-.home-mission__text .body-lg { color: rgba(255,255,255,0.6); }
-
-.home-mission__pull blockquote {
-  border-left: 3px solid var(--gold);
-  padding: 1.5rem 2rem;
-  background: rgba(255,255,255,0.04);
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-}
-.home-mission__pull blockquote p {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  color: rgba(255,255,255,0.8);
-  line-height: 1.5;
-  font-style: italic;
-  margin-bottom: 0.75rem;
-}
-.home-mission__pull blockquote cite {
-  font-size: 0.8rem;
-  color: var(--gold);
-  font-style: normal;
-  letter-spacing: 0.05em;
-}
-
-/* ─── Responsive ─── */
-@media (max-width: 768px) {
-  .hero__inner {
-    grid-template-columns: 1fr;
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+/* ── Smaller screens (the Figma frame is a 1920px desktop layout) ── */
+@media (max-width: 1280px) {
+  .sc-home__header {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 32px 24px;
+    text-align: center;
   }
-  .hero__decoration { display: none; }
-  .hero__stats-inner {
-    gap: 1.5rem;
-    flex-wrap: wrap;
+  .sc-home__brand,
+  .sc-home__logo,
+  .sc-home__tagline {
+    position: static;
+    width: auto;
   }
-  .hero__stat {
-    padding-right: 1.5rem;
-    margin-right: 0;
-    border-right: none;
-  }
-  .home-mission__inner {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
+  .sc-home__brand { height: auto; }
+  .sc-home__logo  { width: 335px; height: 335px; max-width: 100%; }
+  .sc-home__tagline { max-width: 614px; }
+
+  .sc-home__hero,
+  .sc-home__mission { padding: 72px 48px; }
+  .sc-home__hero { height: auto; }
+  .sc-home__hero-copy { height: auto; }
+}
+
+@media (max-width: 800px) {
+  .sc-home__brand { white-space: normal; }
+  .sc-home__brand-name   { font-size: 56px; }
+  .sc-home__brand-subtitle { font-size: 22px; }
+  .sc-home__tagline      { font-size: 40px; }
+
+  .sc-home__hero,
+  .sc-home__mission { padding: 48px 24px; }
+  .sc-home__hero-title,
+  .sc-home__mission-title { font-size: 48px; letter-spacing: -1.44px; }
+  .sc-home__hero-description { font-size: 22px; }
+  .sc-home__mission-body  { font-size: 30px; letter-spacing: -0.6px; }
+
+  .sc-home__hero-actions,
+  .sc-home__mission-actions { flex-wrap: wrap; gap: 16px; }
+  .sc-btn--sign-up,
+  .sc-btn--ordinance,
+  .sc-btn--simulation { height: 72px; }
+  .sc-btn--mission    { height: 68px; }
 }

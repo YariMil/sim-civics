@@ -22,11 +22,14 @@ function AppInner() {
   const { pathname } = useLocation();
   // ModuleViewer is full-screen — hide the shared nav/footer
   const isViewer = pathname.startsWith('/resources/');
+  // The redesigned home page is a standalone layout (no shared nav/footer)
+  const isHome = pathname === '/';
+  const hideChrome = isViewer || isHome;
 
   return (
     <>
       <ScrollToTop />
-      {!isViewer && <Navbar />}
+      {!hideChrome && <Navbar />}
       <Routes>
         <Route path="/"                      element={<Home />} />
         <Route path="/simulation"            element={<Simulation />} />
@@ -36,7 +39,7 @@ function AppInner() {
         {/* Catch-all → home */}
         <Route path="*"                      element={<Home />} />
       </Routes>
-      {!isViewer && <Footer />}
+      {!hideChrome && <Footer />}
     </>
   );
 }
