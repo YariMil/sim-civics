@@ -1,0 +1,541 @@
+/* ═══════════════════════════════════════════════════════════
+   Module viewer — Figma "Full" page style. This file is self-contained:
+   it holds the structural layout (formerly in ModuleViewer.css, which is
+   no longer needed) plus the Full theme.
+
+   The theme rules apply when the shell has .mv-shell--full, which
+   ModuleViewer.tsx sets for the modules listed in FULL_STYLE_MODULES.
+
+   Tokens come from sim-civics-tokens.css:
+   blue #004aad · red #e55050 · text #3a3a3a · surface #f2f2f7 · border #d4d4dc
+   Newsreader (display) · Inter (body)
+   Figma references: section-heading (150:69), tag (150:76),
+   ai-polish-result panel / cards / buttons (152:757).
+   ═══════════════════════════════════════════════════════════ */
+
+/* ═════════ 1. Structure (layout only — applies to every module) ═════════ */
+
+.mv-shell {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar */
+.mv-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.mv-topbar__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.mv-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+.mv-topbar__module {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mv-topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.mv-topbar__count {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Progress bar */
+.mv-progress-track { flex-shrink: 0; }
+.mv-progress-fill {
+  height: 100%;
+  transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Stage: centered card */
+.mv-stage {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+.mv-card {
+  width: 100%;
+  animation: fadeUp 0.3s ease forwards;   /* keyframes live in globals.css */
+}
+
+/* Text slides */
+.mv-slide-body {
+  display: flex;
+  flex-direction: column;
+}
+.mv-slide-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.mv-slide-bullets li { position: relative; }
+.mv-slide-bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  border-radius: 50%;
+}
+
+/* Quiz slides */
+.mv-quiz-choices {
+  display: flex;
+  flex-direction: column;
+}
+.mv-choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+}
+.mv-choice:disabled { cursor: default; }
+.mv-choice__letter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+.mv-choice__text { flex: 1; }
+.mv-choice__icon { flex-shrink: 0; }
+
+/* Bottom navigation: Back · dots · Next */
+.mv-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+.mv-nav__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.mv-nav__btn--prev:disabled { cursor: default; }
+.mv-nav__btn--next:disabled,
+.mv-nav__btn--finish:disabled { cursor: not-allowed; }
+
+.mv-dots {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+.mv-dot {
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transition: background 0.2s, transform 0.2s;
+}
+.mv-dot--active { transform: scale(1.4); }
+
+/* Completion screen */
+.mv-complete {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+.mv-complete__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  border-radius: 50%;
+  font-size: 1.75rem;
+  color: #fff;
+}
+.mv-complete__title { margin-bottom: 0.75rem; }
+.mv-complete__sub   { margin-bottom: 2rem; }
+.mv-complete__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* "Module not found" state */
+.mv-error {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+@media (max-width: 640px) {
+  .mv-topbar__module { display: none; }
+  .mv-stage { align-items: flex-start; }
+  .mv-dots { gap: 4px; }
+  .mv-dot { width: 6px; height: 6px; }
+}
+
+/* ═════════ 2. Full theme ═════════ */
+
+/* The heading rule only exists in the Full theme */
+.mv-slide-rule { display: none; }
+
+.mv-shell--full {
+  --mvf-panel: #dceafd;          /* Figma light-blue panel */
+  --mvf-card-line: #c9c9d1;      /* Figma neutral card outline */
+  --mvf-red-tint: #fdecec;
+  --mvf-red-dark: #c94141;
+
+  background: #fff;
+  color: var(--sc-text);
+  font-family: var(--sc-font-body);
+}
+
+/* ── Top bar: blue, like the site header ── */
+.mv-shell--full .mv-topbar {
+  height: 72px;
+  padding: 0 clamp(16px, 6.6vw, 95px);
+  background: var(--sc-blue);
+}
+.mv-shell--full .mv-topbar__left { gap: 16px; }
+.mv-shell--full .mv-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+}
+.mv-shell--full .mv-close:hover { background: rgba(255, 255, 255, 0.3); }
+.mv-shell--full .mv-close:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.mv-shell--full .mv-topbar__module {
+  max-width: min(760px, 60vw);
+  font: 700 24px/1.2 var(--sc-font-display);
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+/* slide counter as an outlined tag on blue */
+.mv-shell--full .mv-topbar__count {
+  padding: 6px 14px;
+  border: 1.5px solid #fff;
+  border-radius: 999px;
+  font: 600 15px/1.2 var(--sc-font-body);
+  color: #fff;
+}
+
+/* ── Progress ── */
+.mv-shell--full .mv-progress-track { height: 6px; background: var(--mvf-panel); }
+.mv-shell--full .mv-progress-fill  { background: var(--sc-red); }
+
+/* ── Stage + card (Figma: light-blue panel, white card with 2px blue outline) ── */
+.mv-shell--full .mv-stage {
+  padding: 48px clamp(16px, 6.6vw, 95px);
+  background: var(--mvf-panel);
+}
+.mv-shell--full .mv-card {
+  max-width: 900px;
+  padding: 42px 48px;
+  background: #fff;
+  border: 2px solid var(--sc-blue);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* ── Text slides: section heading = red Newsreader + red rule ── */
+.mv-shell--full .mv-slide-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.mv-shell--full .mv-slide-heading {
+  margin: 0;
+  font: 700 32px/1.2 var(--sc-font-display);
+  letter-spacing: -0.64px;
+  color: var(--sc-red);
+}
+.mv-shell--full .mv-slide-rule {
+  display: block;
+  flex: 1 1 48px;
+  min-width: 48px;
+  height: 1px;
+  background: var(--sc-red);
+}
+
+.mv-shell--full .mv-slide-body { gap: 16px; }
+.mv-shell--full .mv-slide-para {
+  font: 400 17px/1.6 var(--sc-font-body);
+  color: var(--sc-text);
+}
+.mv-shell--full .mv-slide-bullets { gap: 8px; margin-top: 4px; }
+.mv-shell--full .mv-slide-bullets li {
+  padding-left: 22px;
+  font: 400 16px/1.5 var(--sc-font-body);
+  color: var(--sc-text);
+}
+.mv-shell--full .mv-slide-bullets li::before {
+  top: 0.6em;
+  width: 7px;
+  height: 7px;
+  background: var(--sc-blue);
+}
+
+/* Notes → neutral card (Figma "original-version" card) */
+.mv-shell--full .mv-slide-note {
+  margin-top: 28px;
+  padding: 16px 20px;
+  background: var(--sc-surface);
+  border: 2px solid var(--mvf-card-line);
+  font: 400 15px/1.5 var(--sc-font-body);
+  font-style: normal;
+  color: var(--sc-text);
+}
+
+/* ── Quiz slides ── */
+/* "Quick check" → selected Tag (blue pill, white text) */
+.mv-shell--full .mv-quiz-label {
+  display: inline-flex;
+  margin-bottom: 18px;
+  padding: 9px 20px;
+  background: var(--sc-blue);
+  border: 1.5px solid var(--sc-blue);
+  border-radius: 999px;
+  font: 600 15px/1.2 var(--sc-font-body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: #fff;
+}
+/* Questions use the panel-title style (blue Newsreader) */
+.mv-shell--full .mv-slide-content--quiz .mv-slide-heading {
+  font-size: 28px;
+  letter-spacing: -0.56px;
+  color: var(--sc-blue);
+}
+
+.mv-shell--full .mv-quiz-choices { gap: 12px; margin-top: 24px; }
+.mv-shell--full .mv-choice {
+  gap: 14px;
+  padding: 14px 18px;
+  background: #fff;
+  border: 1.5px solid var(--sc-blue);
+  border-radius: 8px;
+  font: 400 16px/1.4 var(--sc-font-body);
+  color: var(--sc-text);
+}
+.mv-shell--full .mv-choice:not(:disabled):hover {
+  background: var(--mvf-panel);
+  border-color: var(--sc-blue);
+  transform: none;
+}
+.mv-shell--full .mv-choice:focus-visible { outline: 3px solid var(--sc-red); outline-offset: 2px; }
+.mv-shell--full .mv-choice__letter {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid var(--sc-blue);
+  background: #fff;
+  font: 600 14px/1 var(--sc-font-body);
+  color: var(--sc-blue);
+}
+
+/* Correct → selected Tag look (blue fill, white text) */
+.mv-shell--full .mv-choice--correct {
+  background: var(--sc-blue);
+  border-color: var(--sc-blue);
+  color: #fff;
+  opacity: 1;
+}
+.mv-shell--full .mv-choice--correct .mv-choice__letter {
+  background: #fff;
+  border-color: #fff;
+  color: var(--sc-blue);
+}
+.mv-shell--full .mv-choice--correct .mv-choice__icon { color: #fff; }
+
+/* Wrong → red */
+.mv-shell--full .mv-choice--wrong {
+  background: var(--mvf-red-tint);
+  border-color: var(--sc-red);
+  color: var(--sc-text);
+  opacity: 1;
+}
+.mv-shell--full .mv-choice--wrong .mv-choice__letter {
+  background: var(--sc-red);
+  border-color: var(--sc-red);
+  color: #fff;
+}
+.mv-shell--full .mv-choice--wrong .mv-choice__icon { color: var(--mvf-red-dark); }
+
+.mv-shell--full .mv-choice--dim { opacity: 0.5; }
+
+.mv-shell--full .mv-quiz-explanation {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 0;
+  font: 400 16px/1.5 var(--sc-font-body);
+  color: var(--sc-text);
+}
+.mv-shell--full .mv-quiz-explanation--correct {
+  background: var(--mvf-panel);
+  border-left: 4px solid var(--sc-blue);
+}
+.mv-shell--full .mv-quiz-explanation--correct strong { color: var(--sc-blue); }
+.mv-shell--full .mv-quiz-explanation--wrong {
+  background: var(--mvf-red-tint);
+  border-left: 4px solid var(--sc-red);
+}
+.mv-shell--full .mv-quiz-explanation--wrong strong { color: var(--mvf-red-dark); }
+
+/* ── Bottom navigation (Figma buttons: red primary / light secondary) ── */
+.mv-shell--full .mv-nav {
+  padding: 18px clamp(16px, 6.6vw, 95px);
+  background: #fff;
+  border-top: 1px solid var(--sc-border);
+}
+.mv-shell--full .mv-nav__btn {
+  gap: 8px;
+  min-width: 110px;
+  padding: 12px 18px;
+  border: 1px solid var(--sc-red);
+  border-radius: 8px;
+  font: 600 16px/1 var(--sc-font-body);
+}
+.mv-shell--full .mv-nav__btn:focus-visible { outline: 3px solid var(--sc-blue); outline-offset: 3px; }
+
+.mv-shell--full .mv-nav__btn--prev {
+  background: #f5f5f5;
+  border-color: var(--sc-red);
+  color: var(--sc-red);
+}
+.mv-shell--full .mv-nav__btn--prev:hover:not(:disabled) {
+  background: var(--mvf-red-tint);
+  color: var(--sc-red);
+}
+.mv-shell--full .mv-nav__btn--prev:disabled { opacity: 0.4; }
+
+.mv-shell--full .mv-nav__btn--next,
+.mv-shell--full .mv-nav__btn--finish {
+  background: var(--sc-red);
+  border-color: var(--sc-red);
+  color: #fff;
+}
+.mv-shell--full .mv-nav__btn--next:hover:not(:disabled),
+.mv-shell--full .mv-nav__btn--finish:hover:not(:disabled) {
+  background: var(--mvf-red-dark);
+  border-color: var(--mvf-red-dark);
+  filter: none;
+  transform: none;
+}
+.mv-shell--full .mv-nav__btn--next:disabled,
+.mv-shell--full .mv-nav__btn--finish:disabled {
+  background: var(--sc-red);
+  border-color: var(--sc-red);
+  color: #fff;
+  opacity: 0.4;
+}
+
+.mv-shell--full .mv-dot { background: var(--mvf-card-line); }
+.mv-shell--full .mv-dot--done   { background: var(--sc-blue); opacity: 1; }
+.mv-shell--full .mv-dot--active { background: var(--sc-red); }
+
+/* ── Completion screen ── */
+.mv-shell--full .mv-complete {
+  min-height: 100dvh;
+  background: var(--mvf-panel);
+}
+.mv-shell--full .mv-complete__icon {
+  width: 72px;
+  height: 72px;
+  background: var(--sc-blue);
+  box-shadow: none;
+}
+/* eyebrow → outlined Tag */
+.mv-shell--full .mv-complete__eyebrow {
+  margin-bottom: 14px;
+  padding: 9px 20px;
+  background: #fff;
+  border: 1.5px solid var(--sc-blue);
+  border-radius: 999px;
+  font: 600 15px/1.2 var(--sc-font-body);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--sc-blue);
+}
+.mv-shell--full .mv-complete__title {
+  font: 700 48px/1.1 var(--sc-font-display);
+  letter-spacing: -0.96px;
+  color: var(--sc-blue);
+}
+.mv-shell--full .mv-complete__sub {
+  font: 400 17px/1.5 var(--sc-font-body);
+  color: var(--sc-text);
+}
+.mv-shell--full .mv-complete__actions { gap: 12px; }
+.mv-shell--full .mv-complete .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font: 600 16px/1 var(--sc-font-body);
+  box-shadow: none;
+  transform: none;
+}
+.mv-shell--full .mv-complete .btn-primary {
+  background: var(--sc-red);
+  border: 1px solid var(--sc-red);
+  color: #fff;
+}
+.mv-shell--full .mv-complete .btn-primary:hover {
+  background: var(--mvf-red-dark);
+  border-color: var(--mvf-red-dark);
+  box-shadow: none;
+  transform: none;
+}
+.mv-shell--full .mv-complete .btn-secondary {
+  background: #f5f5f5;
+  border: 1px solid var(--sc-red);
+  color: var(--sc-red);
+}
+.mv-shell--full .mv-complete .btn-secondary:hover {
+  background: var(--mvf-red-tint);
+  transform: none;
+}
+.mv-shell--full .mv-complete .btn:focus-visible { outline: 3px solid var(--sc-blue); outline-offset: 3px; }
+
+/* ── Small screens ── */
+@media (max-width: 640px) {
+  .mv-shell--full .mv-topbar { height: 60px; }
+  .mv-shell--full .mv-stage { padding: 20px 12px; }
+  .mv-shell--full .mv-card { padding: 24px 20px; }
+  .mv-shell--full .mv-slide-heading { font-size: 26px; }
+  .mv-shell--full .mv-slide-content--quiz .mv-slide-heading { font-size: 23px; }
+  .mv-shell--full .mv-slide-para { font-size: 16px; }
+  .mv-shell--full .mv-nav__btn { min-width: 0; padding: 11px 14px; }
+  .mv-shell--full .mv-complete__title { font-size: 36px; }
+}

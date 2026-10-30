@@ -3,7 +3,12 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, X, CheckCircle, XCircle } from 'lucide-react';
 import { modules } from '../data/resources';
 import { getSlidesForModule, type Slide, type TextSlide, type QuizSlide } from '../data/slides';
-import './ModuleViewer.css';
+import '../styles/sim-civics-tokens.css';
+import './ModuleViewerFull.css';
+
+// ─── Modules restyled to the Figma "Full" page look ─────────────
+// Add a module id here to switch it to the new theme (see ModuleViewerFull.css).
+const FULL_STYLE_MODULES = new Set(['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6']);
 
 // ─── localStorage helpers ────────────────────────────────────────
 function progressKey(moduleId: string) { return `simcivics-progress-${moduleId}`; }
@@ -23,7 +28,10 @@ function saveProgress(moduleId: string, idx: number) {
 function TextSlideView({ slide }: { slide: TextSlide }) {
   return (
     <div className="mv-slide-content mv-slide-content--text">
-      <h2 className="mv-slide-heading">{slide.heading}</h2>
+      <div className="mv-slide-heading-row">
+        <h2 className="mv-slide-heading">{slide.heading}</h2>
+        <span className="mv-slide-rule" aria-hidden="true" />
+      </div>
       <div className="mv-slide-body">
         {slide.body.map((para, i) => (
           <p key={i} className="mv-slide-para">{para}</p>
@@ -93,6 +101,7 @@ export default function ModuleViewer() {
   const navigate = useNavigate();
 
   const mod = modules.find((m) => m.id === moduleId);
+  const shellClass = `mv-shell${moduleId && FULL_STYLE_MODULES.has(moduleId) ? ' mv-shell--full' : ''}`;
   const slides = moduleId ? getSlidesForModule(moduleId) : [];
 
   // Saved progress
@@ -152,7 +161,7 @@ export default function ModuleViewer() {
   // ── Completion screen (past last slide) ──
   if (currentIdx >= slides.length) {
     return (
-      <div className="mv-shell" style={{ '--mod-color': mod.color } as React.CSSProperties}>
+      <div className={shellClass} style={{ '--mod-color': mod.color } as React.CSSProperties}>
         <div className="mv-complete">
           <div className="mv-complete__icon" aria-hidden="true">✓</div>
           <p className="mv-complete__eyebrow">Module {mod.number} complete</p>
@@ -179,7 +188,7 @@ export default function ModuleViewer() {
   const progressPct = Math.round(((currentIdx) / (slides.length - 1)) * 100);
 
   return (
-    <div className="mv-shell" style={{ '--mod-color': mod.color } as React.CSSProperties}>
+    <div className={shellClass} style={{ '--mod-color': mod.color } as React.CSSProperties}>
 
       {/* ── Top bar ── */}
       <header className="mv-topbar">
