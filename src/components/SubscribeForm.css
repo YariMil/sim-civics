@@ -1,0 +1,220 @@
+.sc-form {
+  flex: 1 1 0;
+  min-width: 0;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px;
+  background: var(--sc-surface);
+  border: 2px solid var(--sc-red);
+  color: var(--sc-text);
+  font-family: var(--sc-font-body);
+}
+
+.sc-form__title {
+  margin: 0;
+  font: 700 32px/1.2 var(--sc-font-display);
+  color: var(--sc-blue);
+}
+
+.sc-form__success {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sc-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sc-field label,
+.sc-switch label {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sc-field__hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--sc-muted);
+}
+
+.sc-form input[type='email'],
+.sc-form input[type='text'],
+.sc-form input[type='password'],
+.sc-form select {
+  box-sizing: border-box;
+  width: 100%;
+  height: 42px;
+  padding: 0 12px;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 8px;
+  font: 400 14px var(--sc-font-body);
+  color: var(--sc-text);
+}
+
+.sc-form ::placeholder {
+  color: var(--sc-placeholder);
+}
+
+.sc-form input:disabled {
+  background: #f7f7fa;
+  cursor: not-allowed;
+}
+
+.sc-form select {
+  appearance: none;
+  padding-right: 36px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%233a3a3a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 12px center;
+}
+
+.sc-form select:invalid {
+  color: var(--sc-placeholder);
+}
+
+.sc-form input:focus-visible,
+.sc-form select:focus-visible,
+.sc-form button:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}
+
+.sc-affil {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sc-affil legend {
+  padding: 0;
+  margin-bottom: 12px;
+  font: 600 16px/1.2 var(--sc-font-body);
+}
+
+.sc-affil__options {
+  display: flex;
+  gap: 40px;
+}
+
+.sc-affil__options label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.sc-affil__options input {
+  margin: 0;
+  accent-color: #1c1c1e;
+}
+
+.sc-switch {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.sc-switch input[type='checkbox'] {
+  appearance: none;
+  position: relative;
+  flex: none;
+  width: 44px;
+  height: 24px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.sc-switch input[type='checkbox']::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #8a8a93;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.sc-switch input[type='checkbox']:checked {
+  background: var(--sc-blue);
+  border-color: var(--sc-blue);
+}
+
+.sc-switch input[type='checkbox']:checked::after {
+  background: #fff;
+  transform: translateX(20px);
+}
+
+.sc-switch input[type='checkbox']:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}
+
+.sc-form__submit {
+  width: 100%;
+  height: 40px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--sc-red);
+  color: #fff;
+  font: 600 14px var(--sc-font-body);
+  cursor: pointer;
+}
+
+.sc-form__submit:hover:not(:disabled) {
+  filter: brightness(0.94);
+}
+
+.sc-form__submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sc-form__error {
+  margin: 0;
+  font-size: 14px;
+  color: #b42318;
+}
+
+.sc-form__note,
+.sc-form__login {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.sc-form__note {
+  color: var(--sc-muted);
+}
+
+.sc-form a {
+  color: var(--sc-blue);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-switch input[type='checkbox'],
+  .sc-switch input[type='checkbox']::after {
+    transition: none;
+  }
+}
+
+@media (max-width: 960px) {
+  .sc-form {
+    padding: 24px;
+  }
+}

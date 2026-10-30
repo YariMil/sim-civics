@@ -1,38 +1,45 @@
-import SimCivicsNav, { type TopNavKey } from './SimCivicsNav';
+import { Link, NavLink } from 'react-router-dom';
+import { User } from 'lucide-react';
+import '../styles/sim-civics-tokens.css';
 import './SimCivicsTop.css';
 
-/*
-  Sim-Civics Top — from the Figma "Contact Us Page" (symbol: Sim-Civics Top).
-  Blue band with a big page title, tab navigation (top right) and the logo.
+const NAV = [
+  { to: '/', label: 'Home', end: true },
+  { to: '/ideas', label: 'Ideas', end: false },
+  { to: '/simulation', label: 'Simulation', end: false },
+  { to: '/resources', label: 'Resources', end: false },
+];
 
-  Exports: <SimCivicsTop title="…" active="simulation" />
-
-  Logo: public/images/sim-civics-logo.png
-  Links: Home, Simulation and Resources go to existing pages.
-         "Ordinance Refiner" is a placeholder for later (no link yet).
-*/
-
-export type { TopNavKey };
-
-interface Props {
-  title: string;
-  active?: TopNavKey;
-}
-
-export default function SimCivicsTop({ title, active }: Props) {
+export default function SimCivicsTop() {
   return (
-    <div className="sc-top">
-      <h1 className="sc-top__title">{title}</h1>
+    <header className='sc-top'>
+      <Link to='/' className='sc-top__wordmark'>
+        Sim-Civics
+      </Link>
 
-      <SimCivicsNav className="sc-top__nav" active={active} />
+      <nav className='sc-top__nav' aria-label='Main'>
+        <ul className='sc-top__tabs'>
+          {NAV.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
+                end={item.end}
+                className={({ isActive }) =>
+                  isActive ? 'sc-top__tab sc-top__tab--active' : 'sc-top__tab'
+                }
+              >
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <Link to='/sign-up' className='sc-top__account' aria-label='Sign up'>
+          <User size={20} aria-hidden='true' />
+        </Link>
+      </nav>
 
-      <img
-        className="sc-top__logo"
-        src="/images/sim-civics-logo.png"
-        alt="Sim-Civics logo"
-        width={305}
-        height={305}
-      />
-    </div>
+      <span className='sc-top__rule sc-top__rule--left' aria-hidden='true' />
+      <span className='sc-top__rule sc-top__rule--right' aria-hidden='true' />
+    </header>
   );
 }

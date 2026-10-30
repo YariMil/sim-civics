@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import SimCivicsTop from './components/SimCivicsTop';
+import SimCivicsBottom from './components/SimCivicsBottom';
 import Home from './pages/Home';
 import Simulation from './pages/Simulation';
 import Resources from './pages/Resources';
@@ -11,6 +11,7 @@ import './styles/globals.css';
 // Scroll to top on route change
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import SignUp from './pages/SignUp';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,17 +31,18 @@ function AppInner() {
   return (
     <>
       <ScrollToTop />
-      {!hideChrome && <Navbar />}
+      {!hideChrome && <SimCivicsTop />}
       <Routes>
         <Route path="/"                      element={<Home />} />
         <Route path="/simulation"            element={<Simulation />} />
         <Route path="/resources"             element={<Resources />} />
         <Route path="/resources/:moduleId"   element={<ModuleViewer />} />
         <Route path="/contact"              element={<Contact />} />
+           <Route path='/sign-up' element={<SignUp/>} />
         {/* Catch-all → home */}
         <Route path="*"                      element={<Home />} />
       </Routes>
-      {!hideChrome && <Footer />}
+      {!hideChrome && <SimCivicsBottom />}
     </>
   );
 }

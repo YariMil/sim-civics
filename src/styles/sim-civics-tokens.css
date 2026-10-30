@@ -1,0 +1,12 @@
+/* Design tokens from the Figma "Full" page. Imported by the new header, footer, and Sign Up page. */
+:root {
+  --sc-blue: #004aad;
+  --sc-red: #e55050;
+  --sc-text: #3a3a3a;
+  --sc-muted: #6b6b73;
+  --sc-surface: #f2f2f7;
+  --sc-border: #d4d4dc;
+  --sc-placeholder: #767680;
+  --sc-font-display: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --sc-font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
