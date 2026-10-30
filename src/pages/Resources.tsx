@@ -4,8 +4,6 @@ import {
   BookOpen, Map, Play, ClipboardCheck, PenLine,
   ChevronRight, ChevronDown, PlayCircle,
 } from 'lucide-react';
-import SimCivicsTop from '../components/SimCivicsTop';
-import SimCivicsBottom from '../components/SimCivicsBottom';
 import { modules, categoryMeta, type ResourceCategory } from '../data/resources';
 import './Resources.css';
 
@@ -52,7 +50,6 @@ export default function Resources() {
   return (
     <>
       {/* ── Top band (page title lives here, as on the other redesigned pages) ── */}
-      <SimCivicsTop title="Civic Education Curriculum" active="resources" />
 
       <main className="sc-res">
         {/* ── Intro ── */}
@@ -198,8 +195,6 @@ export default function Resources() {
 
         </div>
       </main>
-
-      <SimCivicsBottom />
     </>
   );
 }

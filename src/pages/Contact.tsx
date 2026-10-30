@@ -2,8 +2,6 @@ import { useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import { Send, CheckCircle } from 'lucide-react';
-import SimCivicsTop from '../components/SimCivicsTop';
-import SimCivicsBottom from '../components/SimCivicsBottom';
 import './Contact.css';
 
 const SITE_KEY = '0x4AAAAAAFr_0iYfpD7W-5oP';
@@ -83,7 +81,6 @@ const handleSubmit = async (e: FormEvent) => {
 
   return (
     <>
-      <SimCivicsTop title="Contact Us!" />
 
       <main className="sc-contact">
         <div className="sc-contact__layout">
@@ -184,8 +181,6 @@ const handleSubmit = async (e: FormEvent) => {
 
         </div>
       </main>
-
-      <SimCivicsBottom />
     </>
   );
 }

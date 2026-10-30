@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { FileText, Users } from 'lucide-react';
-import SimCivicsTop from '../components/SimCivicsTop';
-import SimCivicsBottom from '../components/SimCivicsBottom';
 import DocumentCard from '../components/DocumentCard';
 import { documents, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
@@ -34,7 +32,6 @@ export default function Simulation() {
 
   return (
     <>
-      <SimCivicsTop title="City Council Simulation" active="simulation" />
 
       <main className="sc-sim">
         <div className="sc-sim__inner">
@@ -135,8 +132,6 @@ export default function Simulation() {
           )}
         </div>
       </main>
-
-      <SimCivicsBottom />
     </>
   );
 }

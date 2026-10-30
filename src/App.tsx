@@ -1,4 +1,5 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import SimCivicsTop from './components/SimCivicsTop';
 import SimCivicsBottom from './components/SimCivicsBottom';
 import Home from './pages/Home';
@@ -6,13 +7,10 @@ import Simulation from './pages/Simulation';
 import Resources from './pages/Resources';
 import ModuleViewer from './pages/ModuleViewer';
 import Contact from './pages/Contact';
+import SignUp from './pages/SignUp';
 import './styles/globals.css';
 
 // Scroll to top on route change
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import SignUp from './pages/SignUp';
-
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
@@ -21,26 +19,23 @@ function ScrollToTop() {
 
 function AppInner() {
   const { pathname } = useLocation();
-  // ModuleViewer is full-screen — hide the shared nav/footer
-  const isViewer = pathname.startsWith('/resources/');
-  // Redesigned pages (Home, Simulation, Resources, Contact) bring their own top/bottom — hide the shared nav/footer
   const path = pathname.replace(/\/+$/, '') || '/';
-  const hasOwnChrome = ['/', '/simulation', '/resources', '/contact'].includes(path);
-  const hideChrome = isViewer || hasOwnChrome;
+  // ModuleViewer is full-screen, so it is the only page without the shared header/footer
+  const hideChrome = path.startsWith('/resources/');
 
   return (
     <>
       <ScrollToTop />
       {!hideChrome && <SimCivicsTop />}
       <Routes>
-        <Route path="/"                      element={<Home />} />
-        <Route path="/simulation"            element={<Simulation />} />
-        <Route path="/resources"             element={<Resources />} />
-        <Route path="/resources/:moduleId"   element={<ModuleViewer />} />
-        <Route path="/contact"              element={<Contact />} />
-           <Route path='/sign-up' element={<SignUp/>} />
+        <Route path="/"                    element={<Home />} />
+        <Route path="/simulation"          element={<Simulation />} />
+        <Route path="/resources"           element={<Resources />} />
+        <Route path="/resources/:moduleId" element={<ModuleViewer />} />
+        <Route path="/contact"             element={<Contact />} />
+        <Route path="/sign-up"             element={<SignUp />} />
         {/* Catch-all → home */}
-        <Route path="*"                      element={<Home />} />
+        <Route path="*"                    element={<Home />} />
       </Routes>
       {!hideChrome && <SimCivicsBottom />}
     </>
