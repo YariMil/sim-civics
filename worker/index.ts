@@ -65,23 +65,29 @@ async function verifyTurnstile(token: string, secret: string, ip: string | null)
      return json({ error: 'Something went wrong. Please try again later.' }, 502);
    }
 
+const PARTNER_TYPES = ['school', 'community', 'city-agency', 'media', 'individual', 'other'];
+
 async function contact(body: Record<string, unknown>, env: Env) {
   const name = clean(body.name, 100);
   const email = clean(body.email, 254);
-  const org = clean(body.organization, 150);
+  const org = clean(body.org, 150);
+  const partnerType = PARTNER_TYPES.includes(String(body.partnerType))
+    ? String(body.partnerType)
+    : 'not specified';
   const message = String(body.message ?? '').trim().slice(0, 5000);
   if (!name || !EMAIL_RE.test(email) || message.length < 10) {
     return json({ error: 'Please fill in your name, a valid email, and a message.' }, 400);
   }
 
   await env.EMAIL.send({
-    to: 'simcivics@gmail.com',
-    from: 'simcivicssite@gmail.com',
+    to: 'admin@simcivicsla.com',
+    from: 'website@simcivicsla.com',
     replyTo: email,
     subject: `Partnership inquiry from ${name}`,
     text: `Name: ${name}
 Email: ${email}
-Organization: ${org}
+Organization: ${org || 'not provided'}
+Type of partnership: ${partnerType}
 
 ${message}`,
   });

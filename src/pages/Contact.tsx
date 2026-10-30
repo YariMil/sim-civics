@@ -1,9 +1,12 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { FormEvent } from 'react';
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import { Send, CheckCircle } from 'lucide-react';
 import SimCivicsTop from '../components/SimCivicsTop';
 import SimCivicsBottom from '../components/SimCivicsBottom';
 import './Contact.css';
+
+const SITE_KEY = '0x4AAAAAAFr_0iYfpD7W-5oP';
 
 /*
   Contact Us — built from the Figma "Contact Us Page" frame:
@@ -34,22 +37,49 @@ export default function Contact() {
   const [form, setForm] = useState<FormState>({ name: '', org: '', email: '', partnerType: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [token, setToken] = useState('');
+const [sending, setSending] = useState(false);
+const widget = useRef<TurnstileInstance>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     setError('');
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.name || !form.email || !form.message) {
-      setError('Please fill in your name, email, and message.');
+const handleSubmit = async (e: FormEvent) => {
+  e.preventDefault();
+  if (sending) return;
+  if (!form.name || !form.email || !form.message) {
+    setError('Please fill in your name, email, and message.');
+    return;
+  }
+  if (form.message.trim().length < 10) {
+    setError('Please write at least a short sentence in your message.');
+    return;
+  }
+
+  setSending(true);
+  setError('');
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...form, token }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) {
+      setSubmitted(true);
       return;
     }
-    // In production: POST to your backend / Netlify Forms / Formspree here
-    console.log('Form submission:', form);
-    setSubmitted(true);
-  };
+    setError(data.error ?? 'Something went wrong. Please try again.');
+  } catch {
+    setError('Network error. Please try again.');
+  } finally {
+    setSending(false);
+  }
+  widget.current?.reset(); // Turnstile tokens are single-use
+  setToken('');
+};
 
   return (
     <>
@@ -124,11 +154,11 @@ export default function Contact() {
                     required
                   />
                 </div>
-
+                <Turnstile ref={widget} siteKey={SITE_KEY} onSuccess={setToken} />
                 {error && <p className="sc-cf-error" role="alert">{error}</p>}
 
-                <button type="submit" className="sc-contact__btn">
-                  Send message <Send size={15} aria-hidden="true" />
+                <button type="submit" className="sc-contact__btn" disabled={!token || sending}>
+                {sending ? 'Sending…' : <>Send message <Send size={15} aria-hidden="true" /></>}
                 </button>
 
                 <p className="sc-cf-disclaimer">
@@ -144,7 +174,7 @@ export default function Contact() {
                 </p>
                 <button
                   className="sc-contact__btn sc-contact__btn--outline"
-                  onClick={() => { setSubmitted(false); setForm({ name: '', org: '', email: '', partnerType: '', message: '' }); }}
+                  onClick={() => { setToken(''); setSubmitted(false); setForm({ name: '', org: '', email: '', partnerType: '', message: '' }); }}
                 >
                   Send another message
                 </button>
