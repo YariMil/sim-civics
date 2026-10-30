@@ -22,7 +22,7 @@ export default function SimCivicsBottom() {
         <div className='sc-bottom__brand'>
           <div className='sc-bottom__lockup'>
             {/* Export the logo from Figma (node 163:699) to public/sim-civics-logo.png */}
-            <img src='/images/sim-civics-mark.png' alt='' width={64} height={64} />
+            <img src='/public/images/sim-civics-mark.png' alt='' width={64} height={64} />
             <span className='sc-bottom__name'>Sim-Civics</span>
           </div>
           <p className='sc-bottom__tagline'>
