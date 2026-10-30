@@ -8,6 +8,7 @@ import Resources from './pages/Resources';
 import ModuleViewer from './pages/ModuleViewer';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
+import Privacy from './pages/Privacy';
 import './styles/globals.css';
 
 // Scroll to top on route change
@@ -34,6 +35,7 @@ function AppInner() {
         <Route path="/resources/:moduleId" element={<ModuleViewer />} />
         <Route path="/contact"             element={<Contact />} />
         <Route path="/sign-up"             element={<SignUp />} />
+          <Route path="/privacy" element={<Privacy />} />
         {/* Catch-all → home */}
         <Route path="*"                    element={<Home />} />
       </Routes>
