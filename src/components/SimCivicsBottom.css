@@ -1,109 +1,90 @@
-/* ═══════════════════════════════════════════════════════════
-   Sim-Civics Bottom — Figma "Contact Us Page" (2378px-wide canvas).
-   --u is "one Figma pixel" (see SimCivicsTop.css).
-   ═══════════════════════════════════════════════════════════ */
-
 .sc-bottom {
-  --u: min(1px, calc(100vw / 2378));
-  --sc-blue: #004aad;
-  --sc-red: #ce5555;
-
-  position: relative;
-  height: max(calc(var(--u) * 176), 150px);
-  background: var(--sc-red);
-  border-top: 1px solid #fff;
-  color: #fff;
-  font-family: 'Inclusive Sans', system-ui, sans-serif;
-  font-weight: 400;
-  font-size: clamp(14px, calc(var(--u) * 25), 25px);
-  line-height: 1.2;
-  letter-spacing: -0.03em;
-}
-
-/* Blue logo block (218px wide in the design) */
-.sc-bottom__mark {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: calc(var(--u) * 218);
-  min-width: 96px;
+  box-sizing: border-box;
+  padding: 44px clamp(24px, 7.4vw, 107px) 44px clamp(24px, 6.6vw, 95px);
   background: var(--sc-blue);
+  color: #fff;
+  font-family: var(--sc-font-body);
 }
-.sc-bottom__mark img {
-  position: absolute;
-  top: calc(var(--u) * 1);
-  left: calc(var(--u) * 21);
-  width: calc(var(--u) * 175);
-  height: calc(var(--u) * 175);
-  max-width: none;
+
+.sc-bottom__inner {
+  max-width: 1238px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.sc-bottom__brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sc-bottom__lockup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.sc-bottom__lockup img {
+  width: 64px;
+  height: 64px;
   object-fit: cover;
 }
 
-/* Right-hand columns */
-.sc-bottom__cols {
-  position: absolute;
-  top: calc(var(--u) * 14);
-  right: max(12px, calc(var(--u) * 12));
-  display: flex;
-  align-items: flex-start;
-  gap: calc(var(--u) * 170);
-}
-
-/* "Site" — heading over two columns of links */
-.sc-bottom__site {
-  display: grid;
-  grid-template-columns: auto auto;
-  column-gap: max(12px, calc(var(--u) * 20));
-  row-gap: 0.45em;
-}
-.sc-bottom__heading {
-  grid-column: 1 / -1;
-  text-align: center;
-  margin-bottom: 0.2em;
-}
-.sc-bottom__link {
-  color: #fff;
-  text-decoration: none;
+.sc-bottom__name {
+  font: 700 36px/1.2 var(--sc-font-display);
   white-space: nowrap;
 }
-.sc-bottom__link--start-col { justify-self: end; }
-.sc-bottom__link--end-col   { justify-self: start; }
-a.sc-bottom__link:hover { text-decoration: underline; }
-a.sc-bottom__link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 
-/* Organization info */
-.sc-bottom__org {
+.sc-bottom__tagline {
+  margin: 0;
+  width: 380px;
+  max-width: 100%;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.sc-bottom__heading {
+  margin: 0 0 14px;
+  font: 700 20px/1.2 var(--sc-font-display);
+}
+
+.sc-bottom__links {
+  display: flex;
+  gap: 56px;
+}
+
+.sc-bottom ul {
   display: flex;
   flex-direction: column;
-  gap: 0.7em;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  line-height: 1.2;
   white-space: nowrap;
 }
 
-/* ── Narrow screens: stack the band ── */
-@media (max-width: 1100px) {
-  .sc-bottom {
-    height: auto;
-    display: flex;
+.sc-bottom a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.sc-bottom a:hover {
+  text-decoration: underline;
+}
+
+.sc-bottom a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media (max-width: 960px) {
+  .sc-bottom__inner {
     flex-direction: column;
-    align-items: flex-start;
-    font-size: 18px;
-  }
-  .sc-bottom__mark {
-    position: static;
-    width: 100%;
-    min-width: 0;
-    padding: 12px 24px;
-  }
-  .sc-bottom__mark img {
-    position: static;
-    width: 96px;
-    height: 96px;
-  }
-  .sc-bottom__cols {
-    position: static;
-    flex-wrap: wrap;
-    gap: 32px 64px;
-    padding: 24px;
+    gap: 32px;
   }
 }

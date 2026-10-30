@@ -1,40 +1,57 @@
 import { Link } from 'react-router-dom';
+import '../styles/sim-civics-tokens.css';
 import './SimCivicsBottom.css';
 
-/*
-  Sim-Civics Bottom — from the Figma "Contact Us Page" (symbol: Sim-Civics Bottom).
-  Red footer band: logo block on the left, site links and organization info on the right.
+const SITE_LINKS_A = [
+  { to: '/', label: 'Home' },
+  { to: '/ideas', label: 'Ideas' },
+  { to: '/simulation', label: 'Simulation' },
+  { to: '/resources', label: 'Resources' },
+];
 
-  Logo mark: public/images/sim-civics-mark.png
-  "Why us?" and "Refiner" are placeholders for later (no link yet).
-*/
+const SITE_LINKS_B = [
+  { to: '/why-us', label: 'Why us?' },
+  { to: '/contact', label: 'Contact us' },
+  { to: '/sign-up', label: 'Sign up' },
+];
+
 export default function SimCivicsBottom() {
   return (
-    <footer className="sc-bottom">
-      <div className="sc-bottom__mark">
-        <img
-          src="/images/sim-civics-mark.png"
-          alt="Sim-Civics"
-          width={175}
-          height={175}
-        />
-      </div>
+    <footer className='sc-bottom'>
+      <div className='sc-bottom__inner'>
+        <div className='sc-bottom__brand'>
+          <div className='sc-bottom__lockup'>
+            {/* Export the logo from Figma (node 163:699) to public/sim-civics-logo.png */}
+            <img src='/sim-civics-logo.png' alt='' width={64} height={64} />
+            <span className='sc-bottom__name'>Sim-Civics</span>
+          </div>
+          <p className='sc-bottom__tagline'>
+            Supporting local advocacy in Los Angeles through deliberation, action, and learning.
+          </p>
+        </div>
 
-      <div className="sc-bottom__cols">
-        <nav className="sc-bottom__site" aria-label="Site">
-          <p className="sc-bottom__heading">Site</p>
-          <span className="sc-bottom__link sc-bottom__link--start-col">Why us?</span>
-          <Link to="/" className="sc-bottom__link sc-bottom__link--end-col">Home</Link>
-          <Link to="/simulation" className="sc-bottom__link sc-bottom__link--start-col">Simulation</Link>
-          <Link to="/resources" className="sc-bottom__link sc-bottom__link--end-col">Resources</Link>
-          <Link to="/contact" className="sc-bottom__link sc-bottom__link--start-col">Contact us</Link>
-          <span className="sc-bottom__link sc-bottom__link--end-col">Refiner</span>
+        <nav className='sc-bottom__col' aria-label='Footer'>
+          <h2 className='sc-bottom__heading'>Site</h2>
+          <div className='sc-bottom__links'>
+            <ul>
+              {SITE_LINKS_A.map((l) => (
+                <li key={l.to}><Link to={l.to}>{l.label}</Link></li>
+              ))}
+            </ul>
+            <ul>
+              {SITE_LINKS_B.map((l) => (
+                <li key={l.to}><Link to={l.to}>{l.label}</Link></li>
+              ))}
+            </ul>
+          </div>
         </nav>
 
-        <div className="sc-bottom__org">
-          <p>Organization</p>
-          <p>Los Angeles, CA</p>
-          <p>simcivics@gmail.com</p>
+        <div className='sc-bottom__col'>
+          <h2 className='sc-bottom__heading'>Organization</h2>
+          <ul>
+            <li>Los Angeles, CA</li>
+            <li><a href='mailto:simcivics@gmail.com'>simcivics@gmail.com</a></li>
+          </ul>
         </div>
       </div>
     </footer>

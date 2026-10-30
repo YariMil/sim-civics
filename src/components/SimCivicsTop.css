@@ -1,84 +1,116 @@
-/* ═══════════════════════════════════════════════════════════
-   Sim-Civics Top — Figma "Contact Us Page" (2378px-wide canvas).
-   --u is "one Figma pixel": it scales every measurement with the
-   viewport (1px at 2378px wide and above), so the band keeps the
-   same proportions as the design at any desktop width.
-   ═══════════════════════════════════════════════════════════ */
-
 .sc-top {
-  --u: min(1px, calc(100vw / 2378));
-  --sc-blue: #004aad;
-  --sc-red: #ce5555;
-
-  position: relative;
-  height: max(calc(var(--u) * 389), 280px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-sizing: border-box;
+  height: 116px;
+  padding: 25px 70px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
   background: var(--sc-blue);
   color: #fff;
-  overflow: hidden;
+  font-family: var(--sc-font-body);
 }
 
-.sc-top__title {
-  position: absolute;
-  top: calc(var(--u) * 105);
-  left: calc(var(--u) * 53);
-  width: calc(var(--u) * 1900);
-  font-family: 'IM Fell French Canon', Georgia, serif;
-  font-weight: 400;
-  font-size: calc(var(--u) * 150);
-  line-height: 1.2;
-  letter-spacing: calc(var(--u) * -4.5);
+.sc-top__wordmark {
+  grid-column: 2;
+  font: 700 64px/1.2 var(--sc-font-display);
+  letter-spacing: -0.02em;
+  color: #fff;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.sc-top__nav {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 54px;
+}
+
+.sc-top__tabs {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-top__tab {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 48px;
+  font: 400 14px/1 var(--sc-font-body);
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.sc-top__tab:hover {
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
+
+.sc-top__tab--active {
+  font-weight: 600;
+  border-bottom-color: #fff;
+}
+
+.sc-top__account {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
 }
 
-/* ── Tab navigation (markup + tab styles live in SimCivicsNav) ── */
-.sc-top__nav {
-  position: absolute;
-  top: 0;
-  right: calc(var(--u) * 57);
+.sc-top__account:hover {
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* ── Logo ── */
-.sc-top__logo {
-  position: absolute;
-  top: max(calc(var(--u) * 62), 52px);
-  right: calc(var(--u) * 58);
-  width: calc(var(--u) * 305);
-  height: calc(var(--u) * 305);
-  max-width: none;
-  object-fit: cover;
+.sc-top a:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
 }
 
-/* ── Narrow screens: stack the band ── */
-@media (max-width: 1100px) {
+/* The two dotted rules either side of the wordmark */
+.sc-top__rule {
+  position: absolute;
+  top: 91px;
+  width: calc(50% - 253px);
+  border-top: 2px dotted rgba(255, 255, 255, 0.95);
+  pointer-events: none;
+}
+.sc-top__rule--left { left: 107px; }
+.sc-top__rule--right { right: 107px; }
+
+/* Not enough room to center the wordmark and keep the nav on its right */
+@media (max-width: 1360px) {
+  .sc-top {
+    grid-template-columns: auto 1fr;
+    padding: 25px 32px 0;
+  }
+  .sc-top__wordmark { grid-column: 1; font-size: 52px; }
+  .sc-top__nav { grid-column: 2; }
+  .sc-top__rule { display: none; }
+}
+
+@media (max-width: 820px) {
   .sc-top {
     height: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 12px 24px 32px;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 8px;
+    padding: 16px 16px 10px;
   }
-  .sc-top__nav,
-  .sc-top__title,
-  .sc-top__logo { position: static; }
-
-  .sc-top__nav {
-    order: 1;
-    max-width: 100%;
-    flex-wrap: wrap;
-  }
-  .sc-top .sc-nav__tab { min-width: 0; }
-
-  .sc-top__title {
-    order: 2;
-    width: auto;
-    font-size: clamp(44px, 10vw, 96px);
-    letter-spacing: -0.03em;
-  }
-  .sc-top__logo {
-    order: 3;
-    width: 160px;
-    height: 160px;
-    align-self: flex-end;
-  }
+  .sc-top__wordmark { grid-column: 1; font-size: 44px; }
+  .sc-top__nav { grid-column: 1; justify-self: center; gap: 8px; }
+  .sc-top__tab { width: 72px; }
 }
