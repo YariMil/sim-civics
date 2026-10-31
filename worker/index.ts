@@ -101,8 +101,9 @@ async function contact(body: Record<string, unknown>, env: Env) {
     return json({ error: 'Please fill in your name, a valid email, and a message.' }, 400);
   }
 
+  // Must be listed in allowed_destination_addresses in wrangler.jsonc, or Cloudflare refuses to send.
   await env.EMAIL.send({
-    to: 'admin@simcivicsla.com',
+    to: 'simcivics@gmail.com',
     from: 'website@simcivicsla.com',
     replyTo: email,
     subject: `Partnership inquiry from ${name}`,
