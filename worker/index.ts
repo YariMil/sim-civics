@@ -277,6 +277,76 @@ async function me(request: Request, env: Env) {
   return json({ user: user ? publicUser(user) : null });
 }
 
+/* ── Council member for the signed-in member's district ────── */
+
+type CouncilRow = { district: number; name: string; salutation: string; email: string; website: string };
+
+async function myCouncilMember(request: Request, env: Env) {
+  const user = await currentUser(request, env);
+  if (!user) return json({ error: 'Please log in again.' }, 401);
+  const member = await env.DB.prepare(
+    'SELECT district, name, salutation, email, website FROM council_members WHERE district = ?'
+  )
+    .bind(user.district)
+    .first<CouncilRow>();
+  return member
+    ? json({ member })
+    : json({ error: "We couldn't find a council member for your district." }, 404);
+}
+
+/* ── Find a council district from an address ─────────────────
+   The address is never stored or logged. It goes to the US Census Bureau geocoder (which
+   doesn't allow browser requests, so it passes through here), and only the resulting
+   coordinates go to the City of LA's official council district map. */
+
+const CENSUS_GEOCODER = 'https://geocoding.geo.census.gov/geocoder/locations/onelineaddress';
+const LA_COUNCIL_DISTRICTS = 'https://maps.lacity.org/lahub/rest/services/Boundaries/MapServer/13/query';
+
+async function districtLookup(body: Record<string, unknown>, env: Env) {
+  let address = clean(body.address, 200);
+  if (address.length < 5) return json({ error: 'Please enter a street address.' }, 400);
+  // Most people will type just the street; point the geocoder at Los Angeles.
+  if (!/\b(CA|Calif|California)\b|\b9\d{4}\b/i.test(address)) address += ', Los Angeles, CA';
+
+  const geo = new URL(CENSUS_GEOCODER);
+  geo.search = new URLSearchParams({ address, benchmark: 'Public_AR_Current', format: 'json' }).toString();
+  const geoRes = await fetch(geo, { signal: AbortSignal.timeout(8000) });
+  if (!geoRes.ok) {
+    console.error('Census geocoder status:', geoRes.status);
+    return json({ error: "The address lookup isn't working right now. Please choose your district instead." }, 502);
+  }
+  type Match = { matchedAddress: string; coordinates: { x: number; y: number } };
+  const geoData = (await geoRes.json()) as { result?: { addressMatches?: Match[] } };
+  const match = geoData.result?.addressMatches?.[0];
+  if (!match) {
+    return json({ error: "We couldn't find that address. Check the spelling, or choose your district instead." }, 404);
+  }
+
+  const map = new URL(LA_COUNCIL_DISTRICTS);
+  map.search = new URLSearchParams({
+    geometry: `${match.coordinates.x},${match.coordinates.y}`,
+    geometryType: 'esriGeometryPoint',
+    inSR: '4326',
+    spatialRel: 'esriSpatialRelIntersects',
+    outFields: 'District',
+    returnGeometry: 'false',
+    f: 'json',
+  }).toString();
+  const mapRes = await fetch(map, { signal: AbortSignal.timeout(8000) });
+  if (!mapRes.ok) {
+    console.error('LA council district map status:', mapRes.status);
+    return json({ error: "The address lookup isn't working right now. Please choose your district instead." }, 502);
+  }
+  const mapData = (await mapRes.json()) as { features?: { attributes: { District: number } }[] };
+  const district = mapData.features?.[0]?.attributes.District;
+  if (!district) return json({ matchedAddress: match.matchedAddress, district: null });
+
+  const member = await env.DB.prepare('SELECT name FROM council_members WHERE district = ?')
+    .bind(district)
+    .first<{ name: string }>();
+  return json({ matchedAddress: match.matchedAddress, district, councilMember: member?.name ?? null });
+}
+
 /* ── Account settings (signed-in only) ────────────────────── */
 
 async function changeName(user: UserRow, body: Record<string, unknown>, env: Env) {
@@ -284,6 +354,17 @@ async function changeName(user: UserRow, body: Record<string, unknown>, env: Env
   if (!name) return json({ error: 'Please enter your name.' }, 400);
   const updated = await env.DB.prepare('UPDATE users SET name = ? WHERE id = ? RETURNING *')
     .bind(name, user.id)
+    .first<UserRow>();
+  return json({ user: publicUser(updated!) });
+}
+
+async function changeDistrict(user: UserRow, body: Record<string, unknown>, env: Env) {
+  const district = Number(body.district);
+  if (!Number.isInteger(district) || district < 1 || district > MAX_DISTRICT) {
+    return json({ error: `District must be a number from 1 to ${MAX_DISTRICT}.` }, 400);
+  }
+  const updated = await env.DB.prepare('UPDATE users SET district = ? WHERE id = ? RETURNING *')
+    .bind(district, user.id)
     .first<UserRow>();
   return json({ user: publicUser(updated!) });
 }
@@ -559,6 +640,7 @@ export default {
     if (request.method === 'GET') {
       try {
         if (url.pathname === '/api/me') return await me(request, env);
+        if (url.pathname === '/api/council-member') return await myCouncilMember(request, env);
         return (await ideas(request, url, env)) ?? json({ error: 'Not found' }, 404);
       } catch (err) {
         console.error('Handler error', err instanceof Error ? err.message : 'unknown');
@@ -596,12 +678,24 @@ export default {
       return json({ error: 'Invalid request' }, 400);
     }
 
+    // Used on Sign Up before an account exists, so it can't require a session. It needs no bot
+    // check either: it only reads public data, and the /api/ rate limit covers abuse.
+    if (url.pathname === '/api/district-lookup') {
+      try {
+        return await districtLookup(body, env);
+      } catch (err) {
+        console.error('Handler error', err instanceof Error ? err.name : 'unknown'); // never log the address
+        return json({ error: "The address lookup isn't working right now. Please choose your district instead." }, 502);
+      }
+    }
+
     // Account settings rely on the session (and password, where it matters) instead of a bot check.
     if (url.pathname.startsWith('/api/account/')) {
       try {
         const user = await currentUser(request, env);
         if (!user) return json({ error: 'Please log in again.' }, 401);
         if (url.pathname === '/api/account/name') return await changeName(user, body, env);
+        if (url.pathname === '/api/account/district') return await changeDistrict(user, body, env);
         if (url.pathname === '/api/account/discoverable') return await updateDiscoverable(user, body, env);
         if (url.pathname === '/api/account/email') return await changeEmail(user, body, env);
         if (url.pathname === '/api/account/password') return await changePassword(user, body, env);

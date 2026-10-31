@@ -44,3 +44,23 @@ export type SimilarMatch = {
 // "no-tags": the idea has no tags, so there is nothing to match on.
 export const findSimilar = (id: number) =>
   request<{ matches: SimilarMatch[]; reason?: 'no-tags' }>(`/${id}/similar`);
+
+export type CouncilMember = {
+  district: number;
+  name: string;
+  salutation: string;
+  email: string;
+  website: string;
+};
+
+// The council member for the district on the signed-in member's account.
+export async function getCouncilMember(): Promise<{ ok: true; member: CouncilMember } | { ok: false; error: string }> {
+  try {
+    const res = await fetch('/api/council-member');
+    const data = await res.json().catch(() => ({}));
+    if (res.ok) return { ok: true, member: data.member };
+    return { ok: false, error: data.error ?? 'Something went wrong. Please try again.' };
+  } catch {
+    return { ok: false, error: 'Network error. Please try again.' };
+  }
+}

@@ -69,7 +69,10 @@ export default function Privacy() {
             </li>
           )}
         </ul>
-        <p>We do not ask for your street address.</p>
+        <p>
+          We do not ask for your street address. If you choose to look up your council district by
+          address, we use that address only for the lookup and do not save it (see below).
+        </p>
 
         <h2>How we use it</h2>
         <ul>
@@ -92,6 +95,12 @@ export default function Privacy() {
             <strong>Cloudflare</strong> hosts this website, stores account information, protects
             it from abuse, runs the bot check on our forms, and delivers contact-form messages to
             our inbox.
+          </li>
+          <li>
+            If you look up your council district by address, the address is sent through our site to
+            the <strong>U.S. Census Bureau</strong> geocoder to find its map location, and only that
+            location is sent to the <strong>City of Los Angeles</strong> council district map. We do
+            not store or log the address.
           </li>
           {p.usesGoogleFonts && (
             <li>

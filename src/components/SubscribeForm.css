@@ -278,3 +278,78 @@
   opacity: 0.6;
   cursor: wait;
 }
+
+/* "Find my district by address" (DistrictFinder) */
+
+.sc-finder__toggle {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--sc-blue);
+  font: 600 14px/1.4 var(--sc-font-body);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.sc-finder {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 8px;
+}
+
+.sc-finder label {
+  font-weight: 600;
+}
+
+.sc-finder__row {
+  display: flex;
+  gap: 8px;
+}
+
+.sc-finder__row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.sc-finder__go {
+  flex: none;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid var(--sc-blue);
+  border-radius: 8px;
+  background: var(--sc-blue);
+  color: #fff;
+  font: 600 14px var(--sc-font-body);
+  cursor: pointer;
+}
+
+.sc-finder__go:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sc-finder__result {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 14px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.sc-finder__result p {
+  margin: 0;
+}
+
+.sc-finder__toggle:focus-visible,
+.sc-finder__go:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}

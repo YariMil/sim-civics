@@ -1,6 +1,7 @@
 import { useId, useState, type FormEvent } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth, type User } from '../auth/AuthContext';
+import DistrictFinder from '../components/DistrictFinder';
 import '../styles/sim-civics-tokens.css';
 import '../components/SubscribeForm.css';
 import './SignUp.css';
@@ -69,6 +70,7 @@ export default function Account() {
               </button>
             </div>
             <ChangeNameForm current={user.name} />
+            <ChangeDistrictForm current={user.district} />
             <ChangeEmailForm />
             <ChangePasswordForm />
           </div>
@@ -166,6 +168,63 @@ function ChangeNameForm({ current }: { current: string }) {
       </div>
       <button type='submit' className='sc-form__submit' disabled={sending}>
         {sending ? 'Saving…' : 'Save name'}
+      </button>
+      {message && (
+        <p role={message.ok ? 'status' : 'alert'} className={message.ok ? 'sc-form__success' : 'sc-form__error'}>
+          {message.text}
+        </p>
+      )}
+    </form>
+  );
+}
+
+const DISTRICTS = Array.from({ length: 15 }, (_, i) => i + 1);
+
+function ChangeDistrictForm({ current }: { current: number }) {
+  const uid = useId();
+  const { setUser } = useAuth();
+  const [district, setDistrict] = useState(String(current));
+  const [sending, setSending] = useState(false);
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (sending) return;
+    setSending(true);
+    setMessage(null);
+    const result = await updateAccount('district', { district: Number(district) });
+    setSending(false);
+    if (result.ok) {
+      setUser(result.user);
+      setMessage({ ok: true, text: `Your district is now CD ${result.user.district}.` });
+    } else {
+      setMessage({ ok: false, text: result.error });
+    }
+  }
+
+  return (
+    <form className='sc-form' onSubmit={onSubmit}>
+      <h2 className='sc-form__title'>Change district</h2>
+      <div className='sc-field'>
+        <label htmlFor={`${uid}-district`}>LA Council District</label>
+        <p id={`${uid}-hint`} className='sc-field__hint'>
+          “Send to Council Member” writes to the council member for this district.
+        </p>
+        <DistrictFinder onUse={(d) => setDistrict(String(d))} />
+        <select
+          id={`${uid}-district`}
+          required
+          aria-describedby={`${uid}-hint`}
+          value={district}
+          onChange={(e) => setDistrict(e.target.value)}
+        >
+          {DISTRICTS.map((d) => (
+            <option key={d} value={d}>CD {d}</option>
+          ))}
+        </select>
+      </div>
+      <button type='submit' className='sc-form__submit' disabled={sending || Number(district) === current}>
+        {sending ? 'Saving…' : 'Save district'}
       </button>
       {message && (
         <p role={message.ok ? 'status' : 'alert'} className={message.ok ? 'sc-form__success' : 'sc-form__error'}>

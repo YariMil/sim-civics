@@ -4,6 +4,7 @@ import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import { TURNSTILE_SITE_KEY } from '../config/turnstile';
 import { ACCOUNTS_ENABLED } from '../config/features';
 import { useAuth } from '../auth/AuthContext';
+import DistrictFinder from './DistrictFinder';
 import '../styles/sim-civics-tokens.css';
 import './SubscribeForm.css';
 
@@ -140,6 +141,7 @@ export default function SubscribeForm() {
         <p id={id('district-hint')} className='sc-field__hint'>
           Los Angeles has 15 council districts (CD 1–15).
         </p>
+        <DistrictFinder onUse={(d) => setDistrict(String(d))} />
         <select
           id={id('district')}
           required
