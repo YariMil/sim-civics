@@ -1,20 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  BookOpen, Map, Play, ClipboardCheck, PenLine,
-  ChevronRight, ChevronDown, PlayCircle,
-} from 'lucide-react';
-import { modules, categoryMeta, type ResourceCategory } from '../data/resources';
+import { ChevronRight, ChevronDown, PlayCircle } from 'lucide-react';
+import { modules } from '../data/resources';
+import '../styles/sim-civics-tokens.css';
 import './Resources.css';
-
-// ─── Icon map ────────────────────────────────────────────────────
-const iconMap: Record<ResourceCategory, JSX.Element> = {
-  explainer: <BookOpen  size={14} aria-hidden="true" />,
-  guide:     <Map       size={14} aria-hidden="true" />,
-  video:     <Play      size={14} aria-hidden="true" />,
-  quiz:      <ClipboardCheck size={14} aria-hidden="true" />,
-  activity:  <PenLine   size={14} aria-hidden="true" />,
-};
 
 // ─── Total item count helper ─────────────────────────────────────
 function itemCount(n: number): string {
@@ -148,43 +137,33 @@ export default function Resources() {
                       <p className="sc-module__desc">{mod.description}</p>
 
                       <ol className="sc-item-list" aria-label={`Items in ${mod.title}`}>
-                        {mod.items.map((item, idx) => {
-                          const meta = categoryMeta[item.category];
-                          return (
-                            <li key={item.id} className="sc-item">
-                              <div className="sc-item__index" aria-hidden="true">
-                                {String(idx + 1).padStart(2, '0')}
-                              </div>
-                              <div className="sc-item__body">
+                        {mod.items.map((item, idx) => (
+                          <li key={item.id} className="sc-item">
+                            <div className="sc-item__index" aria-hidden="true">
+                              {String(idx + 1).padStart(2, '0')}
+                            </div>
+                            <div className="sc-item__body">
+                              {item.readTime && (
                                 <div className="sc-item__meta">
-                                  <span className="sc-tag sc-tag--blue sc-tag--sm">
-                                    {iconMap[item.category]}
-                                    {meta.label}
-                                  </span>
-                                  {item.isNew && (
-                                    <span className="sc-tag sc-tag--red sc-tag--sm">New</span>
-                                  )}
-                                  {item.readTime && (
-                                    <span className="sc-item__time">{item.readTime}</span>
-                                  )}
+                                  <span className="sc-item__time">{item.readTime}</span>
                                 </div>
-                                <h3 className="sc-item__title">{item.title}</h3>
-                                <p className="sc-item__desc">{item.description}</p>
-                              </div>
-                              {/* Items without an href show no button */}
-                              {item.href && (
-                                <a
-                                  href={item.href}
-                                  className="sc-btn-blue sc-item__cta"
-                                  aria-label={`Open: ${item.title}`}
-                                >
-                                  <span>Open</span>
-                                  <ChevronRight size={14} aria-hidden="true" />
-                                </a>
                               )}
-                            </li>
-                          );
-                        })}
+                              <h3 className="sc-item__title">{item.title}</h3>
+                              <p className="sc-item__desc">{item.description}</p>
+                            </div>
+                            {/* Items without an href show no button */}
+                            {item.href && (
+                              <a
+                                href={item.href}
+                                className="sc-btn-blue sc-item__cta"
+                                aria-label={`Open: ${item.title}`}
+                              >
+                                <span>Open</span>
+                                <ChevronRight size={14} aria-hidden="true" />
+                              </a>
+                            )}
+                          </li>
+                        ))}
                       </ol>
                     </div>
                   )}

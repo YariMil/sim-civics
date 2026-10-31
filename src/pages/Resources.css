@@ -1,7 +1,8 @@
 /* ═══════════════════════════════════════════════════════════
    Resources — styled after the Figma "Ordinance Refiner" page:
    pinkish page (#f6f0f0), gray (#d9d9d9) cards/panels with thin black
-   outlines, IM Fell French Canon text, tinted pill tags and blue buttons.
+   outlines, tinted pill tags and blue buttons. Fonts match the rest of the site:
+   Newsreader for headings, Inter for text (sim-civics-tokens.css).
    Top and bottom bands live in SimCivicsTop / SimCivicsBottom.
    All classes are namespaced (sc-res / sc-module / sc-item / sc-tag).
    ═══════════════════════════════════════════════════════════ */
@@ -17,7 +18,7 @@
 
   background: #f6f0f0;
   color: var(--sc-ink);
-  font-family: 'IM Fell French Canon', Georgia, serif;
+  font-family: var(--sc-font-body);
   padding: max(32px, calc(var(--u) * 56)) max(20px, calc(var(--u) * 26)) max(64px, calc(var(--u) * 110));
 }
 
@@ -29,12 +30,12 @@
   padding: 6px 22px;
   border: 2px solid transparent;
   border-radius: 999px;
-  font-family: 'IM Fell French Canon', Georgia, serif;
-  font-size: 22px;
+  font-family: var(--sc-font-body);
+  font-weight: 600;
+  font-size: 15px;
   line-height: 1.2;
   white-space: nowrap;
 }
-.sc-tag--sm { padding: 2px 14px; font-size: 17px; border-width: 2px; }
 .sc-tag--blue  { background: #fff;                         border-color: var(--sc-blue); color: var(--sc-blue); }
 .sc-tag--green { background: rgba(102, 211, 101, 0.25);    border-color: #269824;        color: #1f7a1d; }
 .sc-tag--red   { background: rgba(208, 63, 63, 0.25);      border-color: #d03f3f;        color: #b53535; }
@@ -49,7 +50,7 @@
   background: var(--sc-blue);
   border: 2px solid var(--sc-blue);
   border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-weight: 400;
   font-size: 16px;
   line-height: 1;
@@ -64,15 +65,16 @@
 /* ── Intro ── */
 .sc-res__intro { max-width: max(calc(var(--u) * 1300), 640px); }
 .sc-res__eyebrow {
-  font-size: max(30px, calc(var(--u) * 60));
+  font-family: var(--sc-font-display);
+  font-weight: 700;
+  font-size: max(30px, calc(var(--u) * 56));
   line-height: 1.2;
-  letter-spacing: -0.03em;
+  color: var(--sc-blue);
 }
 .sc-res__sub {
   margin-top: 10px;
-  font-size: max(20px, calc(var(--u) * 35));
-  line-height: 1.25;
-  letter-spacing: -0.02em;
+  font-size: max(17px, calc(var(--u) * 24));
+  line-height: 1.5;
   color: var(--sc-ink-soft);
 }
 .sc-res__chips {
@@ -102,9 +104,10 @@
 }
 .sc-res__sidebar-heading {
   padding: 0 8px 12px;
-  font-size: 28px;
+  font-family: var(--sc-font-display);
+  font-weight: 700;
+  font-size: 24px;
   line-height: 1.1;
-  letter-spacing: -0.03em;
 }
 .sc-res__nav-item {
   display: flex;
@@ -131,7 +134,7 @@
 .sc-res__nav-item:focus-visible { outline: 3px solid var(--sc-ink); outline-offset: 2px; }
 .sc-res__nav-num {
   flex-shrink: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-weight: 600;
   font-size: 15px;
   line-height: 1.5;
@@ -144,7 +147,7 @@
   letter-spacing: -0.01em;
 }
 .sc-res__nav-count {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-size: 12.5px;
   color: var(--sc-ink-soft);
 }
@@ -176,7 +179,7 @@
 .sc-module__header:focus-visible { outline: 3px solid var(--sc-ink); outline-offset: -3px; }
 .sc-module__header-left { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .sc-module__eyebrow {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -184,16 +187,15 @@
   color: var(--sc-ink-soft);
 }
 .sc-module__title {
-  font-family: 'IM Fell French Canon', Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(28px, calc(var(--u) * 48), 48px);
+  font-family: var(--sc-font-display);
+  font-weight: 700;
+  font-size: clamp(26px, calc(var(--u) * 44), 40px);
   line-height: 1.15;
-  letter-spacing: -0.03em;
+  color: var(--sc-blue);
 }
 .sc-module__subtitle {
-  font-size: clamp(20px, calc(var(--u) * 30), 30px);
-  line-height: 1.2;
-  letter-spacing: -0.02em;
+  font-size: clamp(16px, calc(var(--u) * 22), 19px);
+  line-height: 1.4;
   color: var(--sc-ink-soft);
 }
 .sc-module__header-right {
@@ -204,7 +206,7 @@
   padding-top: 6px;
 }
 .sc-module__count {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-size: 14px;
   color: var(--sc-ink-soft);
 }
@@ -216,9 +218,8 @@
 .sc-module__body { padding: 0 24px 24px; }
 .sc-module__desc {
   margin-bottom: 20px;
-  font-size: clamp(19px, calc(var(--u) * 28), 28px);
-  line-height: 1.3;
-  letter-spacing: -0.015em;
+  font-size: clamp(16px, calc(var(--u) * 21), 18px);
+  line-height: 1.5;
 }
 
 /* ── Item rows (Figma "idea-detail-card": white, thin black outline) ── */
@@ -239,7 +240,7 @@
 .sc-item__index {
   flex-shrink: 0;
   width: 44px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-weight: 600;
   font-size: 18px;
   line-height: 1.7;
@@ -254,22 +255,20 @@
   margin-bottom: 8px;
 }
 .sc-item__time {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--sc-font-body);
   font-size: 13px;
   color: var(--sc-ink-soft);
 }
 .sc-item__title {
-  font-family: 'IM Fell French Canon', Georgia, serif;
-  font-weight: 400;
-  font-size: clamp(22px, calc(var(--u) * 36), 36px);
+  font-family: var(--sc-font-display);
+  font-weight: 700;
+  font-size: clamp(20px, calc(var(--u) * 30), 26px);
   line-height: 1.2;
-  letter-spacing: -0.025em;
 }
 .sc-item__desc {
   margin-top: 6px;
-  font-size: clamp(18px, calc(var(--u) * 25), 25px);
-  line-height: 1.3;
-  letter-spacing: -0.01em;
+  font-size: clamp(15px, calc(var(--u) * 19), 17px);
+  line-height: 1.5;
   color: var(--sc-ink-soft);
 }
 .sc-item__cta { flex-shrink: 0; align-self: center; padding: 10px 14px; font-size: 15px; }

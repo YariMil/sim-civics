@@ -4,8 +4,10 @@ export type Idea = {
   body: string;
   tags: string[];
   subtag: string | null;
-  createdAt: number;
-  updatedAt: number;
+  createdAt: number; // first drafted
+  updatedAt: number; // last edited
+  councilSentAt: number | null; // when the member said they emailed it to their council member
+  councilSentTo: string | null;
 };
 
 export type IdeaInput = Pick<Idea, 'title' | 'body' | 'tags' | 'subtag'>;
@@ -33,6 +35,14 @@ export const createIdea = (idea: IdeaInput) =>
 export const updateIdea = (id: number, idea: IdeaInput) =>
   request<{ idea: Idea }>(`/${id}`, { method: 'PUT', body: JSON.stringify(idea) });
 export const deleteIdea = (id: number) => request<{ ok: true }>(`/${id}`, { method: 'DELETE' });
+export const markSentToCouncil = (id: number) =>
+  request<{ idea: Idea }>(`/${id}/council-sent`, { method: 'POST' });
+
+export const formatDate = (ms: number) =>
+  new Date(ms).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+// Saving within a minute of creating counts as the first draft, not an edit.
+export const wasEdited = (idea: Idea) => idea.updatedAt - idea.createdAt > 60_000;
 
 export type SimilarMatch = {
   name: string; // may be empty for older accounts

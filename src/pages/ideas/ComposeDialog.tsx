@@ -45,6 +45,7 @@ export default function ComposeDialog({
   subject,
   template,
   context,
+  onSent,
   onClose,
 }: {
   to: string;
@@ -52,12 +53,22 @@ export default function ComposeDialog({
   subject: string;
   template: string;
   context?: ReactNode; // extra line under To/Subject, e.g. why this recipient
+  // When given, asks "Did you send it?" after the message is handed off, since the site can't tell.
+  onSent?: () => Promise<boolean>;
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   const uid = useId();
   const [body, setBody] = useState(template);
   const copyMessage = useCopyLabel('Copy message');
+  const [handedOff, setHandedOff] = useState(false);
+  const [sentState, setSentState] = useState<'idle' | 'saving' | 'saved' | 'failed'>('idle');
+
+  async function confirmSent() {
+    if (!onSent) return;
+    setSentState('saving');
+    setSentState((await onSent()) ? 'saved' : 'failed');
+  }
 
   useEffect(() => {
     ref.current?.showModal();
@@ -98,23 +109,41 @@ export default function ComposeDialog({
           )}
         </p>
         <div className='sc-compose__actions'>
-          <a className='sc-btn sc-btn--primary' href={gmail} target='_blank' rel='noopener noreferrer'>
+          <a className='sc-btn sc-btn--primary' href={gmail} target='_blank' rel='noopener noreferrer' onClick={() => setHandedOff(true)}>
             Open in Gmail
           </a>
-          <a className='sc-btn sc-btn--primary' href={outlook} target='_blank' rel='noopener noreferrer'>
+          <a className='sc-btn sc-btn--primary' href={outlook} target='_blank' rel='noopener noreferrer' onClick={() => setHandedOff(true)}>
             Open in Outlook.com
           </a>
-          <a className='sc-btn sc-btn--outline' href={mailto}>
+          <a className='sc-btn sc-btn--outline' href={mailto} onClick={() => setHandedOff(true)}>
             {ON_APPLE_DEVICE ? 'Open in Apple Mail' : 'Open my email app'}
           </a>
           <button
             type='button'
             className='sc-btn sc-btn--outline'
-            onClick={() => copyMessage.copy(`To: ${to}\nSubject: ${subject}\n\n${body}`)}
+            onClick={() => {
+              setHandedOff(true);
+              copyMessage.copy(`To: ${to}\nSubject: ${subject}\n\n${body}`);
+            }}
           >
             {copyMessage.label}
           </button>
         </div>
+        {onSent && handedOff && (
+          <div className='sc-compose__sent' aria-live='polite'>
+            {sentState === 'saved' ? (
+              <p>Marked as sent. You'll see the date on your idea.</p>
+            ) : (
+              <>
+                <p>Did you send it? Let us know so your idea shows when it was sent.</p>
+                <button type='button' className='sc-btn sc-btn--outline' onClick={confirmSent} disabled={sentState === 'saving'}>
+                  {sentState === 'saving' ? 'Saving…' : 'Yes, I sent it'}
+                </button>
+                {sentState === 'failed' && <p role='alert' className='sc-form__error'>Couldn't save that. Please try again.</p>}
+              </>
+            )}
+          </div>
+        )}
         <p className='sc-similar__note'>Sim-Civics doesn't send or keep a copy of this message.</p>
       </form>
     </dialog>

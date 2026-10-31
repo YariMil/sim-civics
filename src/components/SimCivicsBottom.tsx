@@ -10,7 +10,6 @@ const SITE_LINKS_A = [
 ];
 
 const SITE_LINKS_B = [
-  { to: '/why-us', label: 'Why us?' },
   { to: '/contact', label: 'Contact us' },
   { to: '/sign-up', label: 'Sign up' },
 ];

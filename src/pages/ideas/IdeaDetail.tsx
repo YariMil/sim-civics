@@ -3,7 +3,16 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import IdeasLayout from './IdeasLayout';
 import { ChipList } from './Chips';
 import ComposeDialog from './ComposeDialog';
-import { deleteIdea, getCouncilMember, getIdea, type CouncilMember, type Idea } from './api';
+import {
+  deleteIdea,
+  formatDate,
+  getCouncilMember,
+  getIdea,
+  markSentToCouncil,
+  wasEdited,
+  type CouncilMember,
+  type Idea,
+} from './api';
 import { useAuth, type User } from '../../auth/AuthContext';
 
 export default function IdeaDetail() {
@@ -57,6 +66,27 @@ export default function IdeaDetail() {
             </div>
           </div>
 
+          <dl className='sc-idea-meta'>
+            <div>
+              <dt>First drafted</dt>
+              <dd>{formatDate(idea.createdAt)}</dd>
+            </div>
+            {wasEdited(idea) && (
+              <div>
+                <dt>Last edited</dt>
+                <dd>{formatDate(idea.updatedAt)}</dd>
+              </div>
+            )}
+            <div>
+              <dt>Sent to council member</dt>
+              <dd>
+                {idea.councilSentAt
+                  ? `${formatDate(idea.councilSentAt)}${idea.councilSentTo ? ` · ${idea.councilSentTo}` : ''}`
+                  : 'Not yet'}
+              </dd>
+            </div>
+          </dl>
+
           <p className='sc-idea-detail__body'>{idea.body}</p>
 
           {(idea.tags.length > 0 || idea.subtag) && (
@@ -103,6 +133,11 @@ export default function IdeaDetail() {
               <a href={council.website} target='_blank' rel='noopener noreferrer'>Visit their office's website</a>.
             </>
           }
+          onSent={async () => {
+            const r = await markSentToCouncil(id);
+            if (r.ok) setIdea(r.data.idea);
+            return r.ok;
+          }}
           onClose={() => setCouncil(null)}
         />
       )}

@@ -239,6 +239,49 @@ button.sc-chip {
   color: var(--sc-text);
 }
 
+/* ── Idea dates (drafted, edited, sent) ── */
+
+.sc-idea-card__dates {
+  margin: 0;
+  font-size: 13px;
+  color: var(--sc-text);
+}
+
+.sc-idea-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin: -12px 0 0;
+  font-size: 14px;
+}
+
+.sc-idea-meta dt {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--sc-muted);
+}
+
+.sc-idea-meta dd {
+  margin: 2px 0 0;
+}
+
+.sc-compose__sent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.sc-compose__sent p {
+  margin: 0;
+}
+
 /* ── Detail and editor cards ── */
 
 .sc-ideas__card {

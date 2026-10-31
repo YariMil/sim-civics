@@ -427,6 +427,8 @@ type IdeaRow = {
   subtag: string | null;
   created_at: number;
   updated_at: number;
+  council_sent_at: number | null;
+  council_sent_to: string | null;
 };
 
 const publicIdea = (i: IdeaRow) => ({
@@ -437,6 +439,8 @@ const publicIdea = (i: IdeaRow) => ({
   subtag: i.subtag,
   createdAt: i.created_at,
   updatedAt: i.updated_at,
+  councilSentAt: i.council_sent_at ?? null,
+  councilSentTo: i.council_sent_to ?? null,
 });
 
 // Keep only known names, without duplicates, in the canonical order.
@@ -605,16 +609,33 @@ async function findSimilar(user: UserRow, id: number, env: Env) {
   });
 }
 
-// Routes /api/ideas, /api/ideas/:id and /api/ideas/:id/similar. Returns null for paths it doesn't own.
+// The member confirmed they emailed this idea to their council member. The name comes from
+// their current district on the server, not from the request. Doesn't change "last edited".
+async function markSentToCouncil(user: UserRow, id: number, env: Env) {
+  const member = await env.DB.prepare('SELECT name FROM council_members WHERE district = ?')
+    .bind(user.district)
+    .first<{ name: string }>();
+  const updated = await env.DB.prepare(
+    'UPDATE ideas SET council_sent_at = ?, council_sent_to = ? WHERE id = ? AND user_id = ? RETURNING *'
+  )
+    .bind(Date.now(), member?.name ?? null, id, user.id)
+    .first<IdeaRow>();
+  return updated ? json({ idea: publicIdea(updated) }) : json({ error: 'Idea not found.' }, 404);
+}
+
+// Routes /api/ideas, /api/ideas/:id, /api/ideas/:id/similar and /api/ideas/:id/council-sent. Returns null for paths it doesn't own.
 async function ideas(request: Request, url: URL, env: Env) {
-  const match = url.pathname.match(/^\/api\/ideas(?:\/(\d+)(\/similar)?)?$/);
+  const match = url.pathname.match(/^\/api\/ideas(?:\/(\d+)(\/similar|\/council-sent)?)?$/);
   if (!match) return null;
   const user = await currentUser(request, env);
   if (!user) return json({ error: 'Please log in again.' }, 401);
   const id = match[1] ? Number(match[1]) : null;
 
-  if (match[2]) {
+  if (match[2] === '/similar') {
     return request.method === 'GET' ? findSimilar(user, id!, env) : json({ error: 'Method not allowed' }, 405);
+  }
+  if (match[2] === '/council-sent') {
+    return request.method === 'POST' ? markSentToCouncil(user, id!, env) : json({ error: 'Method not allowed' }, 405);
   }
 
   if (request.method === 'GET') return id === null ? listIdeas(user, env) : getIdea(user, id, env);
