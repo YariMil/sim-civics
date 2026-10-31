@@ -2,11 +2,11 @@ import { useEffect, useId, useState, type FormEvent } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import IdeasLayout from './IdeasLayout';
 import '../../components/SubscribeForm.css';
-import { ChipPicker } from './Chips';
+import { TagPicker } from './Chips';
 import { createIdea, getIdea, updateIdea, type IdeaInput } from './api';
-import { MAX_BODY, MAX_TITLE, SUBTAGS, TAGS } from '../../data/ideaTags';
+import { MAX_BODY, MAX_TITLE } from '../../data/ideaTags';
 
-const EMPTY: IdeaInput = { title: '', body: '', tags: [], subtags: [] };
+const EMPTY: IdeaInput = { title: '', body: '', tags: [], subtag: null };
 
 // "Ideas – New Idea" at /ideas/new and "Ideas – Edit Idea" at /ideas/:id/edit.
 export default function IdeaEditor() {
@@ -24,8 +24,8 @@ export default function IdeaEditor() {
     if (id === null) return;
     getIdea(id).then((r) => {
       if (!r.ok) return setError(r.error);
-      const { title, body, tags, subtags } = r.data.idea;
-      setIdea({ title, body, tags, subtags });
+      const { title, body, tags, subtag } = r.data.idea;
+      setIdea({ title, body, tags, subtag });
       setSavedTitle(title);
     });
   }, [id]);
@@ -88,22 +88,7 @@ export default function IdeaEditor() {
           />
         </div>
 
-        <div className='sc-ideas__pickers'>
-          <ChipPicker
-            kind='tag'
-            legend='Tags (select all that apply)'
-            options={TAGS}
-            selected={idea.tags}
-            onChange={(tags) => set({ tags })}
-          />
-          <ChipPicker
-            kind='subtag'
-            legend='Subtags (select all that apply)'
-            options={SUBTAGS}
-            selected={idea.subtags}
-            onChange={(subtags) => set({ subtags })}
-          />
-        </div>
+        <TagPicker tags={idea.tags} subtag={idea.subtag} onChange={set} />
 
         <div className='sc-ideas__actions'>
           <button type='submit' className='sc-btn sc-btn--primary' disabled={saving}>

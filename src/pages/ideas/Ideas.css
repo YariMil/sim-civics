@@ -325,9 +325,10 @@ button.sc-chip {
   outline-offset: 2px;
 }
 
-.sc-ideas__pickers {
+.sc-tag-picker {
   display: flex;
-  gap: 48px;
+  flex-direction: column;
+  gap: 24px;
 }
 
 .sc-picker {
@@ -344,6 +345,21 @@ button.sc-chip {
   font: 600 16px/1.2 var(--sc-font-body);
 }
 
+.sc-picker__group + .sc-picker__group {
+  margin-top: 16px;
+}
+
+.sc-picker__group-name {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--sc-muted);
+}
+
+button.sc-chip:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
 .sc-ideas__disclaimer {
   margin: 0;
   font-size: 13px;
@@ -356,10 +372,6 @@ button.sc-chip {
   .sc-idea-detail__title-row {
     flex-direction: column;
     align-items: flex-start;
-  }
-  .sc-ideas__pickers {
-    flex-direction: column;
-    gap: 24px;
   }
   .sc-ideas__card {
     padding: 24px;

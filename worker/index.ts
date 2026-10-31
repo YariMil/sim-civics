@@ -1,4 +1,4 @@
-import { TAGS, SUBTAGS, MAX_TITLE, MAX_BODY } from '../src/data/ideaTags';
+import { TAGS, MAX_TAGS, subtagsFor, MAX_TITLE, MAX_BODY } from '../src/data/ideaTags';
 
 interface Env {
   ASSETS: Fetcher;
@@ -328,7 +328,7 @@ type IdeaRow = {
   title: string;
   body: string;
   tags: string;
-  subtags: string;
+  subtag: string | null;
   created_at: number;
   updated_at: number;
 };
@@ -338,7 +338,7 @@ const publicIdea = (i: IdeaRow) => ({
   title: i.title,
   body: i.body,
   tags: JSON.parse(i.tags) as string[],
-  subtags: JSON.parse(i.subtags) as string[],
+  subtag: i.subtag,
   createdAt: i.created_at,
   updatedAt: i.updated_at,
 });
@@ -346,6 +346,17 @@ const publicIdea = (i: IdeaRow) => ({
 // Keep only known names, without duplicates, in the canonical order.
 const pick = (value: unknown, allowed: readonly string[]) =>
   Array.isArray(value) ? allowed.filter((name) => value.includes(name)) : [];
+
+// Up to MAX_TAGS general tags, and at most one subtag that belongs to one of them.
+function readTags(body: Record<string, unknown>) {
+  const tags = pick(body.tags, TAGS);
+  if (tags.length > MAX_TAGS) return `Choose up to ${MAX_TAGS} tags.`;
+  const subtag = body.subtag == null || body.subtag === '' ? null : String(body.subtag);
+  if (subtag !== null && !subtagsFor(tags).includes(subtag)) {
+    return 'Choose a subtag that belongs to one of your tags.';
+  }
+  return { tags: JSON.stringify(tags), subtag };
+}
 
 function readIdea(body: Record<string, unknown>) {
   const title = clean(body.title, MAX_TITLE);
@@ -357,12 +368,9 @@ function readIdea(body: Record<string, unknown>) {
     .slice(0, MAX_BODY);
   if (!title) return 'Please give your idea a name.';
   if (!text) return 'Please describe your idea.';
-  return {
-    title,
-    body: text,
-    tags: JSON.stringify(pick(body.tags, TAGS)),
-    subtags: JSON.stringify(pick(body.subtags, SUBTAGS)),
-  };
+  const tags = readTags(body);
+  if (typeof tags === 'string') return tags;
+  return { title, body: text, ...tags };
 }
 
 async function listIdeas(user: UserRow, env: Env) {
@@ -386,12 +394,12 @@ async function createIdea(user: UserRow, body: Record<string, unknown>, env: Env
   if (typeof idea === 'string') return json({ error: idea }, 400);
   const now = Date.now();
   const created = await env.DB.prepare(
-    `INSERT INTO ideas (user_id, title, body, tags, subtags, created_at, updated_at)
+    `INSERT INTO ideas (user_id, title, body, tags, subtag, created_at, updated_at)
      SELECT ?, ?, ?, ?, ?, ?, ?
      WHERE (SELECT COUNT(*) FROM ideas WHERE user_id = ?) < ?
      RETURNING *`
   )
-    .bind(user.id, idea.title, idea.body, idea.tags, idea.subtags, now, now, user.id, MAX_IDEAS_PER_USER)
+    .bind(user.id, idea.title, idea.body, idea.tags, idea.subtag, now, now, user.id, MAX_IDEAS_PER_USER)
     .first<IdeaRow>();
   if (!created) {
     return json({ error: `You can save up to ${MAX_IDEAS_PER_USER} ideas. Delete one to add another.` }, 409);
@@ -403,11 +411,11 @@ async function updateIdea(user: UserRow, id: number, body: Record<string, unknow
   const idea = readIdea(body);
   if (typeof idea === 'string') return json({ error: idea }, 400);
   const updated = await env.DB.prepare(
-    `UPDATE ideas SET title = ?, body = ?, tags = ?, subtags = ?, updated_at = ?
+    `UPDATE ideas SET title = ?, body = ?, tags = ?, subtag = ?, updated_at = ?
      WHERE id = ? AND user_id = ?
      RETURNING *`
   )
-    .bind(idea.title, idea.body, idea.tags, idea.subtags, Date.now(), id, user.id)
+    .bind(idea.title, idea.body, idea.tags, idea.subtag, Date.now(), id, user.id)
     .first<IdeaRow>();
   return updated ? json({ idea: publicIdea(updated) }) : json({ error: 'Idea not found.' }, 404);
 }

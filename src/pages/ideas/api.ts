@@ -3,12 +3,12 @@ export type Idea = {
   title: string;
   body: string;
   tags: string[];
-  subtags: string[];
+  subtag: string | null;
   createdAt: number;
   updatedAt: number;
 };
 
-export type IdeaInput = Pick<Idea, 'title' | 'body' | 'tags' | 'subtags'>;
+export type IdeaInput = Pick<Idea, 'title' | 'body' | 'tags' | 'subtag'>;
 
 type Result<T> = { ok: true; data: T } | { ok: false; status: number; error: string };
 

@@ -45,7 +45,7 @@ export default function IdeaDetail() {
 
           <p className='sc-idea-detail__body'>{idea.body}</p>
 
-          {(idea.tags.length > 0 || idea.subtags.length > 0) && (
+          {(idea.tags.length > 0 || idea.subtag) && (
             <div className='sc-idea-detail__tags'>
               {idea.tags.length > 0 && (
                 <div className='sc-idea-detail__tag-group'>
@@ -53,10 +53,10 @@ export default function IdeaDetail() {
                   <ChipList kind='tag' labels={idea.tags} />
                 </div>
               )}
-              {idea.subtags.length > 0 && (
+              {idea.subtag && (
                 <div className='sc-idea-detail__tag-group'>
-                  <span>Subtags</span>
-                  <ChipList kind='subtag' labels={idea.subtags} />
+                  <span>Subtag</span>
+                  <ChipList kind='subtag' labels={[idea.subtag]} />
                 </div>
               )}
             </div>

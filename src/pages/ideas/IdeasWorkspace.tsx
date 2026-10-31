@@ -35,7 +35,7 @@ export default function IdeasWorkspace() {
                 <h3 className='sc-idea-card__title'>{idea.title}</h3>
                 <p className='sc-idea-card__body'>{idea.body}</p>
                 {idea.tags.length > 0 && <ChipList kind='tag' labels={idea.tags} />}
-                {idea.subtags.length > 0 && <ChipList kind='subtag' labels={idea.subtags} />}
+                {idea.subtag && <ChipList kind='subtag' labels={[idea.subtag]} />}
                 <span className='sc-idea-card__view'>View idea</span>
               </Link>
             </li>
