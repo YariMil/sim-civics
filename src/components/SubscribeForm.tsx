@@ -1,7 +1,8 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
 import { ACCOUNTS_ENABLED } from '../config/features';
+import { useAuth } from '../auth/AuthContext';
 import '../styles/sim-civics-tokens.css';
 import './SubscribeForm.css';
 
@@ -24,22 +25,18 @@ export default function SubscribeForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [message, setMessage] = useState('');
   const widget = useRef<TurnstileInstance>(null);
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (status === 'sending') return;
 
-    if (ACCOUNTS_ENABLED) {
-      // Accounts need their own backend (never send passwords to Buttondown). Not built yet.
-      setStatus('error');
-      setMessage('Accounts are not available yet.');
-      return;
-    }
-
     setStatus('sending');
     setMessage('');
     try {
-      const res = await fetch('/api/subscribe', {
+      // With accounts on, the password goes only to our own /api/signup, never to Buttondown.
+      const res = await fetch(ACCOUNTS_ENABLED ? '/api/signup' : '/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -47,10 +44,16 @@ export default function SubscribeForm() {
           district: Number(district),
           affiliated,
           organization: affiliated === 'yes' ? organization : '',
+          ...(ACCOUNTS_ENABLED ? { password, discoverable } : {}),
           token,
         }),
       });
       const data = await res.json().catch(() => ({}));
+      if (res.ok && ACCOUNTS_ENABLED) {
+        setUser(data.user);
+        navigate('/account');
+        return;
+      }
       if (res.ok) {
         setStatus('done');
         setMessage('Almost done! Check your inbox to confirm your subscription.');
@@ -194,7 +197,7 @@ export default function SubscribeForm() {
       <Turnstile ref={widget} siteKey={SITE_KEY} onSuccess={setToken} />
 
       <button type='submit' className='sc-form__submit' disabled={!token || status === 'sending'}>
-        {status === 'sending' ? 'Signing up…' : ACCOUNTS_ENABLED ? 'Create account' : 'Sign up'}
+        {status === 'sending' ? (ACCOUNTS_ENABLED ? 'Creating account…' : 'Signing up…') : ACCOUNTS_ENABLED ? 'Create account' : 'Sign up'}
       </button>
 
       {status === 'error' && <p role='alert' className='sc-form__error'>{message}</p>}

@@ -69,6 +69,8 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.18);
   color: #fff;
+  font: 600 18px/1 var(--sc-font-body);
+  text-decoration: none;
 }
 
 .sc-top__account:hover {

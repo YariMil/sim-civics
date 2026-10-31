@@ -9,6 +9,10 @@ import ModuleViewer from './pages/ModuleViewer';
 import Contact from './pages/Contact';
 import SignUp from './pages/SignUp';
 import Privacy from './pages/Privacy';
+import LogIn from './pages/LogIn';
+import Account from './pages/Account';
+import { AuthProvider } from './auth/AuthContext';
+import { ACCOUNTS_ENABLED } from './config/features';
 import './styles/globals.css';
 
 // Scroll to top on route change
@@ -35,7 +39,9 @@ function AppInner() {
         <Route path="/resources/:moduleId" element={<ModuleViewer />} />
         <Route path="/contact"             element={<Contact />} />
         <Route path="/sign-up"             element={<SignUp />} />
-          <Route path="/privacy" element={<Privacy />} />
+        <Route path="/privacy"             element={<Privacy />} />
+        {ACCOUNTS_ENABLED && <Route path="/log-in"  element={<LogIn />} />}
+        {ACCOUNTS_ENABLED && <Route path="/account" element={<Account />} />}
         {/* Catch-all → home */}
         <Route path="*"                    element={<Home />} />
       </Routes>
@@ -47,7 +53,9 @@ function AppInner() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppInner />
+      <AuthProvider>
+        <AppInner />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

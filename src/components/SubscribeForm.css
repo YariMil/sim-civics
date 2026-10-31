@@ -218,3 +218,31 @@
     padding: 24px;
   }
 }
+
+.sc-account {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px 24px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.sc-account dt {
+  font-weight: 600;
+}
+
+.sc-account dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+  .sc-account {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .sc-account dd + dt {
+    margin-top: 12px;
+  }
+}
