@@ -252,16 +252,68 @@ async function logout(request: Request, env: Env) {
   return json({ ok: true }, 200, { 'Set-Cookie': sessionCookie('', 0) });
 }
 
-async function me(request: Request, env: Env) {
+async function currentUser(request: Request, env: Env) {
   const token = readSessionToken(request);
-  if (!token) return json({ user: null });
-  const user = await env.DB.prepare(
+  if (!token) return null;
+  return env.DB.prepare(
     `SELECT users.* FROM sessions JOIN users ON users.id = sessions.user_id
      WHERE sessions.token_hash = ? AND sessions.expires_at > ?`
   )
     .bind(await sha256(token), Date.now())
     .first<UserRow>();
+}
+
+async function me(request: Request, env: Env) {
+  const user = await currentUser(request, env);
   return json({ user: user ? publicUser(user) : null });
+}
+
+/* ── Account settings (signed-in only) ────────────────────── */
+
+async function updateDiscoverable(user: UserRow, body: Record<string, unknown>, env: Env) {
+  if (typeof body.discoverable !== 'boolean') return json({ error: 'Invalid request' }, 400);
+  const updated = await env.DB.prepare('UPDATE users SET discoverable = ? WHERE id = ? RETURNING *')
+    .bind(body.discoverable ? 1 : 0, user.id)
+    .first<UserRow>();
+  return json({ user: publicUser(updated!) });
+}
+
+// Changing the email or password needs the current password, so a borrowed session isn't enough.
+async function changeEmail(user: UserRow, body: Record<string, unknown>, env: Env) {
+  const email = clean(body.email, 254).toLowerCase();
+  if (!EMAIL_RE.test(email)) return json({ error: 'Please enter a valid email address.' }, 400);
+  if (!(await verifyPassword(String(body.password ?? '').slice(0, MAX_PASSWORD), user.password_hash))) {
+    return json({ error: 'Your current password is incorrect.' }, 401);
+  }
+  if (email === user.email) return json({ user: publicUser(user) });
+
+  const updated = await env.DB.prepare(
+    `UPDATE users SET email = ? WHERE id = ?
+     AND NOT EXISTS (SELECT 1 FROM users WHERE email = ?)
+     RETURNING *`
+  )
+    .bind(email, user.id, email)
+    .first<UserRow>();
+  if (!updated) return json({ error: 'An account with this email already exists.' }, 409);
+  return json({ user: publicUser(updated) });
+}
+
+async function changePassword(user: UserRow, body: Record<string, unknown>, env: Env) {
+  const current = String(body.currentPassword ?? '').slice(0, MAX_PASSWORD);
+  const next = String(body.newPassword ?? '');
+  if (next.length < MIN_PASSWORD || next.length > MAX_PASSWORD) {
+    return json({ error: `Password must be ${MIN_PASSWORD} to ${MAX_PASSWORD} characters.` }, 400);
+  }
+  if (!(await verifyPassword(current, user.password_hash))) {
+    return json({ error: 'Your current password is incorrect.' }, 401);
+  }
+
+  // Sign out every other device, then give this browser a fresh session.
+  await env.DB.batch([
+    env.DB.prepare('UPDATE users SET password_hash = ? WHERE id = ?').bind(await hashPassword(next), user.id),
+    env.DB.prepare('DELETE FROM sessions WHERE user_id = ?').bind(user.id),
+  ]);
+  return json({ user: publicUser(user) }, 200, { 'Set-Cookie': await startSession(user.id, env) });
 }
 
 export default {
@@ -291,6 +343,21 @@ export default {
       body = (await request.json()) as Record<string, unknown>;
     } catch {
       return json({ error: 'Invalid request' }, 400);
+    }
+
+    // Account settings rely on the session (and password, where it matters) instead of a bot check.
+    if (url.pathname.startsWith('/api/account/')) {
+      try {
+        const user = await currentUser(request, env);
+        if (!user) return json({ error: 'Please log in again.' }, 401);
+        if (url.pathname === '/api/account/discoverable') return await updateDiscoverable(user, body, env);
+        if (url.pathname === '/api/account/email') return await changeEmail(user, body, env);
+        if (url.pathname === '/api/account/password') return await changePassword(user, body, env);
+      } catch (err) {
+        console.error('Handler error', err instanceof Error ? err.message : 'unknown');
+        return json({ error: 'Something went wrong. Please try again later.' }, 500);
+      }
+      return json({ error: 'Not found' }, 404);
     }
 
     const human = await verifyTurnstile(

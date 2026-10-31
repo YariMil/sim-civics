@@ -246,3 +246,35 @@
     margin-top: 12px;
   }
 }
+
+.sc-account__stack {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sc-account__stack .sc-form {
+  flex: none;
+}
+
+.sc-form__secondary {
+  width: 100%;
+  height: 40px;
+  border: 1px solid var(--sc-blue);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--sc-blue);
+  font: 600 14px var(--sc-font-body);
+  cursor: pointer;
+}
+
+.sc-form__secondary:hover {
+  background: #f7f7fa;
+}
+
+.sc-switch input[type='checkbox']:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
