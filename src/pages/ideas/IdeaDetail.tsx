@@ -66,11 +66,11 @@ export default function IdeaDetail() {
 
           <hr className='sc-ideas__divider' />
 
-          {/* Not built yet: matching by subtag and sending to council members */}
           <div className='sc-idea-detail__share'>
-            <button type='button' className='sc-btn sc-btn--outline' disabled>
-              Find people with similar ideas · Coming soon
-            </button>
+            <Link to={`/ideas/${id}/similar`} className='sc-btn sc-btn--outline'>
+              Find people with similar ideas
+            </Link>
+            {/* Not built yet */}
             <button type='button' className='sc-btn sc-btn--primary' disabled>
               Send to Council Member · Coming soon
             </button>

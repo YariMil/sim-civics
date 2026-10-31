@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import IdeasLayout from './IdeasLayout';
-import { ChipList } from './Chips';
+import IdeaCard from './IdeaCard';
 import { listIdeas, type Idea } from './api';
 
 export default function IdeasWorkspace() {
@@ -31,13 +31,7 @@ export default function IdeasWorkspace() {
         <ul className='sc-idea-grid'>
           {ideas.map((idea) => (
             <li key={idea.id}>
-              <Link to={`/ideas/${idea.id}`} className='sc-idea-card'>
-                <h3 className='sc-idea-card__title'>{idea.title}</h3>
-                <p className='sc-idea-card__body'>{idea.body}</p>
-                {idea.tags.length > 0 && <ChipList kind='tag' labels={idea.tags} />}
-                {idea.subtag && <ChipList kind='subtag' labels={[idea.subtag]} />}
-                <span className='sc-idea-card__view'>View idea</span>
-              </Link>
+              <IdeaCard idea={idea} />
             </li>
           ))}
           <li>

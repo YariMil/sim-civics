@@ -33,3 +33,14 @@ export const createIdea = (idea: IdeaInput) =>
 export const updateIdea = (id: number, idea: IdeaInput) =>
   request<{ idea: Idea }>(`/${id}`, { method: 'PUT', body: JSON.stringify(idea) });
 export const deleteIdea = (id: number) => request<{ ok: true }>(`/${id}`, { method: 'DELETE' });
+
+export type SimilarMatch = {
+  name: string; // may be empty for older accounts
+  email: string;
+  shared: { kind: 'subtag' | 'tag'; label: string };
+  idea: { title: string; summary: string };
+};
+
+// "no-tags": the idea has no tags, so there is nothing to match on.
+export const findSimilar = (id: number) =>
+  request<{ matches: SimilarMatch[]; reason?: 'no-tags' }>(`/${id}/similar`);

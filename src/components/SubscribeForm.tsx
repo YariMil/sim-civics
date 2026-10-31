@@ -15,6 +15,7 @@ export default function SubscribeForm() {
   const uid = useId();
   const id = (name: string) => `${uid}-${name}`;
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [district, setDistrict] = useState('');
@@ -44,7 +45,7 @@ export default function SubscribeForm() {
           district: Number(district),
           affiliated,
           organization: affiliated === 'yes' ? organization : '',
-          ...(ACCOUNTS_ENABLED ? { password, discoverable } : {}),
+          ...(ACCOUNTS_ENABLED ? { name, password, discoverable } : {}),
           token,
         }),
       });
@@ -81,6 +82,26 @@ export default function SubscribeForm() {
   return (
     <form className='sc-form' onSubmit={onSubmit}>
       <h2 className='sc-form__title'>Sign up</h2>
+
+      {ACCOUNTS_ENABLED && (
+        <div className='sc-field'>
+          <label htmlFor={id('name')}>Name</label>
+          <p id={id('name-hint')} className='sc-field__hint'>
+            Shown with your email if you make it discoverable below.
+          </p>
+          <input
+            id={id('name')}
+            type='text'
+            required
+            maxLength={80}
+            autoComplete='name'
+            placeholder='Your name'
+            aria-describedby={id('name-hint')}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
+      )}
 
       <div className='sc-field'>
         <label htmlFor={id('email')}>Email</label>
@@ -179,8 +200,8 @@ export default function SubscribeForm() {
           <div>
             <label htmlFor={id('discoverable')}>Make my email discoverable to other members</label>
             <p id={id('discoverable-hint')} className='sc-field__hint'>
-              Members with an idea that shares a subtag with yours can see your email and contact
-              you outside Sim-Civics. You can turn this off anytime.
+              Members with a similar idea (same tag or subtag) can see your email and a short
+              summary of your idea, and contact you outside Sim-Civics. You can turn this off anytime.
             </p>
           </div>
           <input

@@ -367,6 +367,247 @@ button.sc-chip:disabled {
   line-height: 1.2;
 }
 
+/* ── Similar ideas ── */
+
+.sc-similar {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.sc-similar__yours {
+  flex: 0 0 391px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sc-similar__label {
+  margin: 0;
+  font: 600 15px/1.2 var(--sc-font-body);
+}
+
+.sc-similar__results {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sc-similar__intro {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.sc-similar__intro a,
+.sc-similar__note a {
+  color: var(--sc-blue);
+  font-weight: 600;
+}
+
+.sc-similar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-similar__row {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 22px 24px;
+  background: var(--sc-surface);
+  border: 2px solid var(--sc-red);
+}
+
+.sc-similar__contact {
+  flex: 0 0 250px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sc-similar__name {
+  margin: 0 0 -6px;
+  font: 600 18px/1.2 var(--sc-font-body);
+  color: var(--sc-blue);
+  overflow-wrap: anywhere;
+}
+
+.sc-similar__email {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+/* Older accounts without a name: the email takes the name's place */
+.sc-similar__email--only {
+  font: 600 16px/1.3 var(--sc-font-body);
+  color: var(--sc-blue);
+}
+
+.sc-similar__shared {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.sc-similar__theirs {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sc-similar__eyebrow {
+  margin: 0;
+  font: 600 12px/1.2 var(--sc-font-body);
+  text-transform: uppercase;
+}
+
+.sc-similar__title {
+  margin: 0;
+  font: 700 22px/1.2 var(--sc-font-display);
+  color: var(--sc-blue);
+  overflow-wrap: anywhere;
+}
+
+.sc-similar__summary {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.sc-similar__actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sc-similar__again {
+  align-self: flex-start;
+}
+
+.sc-similar__note {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.4;
+}
+
+/* Send email dialog (the inner form reuses the .sc-form card) */
+
+.sc-compose {
+  margin: auto; /* the global reset removes the browser's centering */
+  width: min(640px, calc(100% - 32px));
+  max-height: calc(100% - 32px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--sc-text);
+}
+
+.sc-compose::backdrop {
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.sc-compose__inner.sc-form {
+  gap: 16px;
+  padding: 32px;
+}
+
+.sc-compose__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.sc-compose__title {
+  margin: 0;
+  font: 700 28px/1.2 var(--sc-font-display);
+  color: var(--sc-blue);
+  overflow-wrap: anywhere;
+}
+
+.sc-compose__close {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--sc-text);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sc-compose__close:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.sc-compose__to,
+.sc-compose__hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.sc-compose__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* .sc-form styles its links as underlined text; these are buttons */
+.sc-compose a.sc-btn {
+  text-decoration: none;
+}
+
+.sc-compose a.sc-btn--primary {
+  color: #fff;
+}
+
+.sc-compose a.sc-btn--outline {
+  color: var(--sc-red);
+}
+
+@media (max-width: 600px) {
+  .sc-compose__inner.sc-form {
+    padding: 20px;
+  }
+  .sc-compose__actions .sc-btn {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .sc-similar {
+    flex-direction: column;
+  }
+  .sc-similar__yours {
+    flex: none;
+    width: min(100%, 391px);
+  }
+  .sc-similar__results {
+    width: 100%;
+  }
+}
+
 @media (max-width: 760px) {
   .sc-ideas__intro,
   .sc-idea-detail__title-row {
@@ -381,6 +622,18 @@ button.sc-chip:disabled {
   }
   .sc-idea-detail__body {
     font-size: 18px;
+  }
+  .sc-similar__row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .sc-similar__contact {
+    flex: none;
+  }
+  .sc-similar__actions {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
   .sc-btn {
     white-space: normal;

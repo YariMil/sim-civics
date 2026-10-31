@@ -45,7 +45,7 @@ export default function Privacy() {
         </ul>
         <p><strong>When you create an account:</strong></p>
         <ul>
-          <li>The same details as above, plus a password, which we store only in scrambled (hashed) form</li>
+          <li>The same details as above, plus your name and a password, which we store only in scrambled (hashed) form</li>
           <li>Whether you chose to make your email discoverable to other members</li>
           <li>The ideas you write in the Ideas Workspace, along with the tags you choose</li>
           <li>A login cookie that keeps you signed in for up to 30 days; it is removed when you log out</li>
@@ -76,8 +76,8 @@ export default function Privacy() {
           <li>To send you the {p.orgName} newsletter and updates you asked for.</li>
           <li>To run your account and save your progress and ideas.</li>
           <li>
-            If you turn on email discovery, to show your email to members whose ideas share a
-            subtag with yours.
+            If you turn on email discovery, to show your name and email, along with the title and a short
+            summary of one of your ideas, to members whose ideas share a tag or subtag with yours.
           </li>
           <li>To focus our content on issues in your council district.</li>
           <li>To reply to messages and partnership inquiries.</li>

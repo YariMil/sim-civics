@@ -14,6 +14,7 @@ import Account from './pages/Account';
 import IdeasWorkspace from './pages/ideas/IdeasWorkspace';
 import IdeaDetail from './pages/ideas/IdeaDetail';
 import IdeaEditor from './pages/ideas/IdeaEditor';
+import SimilarIdeas from './pages/ideas/SimilarIdeas';
 import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from './auth/AuthContext';
 import { ACCOUNTS_ENABLED } from './config/features';
@@ -52,6 +53,7 @@ function AppInner() {
             <Route path="/ideas/new"      element={<RequireAuth><IdeaEditor /></RequireAuth>} />
             <Route path="/ideas/:id"      element={<RequireAuth><IdeaDetail /></RequireAuth>} />
             <Route path="/ideas/:id/edit" element={<RequireAuth><IdeaEditor /></RequireAuth>} />
+            <Route path="/ideas/:id/similar" element={<RequireAuth><SimilarIdeas /></RequireAuth>} />
           </>
         )}
         {/* Catch-all → home */}

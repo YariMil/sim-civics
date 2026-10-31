@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState, type React
 import { ACCOUNTS_ENABLED } from '../config/features';
 
 export type User = {
+  name: string; // empty for accounts made before names were added
   email: string;
   district: number;
   affiliated: 'yes' | 'no' | 'unspecified';

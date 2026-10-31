@@ -195,6 +195,7 @@ async function startSession(userId: number, env: Env) {
 
 type UserRow = {
   id: number;
+  name: string;
   email: string;
   password_hash: string;
   district: number;
@@ -205,6 +206,7 @@ type UserRow = {
 
 // What the browser is allowed to see about the signed-in user.
 const publicUser = (u: UserRow) => ({
+  name: u.name,
   email: u.email,
   district: u.district,
   affiliated: u.affiliated,
@@ -212,7 +214,11 @@ const publicUser = (u: UserRow) => ({
   discoverable: u.discoverable === 1,
 });
 
+const MAX_NAME = 80;
+
 async function signup(body: Record<string, unknown>, env: Env) {
+  const name = clean(body.name, MAX_NAME);
+  if (!name) return json({ error: 'Please enter your name.' }, 400);
   const p = readProfile(body);
   if (typeof p === 'string') return json({ error: p }, 400);
   const password = String(body.password ?? '');
@@ -222,12 +228,12 @@ async function signup(body: Record<string, unknown>, env: Env) {
   const discoverable = body.discoverable === true ? 1 : 0;
 
   const user = await env.DB.prepare(
-    `INSERT INTO users (email, password_hash, district, affiliated, organization, discoverable, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)
+    `INSERT INTO users (name, email, password_hash, district, affiliated, organization, discoverable, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT (email) DO NOTHING
      RETURNING *`
   )
-    .bind(p.email, await hashPassword(password), p.district, p.affiliated, p.organization, discoverable, Date.now())
+    .bind(name, p.email, await hashPassword(password), p.district, p.affiliated, p.organization, discoverable, Date.now())
     .first<UserRow>();
   if (!user) {
     return json({ error: 'An account with this email already exists. Try logging in!' }, 409);
@@ -272,6 +278,15 @@ async function me(request: Request, env: Env) {
 }
 
 /* ── Account settings (signed-in only) ────────────────────── */
+
+async function changeName(user: UserRow, body: Record<string, unknown>, env: Env) {
+  const name = clean(body.name, MAX_NAME);
+  if (!name) return json({ error: 'Please enter your name.' }, 400);
+  const updated = await env.DB.prepare('UPDATE users SET name = ? WHERE id = ? RETURNING *')
+    .bind(name, user.id)
+    .first<UserRow>();
+  return json({ user: publicUser(updated!) });
+}
 
 async function updateDiscoverable(user: UserRow, body: Record<string, unknown>, env: Env) {
   if (typeof body.discoverable !== 'boolean') return json({ error: 'Invalid request' }, 400);
@@ -427,13 +442,99 @@ async function deleteIdea(user: UserRow, id: number, env: Env) {
   return meta.changes ? json({ ok: true }) : json({ error: 'Idea not found.' }, 404);
 }
 
-// Routes /api/ideas and /api/ideas/:id. Returns null for paths it doesn't own.
+/* ── Find people with similar ideas ──────────────────────────
+   Not a social feature: no messages, profiles or feed. It returns up to 3 random members who
+   turned on "discoverable", each with one of their ideas:
+     - up to 2 whose idea has the same subtag as yours,
+     - then 1 whose idea shares a general tag but has a different subtag.
+   Any slot one group can't fill goes to the other, so with no subtag matches all 3 come from
+   shared general tags. Each person appears at most once. */
+
+const SIMILAR_TOTAL = 3;
+const SAME_SUBTAG_SLOTS = 2;
+const SUMMARY_LENGTH = 200;
+
+type SimilarRow = { user_id: number; name: string; email: string; title: string; body: string; tags: string; subtag: string | null };
+
+const summarize = (text: string) => {
+  const flat = text.replace(/\s+/g, ' ').trim();
+  return flat.length <= SUMMARY_LENGTH ? flat : `${flat.slice(0, SUMMARY_LENGTH - 1).trimEnd()}…`;
+};
+
+async function findSimilar(user: UserRow, id: number, env: Env) {
+  const mine = await env.DB.prepare('SELECT * FROM ideas WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .first<IdeaRow>();
+  if (!mine) return json({ error: 'Idea not found.' }, 404);
+  const tags = JSON.parse(mine.tags) as string[];
+  if (tags.length === 0) return json({ matches: [], reason: 'no-tags' });
+
+  // Random order from the database; one idea per person is kept below.
+  const base = `SELECT ideas.user_id, users.name, users.email, ideas.title, ideas.body, ideas.tags, ideas.subtag
+    FROM ideas JOIN users ON users.id = ideas.user_id
+    WHERE users.discoverable = 1 AND ideas.user_id != ?`;
+  const sameSubtag = mine.subtag
+    ? (await env.DB.prepare(`${base} AND ideas.subtag = ? ORDER BY RANDOM() LIMIT 50`)
+        .bind(user.id, mine.subtag)
+        .all<SimilarRow>()).results
+    : [];
+  const sharedTag = (
+    await env.DB.prepare(
+      `${base}
+       AND EXISTS (SELECT 1 FROM json_each(ideas.tags) WHERE value IN (SELECT value FROM json_each(?)))
+       ${mine.subtag ? 'AND (ideas.subtag IS NULL OR ideas.subtag != ?)' : ''}
+       ORDER BY RANDOM() LIMIT 50`
+    )
+      .bind(...(mine.subtag ? [user.id, mine.tags, mine.subtag] : [user.id, mine.tags]))
+      .all<SimilarRow>()
+  ).results;
+
+  const seen = new Set<number>();
+  const take = (rows: SimilarRow[], n: number) => {
+    const picked: SimilarRow[] = [];
+    for (const row of rows) {
+      if (picked.length >= n) break;
+      if (seen.has(row.user_id)) continue;
+      seen.add(row.user_id);
+      picked.push(row);
+    }
+    return picked;
+  };
+
+  const bySubtag = take(sameSubtag, SAME_SUBTAG_SLOTS);
+  const byTag = take(sharedTag, SIMILAR_TOTAL - bySubtag.length);
+  const extra = take(sameSubtag, SIMILAR_TOTAL - bySubtag.length - byTag.length);
+
+  const toMatch = (row: SimilarRow, kind: 'subtag' | 'tag') => ({
+    name: row.name,
+    email: row.email,
+    shared:
+      kind === 'subtag'
+        ? { kind, label: mine.subtag! }
+        : { kind, label: (JSON.parse(row.tags) as string[]).find((t) => tags.includes(t))! },
+    idea: { title: row.title, summary: summarize(row.body) },
+  });
+
+  return json({
+    matches: [
+      ...bySubtag.map((r) => toMatch(r, 'subtag')),
+      ...extra.map((r) => toMatch(r, 'subtag')),
+      ...byTag.map((r) => toMatch(r, 'tag')),
+    ],
+  });
+}
+
+// Routes /api/ideas, /api/ideas/:id and /api/ideas/:id/similar. Returns null for paths it doesn't own.
 async function ideas(request: Request, url: URL, env: Env) {
-  const match = url.pathname.match(/^\/api\/ideas(?:\/(\d+))?$/);
+  const match = url.pathname.match(/^\/api\/ideas(?:\/(\d+)(\/similar)?)?$/);
   if (!match) return null;
   const user = await currentUser(request, env);
   if (!user) return json({ error: 'Please log in again.' }, 401);
   const id = match[1] ? Number(match[1]) : null;
+
+  if (match[2]) {
+    return request.method === 'GET' ? findSimilar(user, id!, env) : json({ error: 'Method not allowed' }, 405);
+  }
 
   if (request.method === 'GET') return id === null ? listIdeas(user, env) : getIdea(user, id, env);
   if (request.method === 'DELETE' && id !== null) return deleteIdea(user, id, env);
@@ -500,6 +601,7 @@ export default {
       try {
         const user = await currentUser(request, env);
         if (!user) return json({ error: 'Please log in again.' }, 401);
+        if (url.pathname === '/api/account/name') return await changeName(user, body, env);
         if (url.pathname === '/api/account/discoverable') return await updateDiscoverable(user, body, env);
         if (url.pathname === '/api/account/email') return await changeEmail(user, body, env);
         if (url.pathname === '/api/account/password') return await changePassword(user, body, env);

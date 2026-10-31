@@ -54,6 +54,8 @@ export default function Account() {
             <div className='sc-form'>
               <h2 className='sc-form__title'>Account details</h2>
               <dl className='sc-account'>
+                <dt>Name</dt>
+                <dd>{user.name || 'Not set yet'}</dd>
                 <dt>Email</dt>
                 <dd>{user.email}</dd>
                 <dt>LA Council District</dt>
@@ -66,6 +68,7 @@ export default function Account() {
                 Log out
               </button>
             </div>
+            <ChangeNameForm current={user.name} />
             <ChangeEmailForm />
             <ChangePasswordForm />
           </div>
@@ -101,8 +104,8 @@ function DiscoverableSwitch({ user }: { user: User }) {
         <div>
           <label htmlFor={`${uid}-switch`}>Make my email discoverable to other members</label>
           <p id={`${uid}-hint`} className='sc-field__hint'>
-            Members with an idea that shares a subtag with yours can see your email and contact you
-            outside Sim-Civics. You can turn this off anytime.
+            Members with a similar idea (same tag or subtag) can see your email and a short summary
+            of your idea, and contact you outside Sim-Civics. You can turn this off anytime.
           </p>
         </div>
         <input
@@ -117,6 +120,59 @@ function DiscoverableSwitch({ user }: { user: User }) {
       </div>
       {error && <p role='alert' className='sc-form__error'>{error}</p>}
     </>
+  );
+}
+
+function ChangeNameForm({ current }: { current: string }) {
+  const uid = useId();
+  const { setUser } = useAuth();
+  const [name, setName] = useState(current);
+  const [sending, setSending] = useState(false);
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    if (sending) return;
+    setSending(true);
+    setMessage(null);
+    const result = await updateAccount('name', { name });
+    setSending(false);
+    if (result.ok) {
+      setUser(result.user);
+      setMessage({ ok: true, text: 'Your name has been updated.' });
+    } else {
+      setMessage({ ok: false, text: result.error });
+    }
+  }
+
+  return (
+    <form className='sc-form' onSubmit={onSubmit}>
+      <h2 className='sc-form__title'>{current ? 'Change name' : 'Add your name'}</h2>
+      <div className='sc-field'>
+        <label htmlFor={`${uid}-name`}>Name</label>
+        <p id={`${uid}-hint`} className='sc-field__hint'>
+          Shown with your email to members with similar ideas, if your email is discoverable.
+        </p>
+        <input
+          id={`${uid}-name`}
+          type='text'
+          required
+          maxLength={80}
+          autoComplete='name'
+          aria-describedby={`${uid}-hint`}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </div>
+      <button type='submit' className='sc-form__submit' disabled={sending}>
+        {sending ? 'Saving…' : 'Save name'}
+      </button>
+      {message && (
+        <p role={message.ok ? 'status' : 'alert'} className={message.ok ? 'sc-form__success' : 'sc-form__error'}>
+          {message.text}
+        </p>
+      )}
+    </form>
   );
 }
 

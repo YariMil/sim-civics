@@ -39,7 +39,7 @@ export default function SimCivicsTop() {
         {user ? (
           // Signed in: single-letter avatar, per the Figma Avatar guidance
           <Link to='/account' className='sc-top__account' aria-label='Your account'>
-            <span aria-hidden='true'>{user.email[0].toUpperCase()}</span>
+            <span aria-hidden='true'>{(user.name || user.email)[0].toUpperCase()}</span>
           </Link>
         ) : (
           <Link to='/sign-up' className='sc-top__account' aria-label='Sign up or log in'>
