@@ -47,6 +47,7 @@ export default function Privacy() {
         <ul>
           <li>The same details as above, plus a password, which we store only in scrambled (hashed) form</li>
           <li>Whether you chose to make your email discoverable to other members</li>
+          <li>The ideas you write in the Ideas Workspace, along with the tags you choose</li>
           <li>A login cookie that keeps you signed in for up to 30 days; it is removed when you log out</li>
         </ul>
         <p><strong>When you contact us:</strong></p>
