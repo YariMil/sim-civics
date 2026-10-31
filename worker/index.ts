@@ -1,3 +1,5 @@
+import { TAGS, SUBTAGS, MAX_TITLE, MAX_BODY } from '../src/data/ideaTags';
+
 interface Env {
   ASSETS: Fetcher;
   BUTTONDOWN_API_KEY: string;
@@ -227,7 +229,7 @@ async function signup(body: Record<string, unknown>, env: Env) {
     .bind(p.email, await hashPassword(password), p.district, p.affiliated, p.organization, discoverable, Date.now())
     .first<UserRow>();
   if (!user) {
-    return json({ error: 'An account with this email already exists. Try logging in.' }, 409);
+    return json({ error: 'An account with this email already exists. Try logging in!' }, 409);
   }
 
   // Sign-up also joins the newsletter (Buttondown sends its own confirmation email).
@@ -316,24 +318,163 @@ async function changePassword(user: UserRow, body: Record<string, unknown>, env:
   return json({ user: publicUser(user) }, 200, { 'Set-Cookie': await startSession(user.id, env) });
 }
 
+/* ── Ideas Workspace (signed-in only, each member sees only their own) ── */
+
+const MAX_IDEAS_PER_USER = 200;
+
+type IdeaRow = {
+  id: number;
+  title: string;
+  body: string;
+  tags: string;
+  subtags: string;
+  created_at: number;
+  updated_at: number;
+};
+
+const publicIdea = (i: IdeaRow) => ({
+  id: i.id,
+  title: i.title,
+  body: i.body,
+  tags: JSON.parse(i.tags) as string[],
+  subtags: JSON.parse(i.subtags) as string[],
+  createdAt: i.created_at,
+  updatedAt: i.updated_at,
+});
+
+// Keep only known names, without duplicates, in the canonical order.
+const pick = (value: unknown, allowed: readonly string[]) =>
+  Array.isArray(value) ? allowed.filter((name) => value.includes(name)) : [];
+
+function readIdea(body: Record<string, unknown>) {
+  const title = clean(body.title, MAX_TITLE);
+  // Unlike clean(), keep line breaks and tabs so paragraphs survive.
+  const text = Array.from(String(body.body ?? ''))
+    .filter((c) => c >= ' ' || c === '\n' || c === '\t')
+    .join('')
+    .trim()
+    .slice(0, MAX_BODY);
+  if (!title) return 'Please give your idea a name.';
+  if (!text) return 'Please describe your idea.';
+  return {
+    title,
+    body: text,
+    tags: JSON.stringify(pick(body.tags, TAGS)),
+    subtags: JSON.stringify(pick(body.subtags, SUBTAGS)),
+  };
+}
+
+async function listIdeas(user: UserRow, env: Env) {
+  const { results } = await env.DB.prepare(
+    'SELECT * FROM ideas WHERE user_id = ? ORDER BY updated_at DESC'
+  )
+    .bind(user.id)
+    .all<IdeaRow>();
+  return json({ ideas: results.map(publicIdea) });
+}
+
+async function getIdea(user: UserRow, id: number, env: Env) {
+  const idea = await env.DB.prepare('SELECT * FROM ideas WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .first<IdeaRow>();
+  return idea ? json({ idea: publicIdea(idea) }) : json({ error: 'Idea not found.' }, 404);
+}
+
+async function createIdea(user: UserRow, body: Record<string, unknown>, env: Env) {
+  const idea = readIdea(body);
+  if (typeof idea === 'string') return json({ error: idea }, 400);
+  const now = Date.now();
+  const created = await env.DB.prepare(
+    `INSERT INTO ideas (user_id, title, body, tags, subtags, created_at, updated_at)
+     SELECT ?, ?, ?, ?, ?, ?, ?
+     WHERE (SELECT COUNT(*) FROM ideas WHERE user_id = ?) < ?
+     RETURNING *`
+  )
+    .bind(user.id, idea.title, idea.body, idea.tags, idea.subtags, now, now, user.id, MAX_IDEAS_PER_USER)
+    .first<IdeaRow>();
+  if (!created) {
+    return json({ error: `You can save up to ${MAX_IDEAS_PER_USER} ideas. Delete one to add another.` }, 409);
+  }
+  return json({ idea: publicIdea(created) }, 201);
+}
+
+async function updateIdea(user: UserRow, id: number, body: Record<string, unknown>, env: Env) {
+  const idea = readIdea(body);
+  if (typeof idea === 'string') return json({ error: idea }, 400);
+  const updated = await env.DB.prepare(
+    `UPDATE ideas SET title = ?, body = ?, tags = ?, subtags = ?, updated_at = ?
+     WHERE id = ? AND user_id = ?
+     RETURNING *`
+  )
+    .bind(idea.title, idea.body, idea.tags, idea.subtags, Date.now(), id, user.id)
+    .first<IdeaRow>();
+  return updated ? json({ idea: publicIdea(updated) }) : json({ error: 'Idea not found.' }, 404);
+}
+
+async function deleteIdea(user: UserRow, id: number, env: Env) {
+  const { meta } = await env.DB.prepare('DELETE FROM ideas WHERE id = ? AND user_id = ?')
+    .bind(id, user.id)
+    .run();
+  return meta.changes ? json({ ok: true }) : json({ error: 'Idea not found.' }, 404);
+}
+
+// Routes /api/ideas and /api/ideas/:id. Returns null for paths it doesn't own.
+async function ideas(request: Request, url: URL, env: Env) {
+  const match = url.pathname.match(/^\/api\/ideas(?:\/(\d+))?$/);
+  if (!match) return null;
+  const user = await currentUser(request, env);
+  if (!user) return json({ error: 'Please log in again.' }, 401);
+  const id = match[1] ? Number(match[1]) : null;
+
+  if (request.method === 'GET') return id === null ? listIdeas(user, env) : getIdea(user, id, env);
+  if (request.method === 'DELETE' && id !== null) return deleteIdea(user, id, env);
+  if (request.method !== 'POST' && request.method !== 'PUT') return json({ error: 'Method not allowed' }, 405);
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return json({ error: 'Invalid request' }, 400);
+  }
+  if (request.method === 'POST' && id === null) return createIdea(user, body, env);
+  if (request.method === 'PUT' && id !== null) return updateIdea(user, id, body, env);
+  return json({ error: 'Method not allowed' }, 405);
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(request);
 
+    if (request.method === 'GET') {
+      try {
+        if (url.pathname === '/api/me') return await me(request, env);
+        return (await ideas(request, url, env)) ?? json({ error: 'Not found' }, 404);
+      } catch (err) {
+        console.error('Handler error', err instanceof Error ? err.message : 'unknown');
+        return json({ error: 'Something went wrong. Please try again later.' }, 500);
+      }
+    }
+    if (!['POST', 'PUT', 'DELETE'].includes(request.method)) {
+      return json({ error: 'Method not allowed' }, 405);
+    }
+
+    // Only accept requests that come from this same site.
+    if (request.headers.get('Origin') !== url.origin) return json({ error: 'Forbidden' }, 403);
+    // Ideas can be up to 10,000 characters, which is more bytes than that in non-Latin scripts.
+    if (Number(request.headers.get('Content-Length') ?? 0) > 64000) {
+      return json({ error: 'Request too large' }, 413);
+    }
+
+    // Ideas rely on the session instead of a bot check, like account settings.
     try {
-      if (request.method === 'GET' && url.pathname === '/api/me') return await me(request, env);
+      const res = await ideas(request, url, env);
+      if (res) return res;
     } catch (err) {
       console.error('Handler error', err instanceof Error ? err.message : 'unknown');
       return json({ error: 'Something went wrong. Please try again later.' }, 500);
     }
     if (request.method !== 'POST') return json({ error: 'Method not allowed' }, 405);
-
-    // Only accept requests that come from this same site.
-    if (request.headers.get('Origin') !== url.origin) return json({ error: 'Forbidden' }, 403);
-    if (Number(request.headers.get('Content-Length') ?? 0) > 20000) {
-      return json({ error: 'Request too large' }, 413);
-    }
 
     // Logging out needs no body or bot check.
     if (url.pathname === '/api/logout') return await logout(request, env);

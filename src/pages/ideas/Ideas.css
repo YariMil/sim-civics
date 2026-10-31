@@ -1,0 +1,380 @@
+/* Ideas Workspace — Figma "Ideas Workspace", "Idea Detail", "New Idea", "Edit Idea" */
+
+.sc-ideas {
+  box-sizing: border-box;
+  min-height: 680px;
+  padding: 33px clamp(16px, 6.6vw, 95px) 80px;
+  background: #fff;
+  color: var(--sc-text);
+  font-family: var(--sc-font-body);
+}
+
+.sc-ideas__inner {
+  max-width: 1238px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sc-ideas__intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.sc-ideas__intro p {
+  max-width: 720px;
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.sc-ideas__subheading {
+  margin: 0;
+  font: 700 28px/1.2 var(--sc-font-display);
+  color: var(--sc-blue);
+}
+
+.sc-ideas__back {
+  align-self: flex-start;
+  font: 600 16px/1.2 var(--sc-font-body);
+  color: var(--sc-blue);
+  text-decoration: none;
+}
+
+.sc-ideas__back:hover {
+  text-decoration: underline;
+}
+
+.sc-ideas__muted {
+  margin: 0;
+  color: var(--sc-muted);
+}
+
+.sc-ideas__error {
+  margin: 0;
+  color: #b42318;
+}
+
+/* ── Buttons ── */
+
+.sc-btn {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--sc-red);
+  border-radius: 6px;
+  font: 600 14px/1 var(--sc-font-body);
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.sc-btn--primary {
+  background: var(--sc-red);
+  color: #fff;
+}
+
+.sc-btn--outline {
+  background: #fff;
+  color: var(--sc-red);
+}
+
+.sc-btn:hover:not(:disabled) {
+  filter: brightness(0.94);
+}
+
+.sc-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sc-btn:focus-visible,
+.sc-idea-card:focus-visible,
+.sc-chip:focus-visible,
+.sc-ideas__back:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}
+
+.sc-ideas__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* ── Tags (blue pills) and subtags (red rectangles) ── */
+
+.sc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 20px;
+  border: 1.5px solid;
+  background: #fff;
+  font: 600 15px/1.2 var(--sc-font-body);
+  white-space: nowrap;
+}
+
+button.sc-chip {
+  cursor: pointer;
+}
+
+.sc-chip--tag {
+  border-color: var(--sc-blue);
+  border-radius: 999px;
+  color: var(--sc-blue);
+}
+
+.sc-chip--subtag {
+  border-color: var(--sc-red);
+  border-radius: 6px;
+  color: var(--sc-red);
+}
+
+.sc-chip--tag.sc-chip--on {
+  background: var(--sc-blue);
+  color: #fff;
+}
+
+.sc-chip--subtag.sc-chip--on {
+  background: var(--sc-red);
+  color: #fff;
+}
+
+/* ── Workspace grid ── */
+
+.sc-idea-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 32px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-idea-grid > li {
+  display: flex;
+}
+
+.sc-idea-card {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 26px;
+  background: var(--sc-surface);
+  border: 2px solid var(--sc-red);
+  color: var(--sc-blue);
+  text-decoration: none;
+}
+
+.sc-idea-card:hover .sc-idea-card__view {
+  text-decoration: underline;
+}
+
+.sc-idea-card__title {
+  margin: 0;
+  font: 600 23px/1.2 var(--sc-font-body);
+  overflow-wrap: anywhere;
+}
+
+.sc-idea-card__body {
+  display: -webkit-box;
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.3;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.sc-idea-card__view {
+  margin-top: auto;
+  padding-top: 10px;
+  align-self: flex-end;
+  font: 700 20px/1.2 var(--sc-font-display);
+  color: var(--sc-red);
+}
+
+.sc-idea-card--new {
+  min-height: 240px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #fff3f3;
+  border-style: dashed;
+  color: var(--sc-red);
+  text-align: center;
+}
+
+.sc-idea-card__plus {
+  font: 700 48px/1 var(--sc-font-display);
+}
+
+.sc-idea-card__new-title {
+  font: 700 24px/1.2 var(--sc-font-display);
+}
+
+.sc-idea-card__new-text {
+  max-width: 300px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--sc-text);
+}
+
+/* ── Detail and editor cards ── */
+
+.sc-ideas__card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding: 40px;
+  background: var(--sc-surface);
+  border: 2px solid var(--sc-red);
+}
+
+.sc-idea-detail__title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.sc-idea-detail__title {
+  margin: 0;
+  min-width: 0;
+  font: 700 40px/1.2 var(--sc-font-display);
+  color: var(--sc-blue);
+  overflow-wrap: anywhere;
+}
+
+.sc-idea-detail__body {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.sc-idea-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 56px;
+}
+
+.sc-idea-detail__tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font: 600 16px/1.2 var(--sc-font-body);
+}
+
+.sc-ideas__divider {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-top: 1px solid var(--sc-red);
+  opacity: 0.4;
+}
+
+.sc-idea-detail__share {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sc-ideas__card.sc-form {
+  flex: none;
+}
+
+.sc-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 120px;
+  padding: 10px 12px;
+  background: #fff;
+  border: 1px solid var(--sc-border);
+  border-radius: 8px;
+  font: 400 14px/1.4 var(--sc-font-body);
+  color: var(--sc-text);
+  resize: vertical;
+}
+
+.sc-form textarea:focus-visible {
+  outline: 2px solid var(--sc-blue);
+  outline-offset: 2px;
+}
+
+.sc-ideas__pickers {
+  display: flex;
+  gap: 48px;
+}
+
+.sc-picker {
+  flex: 1 1 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.sc-picker legend {
+  padding: 0;
+  margin-bottom: 12px;
+  font: 600 16px/1.2 var(--sc-font-body);
+}
+
+.sc-ideas__disclaimer {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+@media (max-width: 760px) {
+  .sc-ideas__intro,
+  .sc-idea-detail__title-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .sc-ideas__pickers {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .sc-ideas__card {
+    padding: 24px;
+  }
+  .sc-idea-detail__title {
+    font-size: 32px;
+  }
+  .sc-idea-detail__body {
+    font-size: 18px;
+  }
+  .sc-btn {
+    white-space: normal;
+    height: auto;
+    min-height: 40px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+}

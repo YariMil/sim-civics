@@ -1,12 +1,12 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { TURNSTILE_SITE_KEY } from '../config/turnstile';
 import { useAuth } from '../auth/AuthContext';
 import '../styles/sim-civics-tokens.css';
 import '../components/SubscribeForm.css';
 import './SignUp.css';
 
-const SITE_KEY = '0x4AAAAAAFr_0iYfpD7W-5oP';
 
 // Same layout as the Figma "Sign Up" frame, with only email and password.
 export default function LogIn() {
@@ -97,7 +97,7 @@ export default function LogIn() {
               />
             </div>
 
-            <Turnstile ref={widget} siteKey={SITE_KEY} onSuccess={setToken} />
+            <Turnstile ref={widget} siteKey={TURNSTILE_SITE_KEY} onSuccess={setToken} />
 
             <button type='submit' className='sc-form__submit' disabled={!token || sending}>
               {sending ? 'Logging in…' : 'Log in'}

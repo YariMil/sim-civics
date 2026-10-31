@@ -11,6 +11,10 @@ import SignUp from './pages/SignUp';
 import Privacy from './pages/Privacy';
 import LogIn from './pages/LogIn';
 import Account from './pages/Account';
+import IdeasWorkspace from './pages/ideas/IdeasWorkspace';
+import IdeaDetail from './pages/ideas/IdeaDetail';
+import IdeaEditor from './pages/ideas/IdeaEditor';
+import RequireAuth from './components/RequireAuth';
 import { AuthProvider } from './auth/AuthContext';
 import { ACCOUNTS_ENABLED } from './config/features';
 import './styles/globals.css';
@@ -42,6 +46,14 @@ function AppInner() {
         <Route path="/privacy"             element={<Privacy />} />
         {ACCOUNTS_ENABLED && <Route path="/log-in"  element={<LogIn />} />}
         {ACCOUNTS_ENABLED && <Route path="/account" element={<Account />} />}
+        {ACCOUNTS_ENABLED && (
+          <>
+            <Route path="/ideas"          element={<RequireAuth><IdeasWorkspace /></RequireAuth>} />
+            <Route path="/ideas/new"      element={<RequireAuth><IdeaEditor /></RequireAuth>} />
+            <Route path="/ideas/:id"      element={<RequireAuth><IdeaDetail /></RequireAuth>} />
+            <Route path="/ideas/:id/edit" element={<RequireAuth><IdeaEditor /></RequireAuth>} />
+          </>
+        )}
         {/* Catch-all → home */}
         <Route path="*"                    element={<Home />} />
       </Routes>

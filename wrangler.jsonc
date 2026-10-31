@@ -27,6 +27,25 @@
 			"migrations_dir": "migrations"
 		}
 	],
+	// Branch previews (`wrangler preview`) use a separate test database so they never touch real accounts.
+	"previews": {
+		"d1_databases": [
+			{
+				"binding": "DB",
+				"database_name": "sim-civics-preview",
+				"database_id": "53095f7e-3e3a-4c02-8ef9-bd211f89a07b",
+				"migrations_dir": "migrations"
+			}
+		],
+		"send_email": [
+			{
+				"name": "EMAIL",
+				"allowed_destination_addresses": [
+					"simcivics@gmail.com"
+				]
+			}
+		]
+	},
 	"observability": {
 		"enabled": true
 	}
