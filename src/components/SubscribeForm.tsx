@@ -1,12 +1,12 @@
 import { useId, useRef, useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { TURNSTILE_SITE_KEY } from '../config/turnstile';
 import { ACCOUNTS_ENABLED } from '../config/features';
 import { useAuth } from '../auth/AuthContext';
 import '../styles/sim-civics-tokens.css';
 import './SubscribeForm.css';
 
-const SITE_KEY = '0x4AAAAAAFr_0iYfpD7W-5oP';
 const DISTRICTS = Array.from({ length: 15 }, (_, i) => i + 1);
 
 type Status = 'idle' | 'sending' | 'done' | 'error';
@@ -194,7 +194,7 @@ export default function SubscribeForm() {
         </div>
       )}
 
-      <Turnstile ref={widget} siteKey={SITE_KEY} onSuccess={setToken} />
+      <Turnstile ref={widget} siteKey={TURNSTILE_SITE_KEY} onSuccess={setToken} />
 
       <button type='submit' className='sc-form__submit' disabled={!token || status === 'sending'}>
         {status === 'sending' ? (ACCOUNTS_ENABLED ? 'Creating account…' : 'Signing up…') : ACCOUNTS_ENABLED ? 'Create account' : 'Sign up'}

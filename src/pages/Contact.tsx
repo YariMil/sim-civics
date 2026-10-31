@@ -1,10 +1,10 @@
 import { useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile';
+import { TURNSTILE_SITE_KEY } from '../config/turnstile';
 import { Send, CheckCircle } from 'lucide-react';
 import './Contact.css';
 
-const SITE_KEY = '0x4AAAAAAFr_0iYfpD7W-5oP';
 
 /*
   Contact Us — built from the Figma "Contact Us Page" frame:
@@ -151,7 +151,7 @@ const handleSubmit = async (e: FormEvent) => {
                     required
                   />
                 </div>
-                <Turnstile ref={widget} siteKey={SITE_KEY} onSuccess={setToken} />
+                <Turnstile ref={widget} siteKey={TURNSTILE_SITE_KEY} onSuccess={setToken} />
                 {error && <p className="sc-cf-error" role="alert">{error}</p>}
 
                 <button type="submit" className="sc-contact__btn" disabled={!token || sending}>
