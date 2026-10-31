@@ -229,7 +229,7 @@ async function signup(body: Record<string, unknown>, env: Env) {
     .bind(p.email, await hashPassword(password), p.district, p.affiliated, p.organization, discoverable, Date.now())
     .first<UserRow>();
   if (!user) {
-    return json({ error: 'An account with this email already exists. Try logging in.' }, 409);
+    return json({ error: 'An account with this email already exists. Try logging in!' }, 409);
   }
 
   // Sign-up also joins the newsletter (Buttondown sends its own confirmation email).
