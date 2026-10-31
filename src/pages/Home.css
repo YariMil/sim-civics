@@ -213,7 +213,6 @@
 }
 .sc-home__actions .sc-home__btn:first-child { left: 0; }
 .sc-home__actions .sc-home__btn:last-child  { left: 176px; }
-.sc-home__btn--inert { cursor: default; }
 .sc-home__btn:focus-visible {
   outline: 3px solid var(--sc-blue);
   outline-offset: 3px;

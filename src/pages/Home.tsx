@@ -8,11 +8,13 @@ import './Home.css';
   The header and footer are rendered by App.tsx (SimCivicsTop / SimCivicsBottom),
   so they are intentionally not part of this file.
 
-  Links (only these two are wired, everything else is a placeholder for later):
+  Links:
+    • "Ideas Workspace" card     → /ideas (sends signed-out visitors to Log In first)
     • "Council Simulations" card → /simulation
-    • "Contact Us!" button      → /contact
-  The "Ideas Workspace" card, "Government Basics" card and "Sign Up!" button
-  have no click behavior yet. The three "Source:" lines are real external links.
+    • "Government Basics" card   → /resources (the learning modules)
+    • "Sign Up!" button          → /sign-up (goes to /account if already signed in)
+    • "Contact Us!" button       → /contact
+  The three "Source:" lines are real external links.
 
   Logo: /images/sim-civics-logo.png
 */
@@ -40,15 +42,15 @@ export default function Home() {
         </p>
 
         <div className="sc-home__cards">
-          {/* Ideas Workspace — placeholder (no link yet) */}
-          <div className="sc-home__card">
+          {/* Ideas Workspace — links to /ideas */}
+          <Link to="/ideas" className="sc-home__card sc-home__card--link">
             <h2 className="sc-home__card-title">Ideas Workspace</h2>
             <p className="sc-home__card-text">
               Record and refine your ideas for local action, track their development, and share
               proposals with city council members.
             </p>
             <span className="sc-home__card-label">Develop</span>
-          </div>
+          </Link>
 
           {/* Council Simulations — links to /simulation */}
           <Link to="/simulation" className="sc-home__card sc-home__card--link">
@@ -60,15 +62,15 @@ export default function Home() {
             <span className="sc-home__card-label sc-home__card-label--practice">Practice</span>
           </Link>
 
-          {/* Government Basics — placeholder (no link yet) */}
-          <div className="sc-home__card">
+          {/* Government Basics — links to /resources */}
+          <Link to="/resources" className="sc-home__card sc-home__card--link">
             <h2 className="sc-home__card-title">Government Basics</h2>
             <p className="sc-home__card-text">
               Explore accessible explanations of how local government works and how residents can
               participate.
             </p>
             <span className="sc-home__card-label">Learn</span>
-          </div>
+          </Link>
         </div>
       </section>
 
@@ -132,10 +134,10 @@ export default function Home() {
           </p>
 
           <div className="sc-home__actions">
-            {/* Sign Up! — placeholder (no link yet) */}
-            <button type="button" className="sc-home__btn sc-home__btn--inert">
+            {/* Sign Up! — links to /sign-up */}
+            <Link to="/sign-up" className="sc-home__btn">
               Sign Up!
-            </button>
+            </Link>
             {/* Contact Us! — links to /contact */}
             <Link to="/contact" className="sc-home__btn">
               Contact Us!
