@@ -1,5 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { User } from 'lucide-react';
+import { useAuth } from '../auth/AuthContext';
 import '../styles/sim-civics-tokens.css';
 import './SimCivicsTop.css';
 
@@ -11,6 +12,8 @@ const NAV = [
 ];
 
 export default function SimCivicsTop() {
+  const { user } = useAuth();
+
   return (
     <header className='sc-top'>
       <Link to='/' className='sc-top__wordmark'>
@@ -33,9 +36,16 @@ export default function SimCivicsTop() {
             </li>
           ))}
         </ul>
-        <Link to='/sign-up' className='sc-top__account' aria-label='Sign up'>
-          <User size={20} aria-hidden='true' />
-        </Link>
+        {user ? (
+          // Signed in: single-letter avatar, per the Figma Avatar guidance
+          <Link to='/account' className='sc-top__account' aria-label='Your account'>
+            <span aria-hidden='true'>{user.email[0].toUpperCase()}</span>
+          </Link>
+        ) : (
+          <Link to='/sign-up' className='sc-top__account' aria-label='Sign up or log in'>
+            <User size={20} aria-hidden='true' />
+          </Link>
+        )}
       </nav>
 
       <span className='sc-top__rule sc-top__rule--left' aria-hidden='true' />

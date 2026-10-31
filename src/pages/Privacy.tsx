@@ -9,7 +9,7 @@ import './Privacy.css';
 const POLICY = {
   orgName: 'Sim-Civics',
   contactEmail: 'simcivics@gmail.com', // e.g. privacy@simcivicsla.com
-  lastUpdated: 'October 29, 2026',
+  lastUpdated: 'October 30, 2026',
   contactMessageRetention: '12 months', // how long you keep contact-form messages
   responseTime: '30 days', // how quickly you'll answer access or deletion requests
   usesGoogleFonts: true, // set to false if you self-host the fonts
@@ -43,6 +43,12 @@ export default function Privacy() {
           <li>Your Los Angeles council district number</li>
           <li>Whether you are affiliated with an organization and, if so, its name (optional)</li>
         </ul>
+        <p><strong>When you create an account:</strong></p>
+        <ul>
+          <li>The same details as above, plus a password, which we store only in scrambled (hashed) form</li>
+          <li>Whether you chose to make your email discoverable to other members</li>
+          <li>A login cookie that keeps you signed in for up to 30 days; it is removed when you log out</li>
+        </ul>
         <p><strong>When you contact us:</strong></p>
         <ul>
           <li>Your name and email address</li>
@@ -67,6 +73,11 @@ export default function Privacy() {
         <h2>How we use it</h2>
         <ul>
           <li>To send you the {p.orgName} newsletter and updates you asked for.</li>
+          <li>To run your account and save your progress and ideas.</li>
+          <li>
+            If you turn on email discovery, to show your email to members whose ideas share a
+            subtag with yours.
+          </li>
           <li>To focus our content on issues in your council district.</li>
           <li>To reply to messages and partnership inquiries.</li>
           <li>To keep our website and forms secure and free of spam.</li>
@@ -77,8 +88,9 @@ export default function Privacy() {
         <ul>
           <li><strong>Buttondown</strong> stores our newsletter subscriber list and sends our emails.</li>
           <li>
-            <strong>Cloudflare</strong> hosts this website, protects it from abuse, runs the bot
-            check on our forms, and delivers contact-form messages to our inbox.
+            <strong>Cloudflare</strong> hosts this website, stores account information, protects
+            it from abuse, runs the bot check on our forms, and delivers contact-form messages to
+            our inbox.
           </li>
           {p.usesGoogleFonts && (
             <li>
@@ -97,6 +109,7 @@ export default function Privacy() {
           <li>
             Newsletter information stays until you unsubscribe or ask us to delete it.
           </li>
+          <li>Account information stays until you ask us to delete your account.</li>
           <li>Contact-form messages are kept for up to {p.contactMessageRetention}.</li>
         </ul>
 

@@ -1,4 +1,6 @@
+import { Navigate } from 'react-router-dom';
 import SubscribeForm from '../components/SubscribeForm';
+import { useAuth } from '../auth/AuthContext';
 import { ACCOUNTS_ENABLED } from '../config/features';
 import '../styles/sim-civics-tokens.css';
 import './SignUp.css';
@@ -14,6 +16,9 @@ const COPY = ACCOUNTS_ENABLED
     };
 
 export default function SignUp() {
+  const { user } = useAuth();
+  if (ACCOUNTS_ENABLED && user) return <Navigate to='/account' replace />;
+
   return (
     <main className='sc-signup'>
       <div className='sc-signup__inner'>
