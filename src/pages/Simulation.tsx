@@ -11,9 +11,6 @@ const filterOptions: { value: FilterOption; label: string }[] = [
   { value: 'all',     label: 'All documents' },
   { value: 'agenda',  label: 'Agendas' },
   { value: 'ordinances', label: 'Ordinances' },
-  { value: 'motion',  label: 'Motions' },
-  { value: 'report',  label: 'Reports' },
-  { value: 'notice',  label: 'Notices' },
 ];
 
 export default function Simulation() {

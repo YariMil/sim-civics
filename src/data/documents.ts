@@ -2,7 +2,7 @@
 // Add new documents here. The `file` path is relative to /public/documents/
 // Set `file: null` for placeholders while documents are being uploaded.
 
-export type DocCategory = 'agenda' | 'ordinances' | 'report' | 'motion' | 'notice' | 'new';
+export type DocCategory = 'agenda' | 'ordinances';
 
 export interface CouncilDocument {
   id: string;
@@ -53,18 +53,8 @@ export const documents: CouncilDocument[] = [
     category: 'ordinances',
     uploadedAt: '2026-01-16',
     sessionLabel: 'Session 1 · Cycle 1',
-    file: 'ordinance_3_electoral_code',
+    file: 'ordinance_3_electoral_code.pdf',
     fileSize: '83 KB',
-  },
-  {
-    id: 'doc-005',
-    title: 'Public Notice — Zoning Variance Hearing',
-    description: 'Notice of public hearing on zoning variance request in District 7. Public comment open.',
-    category: 'notice',
-    uploadedAt: '2026-06-01',
-    sessionLabel: 'Session 4 · Cycle 1',
-    file: 'notice-zoning-d7.pdf',
-    fileSize: '95 KB',
   },
 ];
 
@@ -72,8 +62,4 @@ export const documents: CouncilDocument[] = [
 export const categoryMeta: Record<DocCategory, { label: string; cssClass: string }> = {
   agenda:  { label: 'Agenda',  cssClass: 'badge--agenda'  },
   ordinances: { label: 'Ordinances', cssClass: 'badge--ordinances' },
-  report:  { label: 'Report',  cssClass: 'badge--report'  },
-  motion:  { label: 'Motion',  cssClass: 'badge--new'     },
-  notice:  { label: 'Notice',  cssClass: 'badge--report'  },
-  new:     { label: 'New',     cssClass: 'badge--new'     },
 };
