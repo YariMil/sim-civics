@@ -54,12 +54,11 @@ export default function Home() {
 
           {/* Council Simulations — links to /simulation */}
           <Link to="/simulation" className="sc-home__card sc-home__card--link">
-            <h2 className="sc-home__card-title">Council Simulations</h2>
+            <h2 className="sc-home__card-title">City Council Simulation</h2>
             <p className="sc-home__card-text">
-              Participate in facilitated city council simulations to discuss local issues, debate
-              proposals, and draft ordinances.
+              Check out the current record of the Sim-Civics city council simulation run at Harvard-Westlake.
             </p>
-            <span className="sc-home__card-label sc-home__card-label--practice">Practice</span>
+            <span className="sc-home__card-label sc-home__card-label--practice">Learn More</span>
           </Link>
 
           {/* Government Basics — links to /resources */}
@@ -135,7 +134,7 @@ export default function Home() {
 
           <div className="sc-home__actions">
             {/* Sign Up! — links to /sign-up */}
-            <Link to="/sign-up" className="sc-home__btn">
+            <Link to="/sign-up" className="sc-home__btn sc-home__btn--signup">
               Sign Up!
             </Link>
             {/* Contact Us! — links to /contact */}

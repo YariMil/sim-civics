@@ -100,7 +100,7 @@
   color: var(--sc-red);
   white-space: nowrap;
 }
-.sc-home__card-label--practice { left: 219px; }
+.sc-home__card-label--practice { left: 190px; }
 
 /* ───────────────────────── Home2 — white info section ───────────────────────── */
 
@@ -216,6 +216,10 @@
 .sc-home__btn:focus-visible {
   outline: 3px solid var(--sc-blue);
   outline-offset: 3px;
+}
+
+.sc-home__btn--signup {
+  width: 105px;
 }
 
 /* Sources */
