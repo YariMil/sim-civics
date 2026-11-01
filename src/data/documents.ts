@@ -17,6 +17,15 @@ export interface CouncilDocument {
 
 export const documents: CouncilDocument[] = [
   {
+    id: 'agenda-2025-2026',
+    title: '2025–2026 Legislative Agenda',
+    description: 'Every item the council took up this year, from January 15 to April 13, 2026, with its sponsors and whether it passed, failed or was tabled.',
+    category: 'agenda',
+    uploadedAt: '2026-04-13',
+    file: 'legislative_agenda_2025-2026.pdf',
+    fileSize: '85 KB',
+  },
+  {
     id: 'ord-14',
     title: 'Ordinance 14 - Wimbishville Safer Districts Act',
     description: 'Lets the Wimbishville Police Department draw on emergency and supplemental funds to reduce crime in designated high-crime districts. Tabled April 13, 2026.',
