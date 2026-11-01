@@ -1,6 +1,6 @@
 import { FileText, Download, Clock } from 'lucide-react';
 import type { CouncilDocument } from '../data/documents';
-import { categoryMeta } from '../data/documents';
+import { categoryMeta, uploadedDate } from '../data/documents';
 import './DocumentCard.css';
 
 interface Props {
@@ -8,7 +8,7 @@ interface Props {
 }
 
 function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return uploadedDate(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
 export default function DocumentCard({ doc }: Props) {
@@ -37,7 +37,7 @@ export default function DocumentCard({ doc }: Props) {
       <div className="doc-card__body">
         <div className="doc-card__meta">
           <span className={`badge ${meta.cssClass}`}>{meta.label}</span>
-          <span className="doc-card__session">{doc.sessionLabel}</span>
+          {doc.sessionLabel && <span className="doc-card__session">{doc.sessionLabel}</span>}
         </div>
         <h3 className="doc-card__title">{doc.title}</h3>
         <p className="doc-card__desc">{doc.description}</p>

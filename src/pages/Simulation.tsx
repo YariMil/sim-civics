@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FileText, Users } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
-import { documents, type DocCategory } from '../data/documents';
+import { documents, uploadedDate, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
 import './Simulation.css';
 
@@ -22,7 +22,7 @@ export default function Simulation() {
     : documents.filter((d) => d.category === filter);
 
   const sorted = [...filtered].sort(
-    (a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime()
+    (a, b) => uploadedDate(b.uploadedAt).getTime() - uploadedDate(a.uploadedAt).getTime()
   );
 
   const roster = [...leadershipPositions].sort((a, b) => a.order - b.order);
@@ -69,7 +69,7 @@ export default function Simulation() {
               <h2 className="sc-sim__heading">Published Documents</h2>
               <p className="sc-sim__sub">
                 {sorted.length} document{sorted.length !== 1 ? 's' : ''} · last updated{' '}
-                {new Date(Math.max(...documents.map((d) => new Date(d.uploadedAt).getTime())))
+                {new Date(Math.max(...documents.map((d) => uploadedDate(d.uploadedAt).getTime())))
                   .toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
               </p>
 
