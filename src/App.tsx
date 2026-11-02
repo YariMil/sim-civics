@@ -11,7 +11,7 @@ import SignUp from './pages/SignUp';
 import Privacy from './pages/Privacy';
 import LogIn from './pages/LogIn';
 import Account from './pages/Account';
-import IdeasWorkspace from './pages/ideas/IdeasWorkspace';
+import IdeasIntro, { IdeasHome } from './pages/ideas/IdeasIntro';
 import IdeaDetail from './pages/ideas/IdeaDetail';
 import IdeaEditor from './pages/ideas/IdeaEditor';
 import SimilarIdeas from './pages/ideas/SimilarIdeas';
@@ -49,7 +49,8 @@ function AppInner() {
         {ACCOUNTS_ENABLED && <Route path="/account" element={<Account />} />}
         {ACCOUNTS_ENABLED && (
           <>
-            <Route path="/ideas"          element={<RequireAuth><IdeasWorkspace /></RequireAuth>} />
+            <Route path="/ideas"          element={<IdeasHome />} />
+            <Route path="/ideas/intro"    element={<IdeasIntro />} />
             <Route path="/ideas/new"      element={<RequireAuth><IdeaEditor /></RequireAuth>} />
             <Route path="/ideas/:id"      element={<RequireAuth><IdeaDetail /></RequireAuth>} />
             <Route path="/ideas/:id/edit" element={<RequireAuth><IdeaEditor /></RequireAuth>} />

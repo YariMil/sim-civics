@@ -17,7 +17,8 @@ export default function IdeasWorkspace() {
       <div className='sc-ideas__intro'>
         <p>
           Record and refine your ideas for local action, track their development, and share
-          proposals with city council members.
+          proposals with city council members.{' '}
+          <Link to='/ideas/intro' className='sc-ideas__how'>How it works</Link>
         </p>
         <Link to='/ideas/new' className='sc-btn sc-btn--primary'>+ New idea</Link>
       </div>

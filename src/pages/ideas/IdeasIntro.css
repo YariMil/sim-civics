@@ -1,0 +1,141 @@
+/* Figma "Ideas – Intro" (node 208:722). */
+
+.sc-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  text-align: center;
+}
+
+.sc-intro__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.sc-intro__headline {
+  max-width: 760px;
+  margin: 0;
+  font-family: var(--sc-font-display);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--sc-blue);
+}
+
+/* Hand-drawn underline under "civic idea." and sparks after it. */
+.sc-intro__mark {
+  position: relative;
+  white-space: nowrap;
+}
+.sc-intro__mark::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.2em;
+  height: 0.29em;
+  background: url('/images/ideas-intro/headline-underline.svg') no-repeat center / 100% 100%;
+}
+.sc-intro__mark::before {
+  content: '';
+  position: absolute;
+  right: -0.72em;
+  top: 0.06em;
+  width: 0.64em;
+  height: 0.68em;
+  background: url('/images/ideas-intro/headline-sparks.svg') no-repeat center / contain;
+}
+
+.sc-intro__text {
+  max-width: 880px;
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--sc-text);
+}
+
+.sc-intro__begin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.sc-intro__label {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0;
+  font-family: var(--sc-font-display);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--sc-red);
+}
+.sc-intro__label::before,
+.sc-intro__label::after {
+  content: '';
+  width: clamp(40px, 12vw, 160px);
+  height: 1px;
+  background: var(--sc-red);
+}
+
+.sc-intro__pills {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sc-intro__pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 28px 12px 22px;
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--sc-text);
+}
+.sc-intro__pill--body { background: #fff3f3; }
+.sc-intro__pill--place { background: #dceafd; }
+.sc-intro__pill--impacts { background: var(--sc-surface); }
+
+.sc-intro__path {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0;
+}
+.sc-intro__path img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.sc-intro__path figcaption {
+  font-family: var(--sc-font-display);
+  font-size: 22px;
+  font-style: italic;
+  line-height: 1.2;
+  color: var(--sc-text);
+}
+
+.sc-intro__open span {
+  margin-left: 4px;
+}
+
+@media (max-width: 600px) {
+  .sc-intro__text { font-size: 17px; }
+  .sc-intro__pill { font-size: 16px; padding: 10px 20px 10px 16px; }
+  .sc-intro__path figcaption { font-size: 18px; }
+}

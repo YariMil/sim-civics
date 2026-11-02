@@ -1,4 +1,4 @@
-import { TAGS, MAX_TAGS, subtagsFor, MAX_TITLE, MAX_BODY } from '../src/data/ideaTags';
+import { TAGS, MAX_TAGS, subtagsFor, MAX_TITLE, MAX_BODY, MAX_PLACE } from '../src/data/ideaTags';
 
 interface Env {
   ASSETS: Fetcher;
@@ -422,7 +422,9 @@ const MAX_IDEAS_PER_USER = 200;
 type IdeaRow = {
   id: number;
   title: string;
-  body: string;
+  body: string; // what it is
+  place: string;
+  impacts: string;
   tags: string;
   subtag: string | null;
   created_at: number;
@@ -435,6 +437,8 @@ const publicIdea = (i: IdeaRow) => ({
   id: i.id,
   title: i.title,
   body: i.body,
+  place: i.place,
+  impacts: i.impacts,
   tags: JSON.parse(i.tags) as string[],
   subtag: i.subtag,
   createdAt: i.created_at,
@@ -458,19 +462,25 @@ function readTags(body: Record<string, unknown>) {
   return { tags: JSON.stringify(tags), subtag };
 }
 
-function readIdea(body: Record<string, unknown>) {
-  const title = clean(body.title, MAX_TITLE);
-  // Unlike clean(), keep line breaks and tabs so paragraphs survive.
-  const text = Array.from(String(body.body ?? ''))
+// Unlike clean(), keeps line breaks and tabs so paragraphs survive.
+const cleanText = (value: unknown, max: number) =>
+  Array.from(String(value ?? ''))
     .filter((c) => c >= ' ' || c === '\n' || c === '\t')
     .join('')
     .trim()
-    .slice(0, MAX_BODY);
+    .slice(0, max);
+
+// Only "what it is" is required, so a quick draft can be saved and finished later.
+function readIdea(body: Record<string, unknown>) {
+  const title = clean(body.title, MAX_TITLE);
+  const text = cleanText(body.body, MAX_BODY);
+  const place = cleanText(body.place, MAX_PLACE);
+  const impacts = cleanText(body.impacts, MAX_BODY);
   if (!title) return 'Please give your idea a name.';
-  if (!text) return 'Please describe your idea.';
+  if (!text) return 'Please describe what your idea is.';
   const tags = readTags(body);
   if (typeof tags === 'string') return tags;
-  return { title, body: text, ...tags };
+  return { title, body: text, place, impacts, ...tags };
 }
 
 async function listIdeas(user: UserRow, env: Env) {
@@ -494,12 +504,12 @@ async function createIdea(user: UserRow, body: Record<string, unknown>, env: Env
   if (typeof idea === 'string') return json({ error: idea }, 400);
   const now = Date.now();
   const created = await env.DB.prepare(
-    `INSERT INTO ideas (user_id, title, body, tags, subtag, created_at, updated_at)
-     SELECT ?, ?, ?, ?, ?, ?, ?
+    `INSERT INTO ideas (user_id, title, body, place, impacts, tags, subtag, created_at, updated_at)
+     SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
      WHERE (SELECT COUNT(*) FROM ideas WHERE user_id = ?) < ?
      RETURNING *`
   )
-    .bind(user.id, idea.title, idea.body, idea.tags, idea.subtag, now, now, user.id, MAX_IDEAS_PER_USER)
+    .bind(user.id, idea.title, idea.body, idea.place, idea.impacts, idea.tags, idea.subtag, now, now, user.id, MAX_IDEAS_PER_USER)
     .first<IdeaRow>();
   if (!created) {
     return json({ error: `You can save up to ${MAX_IDEAS_PER_USER} ideas. Delete one to add another.` }, 409);
@@ -511,11 +521,11 @@ async function updateIdea(user: UserRow, id: number, body: Record<string, unknow
   const idea = readIdea(body);
   if (typeof idea === 'string') return json({ error: idea }, 400);
   const updated = await env.DB.prepare(
-    `UPDATE ideas SET title = ?, body = ?, tags = ?, subtag = ?, updated_at = ?
+    `UPDATE ideas SET title = ?, body = ?, place = ?, impacts = ?, tags = ?, subtag = ?, updated_at = ?
      WHERE id = ? AND user_id = ?
      RETURNING *`
   )
-    .bind(idea.title, idea.body, idea.tags, idea.subtag, Date.now(), id, user.id)
+    .bind(idea.title, idea.body, idea.place, idea.impacts, idea.tags, idea.subtag, Date.now(), id, user.id)
     .first<IdeaRow>();
   return updated ? json({ idea: publicIdea(updated) }) : json({ error: 'Idea not found.' }, 404);
 }
