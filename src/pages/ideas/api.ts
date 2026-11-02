@@ -1,7 +1,9 @@
 export type Idea = {
   id: number;
   title: string;
-  body: string;
+  body: string; // what it is
+  place: string; // where it would take place ('' if not added)
+  impacts: string; // intended impacts ('' if not added)
   tags: string[];
   subtag: string | null;
   createdAt: number; // first drafted
@@ -10,7 +12,7 @@ export type Idea = {
   councilSentTo: string | null;
 };
 
-export type IdeaInput = Pick<Idea, 'title' | 'body' | 'tags' | 'subtag'>;
+export type IdeaInput = Pick<Idea, 'title' | 'body' | 'place' | 'impacts' | 'tags' | 'subtag'>;
 
 type Result<T> = { ok: true; data: T } | { ok: false; status: number; error: string };
 

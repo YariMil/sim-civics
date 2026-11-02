@@ -14,6 +14,7 @@ import {
   type Idea,
 } from './api';
 import { useAuth, type User } from '../../auth/AuthContext';
+import { IDEA_SECTIONS } from './sections';
 
 export default function IdeaDetail() {
   const id = Number(useParams().id);
@@ -87,7 +88,25 @@ export default function IdeaDetail() {
             </div>
           </dl>
 
-          <p className='sc-idea-detail__body'>{idea.body}</p>
+          <div className='sc-idea-detail__sections'>
+            {IDEA_SECTIONS.map((s) => (
+              <section key={s.key} className={`sc-idea-section sc-idea-section--${s.key}`}>
+                <h3 className='sc-idea-section__heading'>
+                  <span className='sc-idea-section__icon' aria-hidden='true'>
+                    <img src={s.icon} alt='' width={22} height={22} />
+                  </span>
+                  {s.heading}
+                </h3>
+                {idea[s.key] ? (
+                  <p className='sc-idea-detail__body'>{idea[s.key]}</p>
+                ) : (
+                  <p className='sc-ideas__muted'>
+                    Not added yet. <Link to={`/ideas/${id}/edit`}>Add it</Link>
+                  </p>
+                )}
+              </section>
+            ))}
+          </div>
 
           {(idea.tags.length > 0 || idea.subtag) && (
             <div className='sc-idea-detail__tags'>
@@ -161,8 +180,7 @@ function councilLetter(idea: Idea, council: CouncilMember, user: User) {
     '',
     idea.title,
     '',
-    idea.body,
-    '',
+    ...IDEA_SECTIONS.filter((s) => idea[s.key]).flatMap((s) => [`${s.heading}:`, idea[s.key], '']),
     "Thank you for your time and for considering this idea. I'd welcome the chance to discuss it with you or your staff.",
     '',
     'Sincerely,',

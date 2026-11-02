@@ -24,6 +24,11 @@
   gap: 24px;
 }
 
+.sc-ideas__how {
+  color: var(--sc-blue);
+  font-weight: 500;
+  white-space: nowrap;
+}
 .sc-ideas__intro p {
   max-width: 720px;
   margin: 0;
@@ -309,6 +314,48 @@ button.sc-chip {
   overflow-wrap: anywhere;
 }
 
+/* The three parts of an idea, colored like the steps on the Ideas intro. */
+.sc-idea-detail__sections {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.sc-idea-section__heading,
+.sc-idea-section label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sc-idea-section__heading {
+  margin: 0 0 8px;
+  font-family: var(--sc-font-display);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--sc-blue);
+}
+.sc-idea-section__icon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1.5px solid;
+  border-radius: 10px;
+}
+.sc-idea-section--body .sc-idea-section__icon { background: #fff3f3; border-color: var(--sc-red); }
+.sc-idea-section--place .sc-idea-section__icon { background: #dceafd; border-color: var(--sc-blue); }
+.sc-idea-section--impacts .sc-idea-section__icon { background: var(--sc-surface); border-color: var(--sc-text); }
+.sc-idea-section__optional {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--sc-muted);
+}
+.sc-idea-section .sc-ideas__muted {
+  margin: 0;
+}
 .sc-idea-detail__body {
   margin: 0;
   font-size: 20px;

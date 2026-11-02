@@ -31,4 +31,5 @@ export const subtagsFor = (tags: readonly string[]): readonly string[] =>
   tags.filter(isTag).flatMap((t) => TAG_GROUPS[t]);
 
 export const MAX_TITLE = 120;
-export const MAX_BODY = 10000;
+export const MAX_BODY = 10000; // also the limit for intended impacts
+export const MAX_PLACE = 1000;

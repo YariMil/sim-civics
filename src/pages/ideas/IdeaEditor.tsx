@@ -4,9 +4,10 @@ import IdeasLayout from './IdeasLayout';
 import '../../components/SubscribeForm.css';
 import { TagPicker } from './Chips';
 import { createIdea, getIdea, updateIdea, type IdeaInput } from './api';
-import { MAX_BODY, MAX_TITLE } from '../../data/ideaTags';
+import { MAX_TITLE } from '../../data/ideaTags';
+import { IDEA_SECTIONS } from './sections';
 
-const EMPTY: IdeaInput = { title: '', body: '', tags: [], subtag: null };
+const EMPTY: IdeaInput = { title: '', body: '', place: '', impacts: '', tags: [], subtag: null };
 
 // "Ideas – New Idea" at /ideas/new and "Ideas – Edit Idea" at /ideas/:id/edit.
 export default function IdeaEditor() {
@@ -24,8 +25,8 @@ export default function IdeaEditor() {
     if (id === null) return;
     getIdea(id).then((r) => {
       if (!r.ok) return setError(r.error);
-      const { title, body, tags, subtag } = r.data.idea;
-      setIdea({ title, body, tags, subtag });
+      const { title, body, place, impacts, tags, subtag } = r.data.idea;
+      setIdea({ title, body, place, impacts, tags, subtag });
       setSavedTitle(title);
     });
   }, [id]);
@@ -75,18 +76,26 @@ export default function IdeaEditor() {
           />
         </div>
 
-        <div className='sc-field'>
-          <label htmlFor={`${uid}-body`}>Your idea</label>
-          <textarea
-            id={`${uid}-body`}
-            required
-            rows={6}
-            maxLength={MAX_BODY}
-            placeholder='What is your idea? What are the main points? How would you like it to be put into practice?'
-            value={idea.body}
-            onChange={(e) => set({ body: e.target.value })}
-          />
-        </div>
+        {IDEA_SECTIONS.map((s) => (
+          <div key={s.key} className={`sc-field sc-idea-section sc-idea-section--${s.key}`}>
+            <label htmlFor={`${uid}-${s.key}`}>
+              <span className='sc-idea-section__icon' aria-hidden='true'>
+                <img src={s.icon} alt='' width={22} height={22} />
+              </span>
+              {s.label}
+              {s.key !== 'body' && <span className='sc-idea-section__optional'>Optional</span>}
+            </label>
+            <textarea
+              id={`${uid}-${s.key}`}
+              required={s.key === 'body'}
+              rows={s.rows}
+              maxLength={s.max}
+              placeholder={s.placeholder}
+              value={idea[s.key]}
+              onChange={(e) => set({ [s.key]: e.target.value })}
+            />
+          </div>
+        ))}
 
         <TagPicker tags={idea.tags} subtag={idea.subtag} onChange={set} />
 

@@ -47,7 +47,10 @@ export default function Privacy() {
         <ul>
           <li>The same details as above, plus your name and a password, which we store only in scrambled (hashed) form</li>
           <li>Whether you chose to make your email discoverable to other members</li>
-          <li>The ideas you write in the Ideas Workspace, along with the tags you choose</li>
+          <li>
+            The ideas you write in the Ideas Workspace (what each idea is, where it would take place,
+            and its intended impacts), along with the tags you choose
+          </li>
           <li>A login cookie that keeps you signed in for up to 30 days; it is removed when you log out</li>
         </ul>
         <p><strong>When you contact us:</strong></p>
@@ -58,6 +61,10 @@ export default function Privacy() {
         </ul>
         <p><strong>Automatically:</strong></p>
         <ul>
+          <li>
+            A note in your browser that you've seen the Ideas Workspace introduction, so it isn't
+            shown again. It stays on your device and is never sent to us.
+          </li>
           <li>
             When you use our forms, a bot-check service checks that you are a person, which
             involves your IP address and basic browser information.
