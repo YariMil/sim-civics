@@ -57,7 +57,7 @@ export default function CouncilConfirmDialog({
 
         <label className='sc-confirm__check'>
           <input type='checkbox' checked={understood} onChange={(e) => setUnderstood(e.target.checked)} />
-          I understand this goes to a real elected official, and my idea is serious.
+          I understand this goes to a real elected official.
         </label>
 
         <div className='sc-compose__actions'>
