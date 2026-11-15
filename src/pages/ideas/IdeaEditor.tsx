@@ -6,6 +6,8 @@ import { TagPicker } from './Chips';
 import { createIdea, getIdea, updateIdea, type IdeaInput } from './api';
 import { MAX_TITLE } from '../../data/ideaTags';
 import { IDEA_SECTIONS } from './sections';
+import RefineWithAi from './RefineWithAi';
+import { AI_REFINE_ENABLED } from '../../data/features';
 
 const EMPTY: IdeaInput = { title: '', body: '', place: '', impacts: '', tags: [], subtag: null };
 
@@ -96,6 +98,8 @@ export default function IdeaEditor() {
             />
           </div>
         ))}
+
+        {AI_REFINE_ENABLED && <RefineWithAi draft={idea} onApply={set} />}
 
         <TagPicker tags={idea.tags} subtag={idea.subtag} onChange={set} />
 

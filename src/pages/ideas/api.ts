@@ -16,9 +16,9 @@ export type IdeaInput = Pick<Idea, 'title' | 'body' | 'place' | 'impacts' | 'tag
 
 type Result<T> = { ok: true; data: T } | { ok: false; status: number; error: string };
 
-async function request<T>(path: string, init?: RequestInit): Promise<Result<T>> {
+async function apiRequest<T>(url: string, init?: RequestInit): Promise<Result<T>> {
   try {
-    const res = await fetch(`/api/ideas${path}`, {
+    const res = await fetch(url, {
       ...init,
       headers: init?.body ? { 'Content-Type': 'application/json' } : undefined,
     });
@@ -29,6 +29,8 @@ async function request<T>(path: string, init?: RequestInit): Promise<Result<T>> 
     return { ok: false, status: 0, error: 'Network error. Please try again.' };
   }
 }
+
+const request = <T>(path: string, init?: RequestInit) => apiRequest<T>(`/api/ideas${path}`, init);
 
 export const listIdeas = () => request<{ ideas: Idea[] }>('');
 export const getIdea = (id: number) => request<{ idea: Idea }>(`/${id}`);
@@ -76,3 +78,20 @@ export async function getCouncilMember(): Promise<{ ok: true; member: CouncilMem
     return { ok: false, error: 'Network error. Please try again.' };
   }
 }
+
+/* Refine with AI: works on the unsaved text in the editor. */
+
+export type AiDraft = Pick<IdeaInput, 'title' | 'body' | 'place' | 'impacts'>;
+
+export type PolishedVersion = { body: string; place: string; impacts: string; changes: string[] };
+
+export type AiSuggestion = { section: 'body' | 'place' | 'impacts'; title: string; text: string };
+
+const postDraft = <T>(url: string, { title, body, place, impacts }: AiDraft) =>
+  apiRequest<T>(url, { method: 'POST', body: JSON.stringify({ title, body, place, impacts }) });
+
+// Two polished versions: the first plainer and shorter, the second more formal.
+export const polishWithAi = (draft: AiDraft) => postDraft<{ versions: PolishedVersion[] }>('/api/ai/polish', draft);
+
+// Two new ideas, each meant to be added to one part of the idea.
+export const suggestWithAi = (draft: AiDraft) => postDraft<{ suggestions: AiSuggestion[] }>('/api/ai/suggest', draft);

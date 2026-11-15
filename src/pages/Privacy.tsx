@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import '../styles/sim-civics-tokens.css';
 import './Privacy.css';
+import { AI_REFINE_ENABLED } from '../data/features';
 
 /* ------------------------------------------------------------------
    FILL IN THESE VALUES. Search this file for REPLACE to find what's left.
@@ -109,6 +110,14 @@ export default function Privacy() {
             location is sent to the <strong>City of Los Angeles</strong> council district map. We do
             not store or log the address.
           </li>
+          {AI_REFINE_ENABLED && (
+            <li>
+              If you press <strong>Polish with AI</strong> or <strong>Suggest new ideas</strong>, the
+              idea you are editing (its name and its three parts) is sent through our site to{' '}
+              <strong>OpenAI</strong> to write the suggestions. Nothing else about you is sent. We keep
+              only a count of how many times you used it, to limit daily use.
+            </li>
+          )}
           {p.usesGoogleFonts && (
             <li>
               <strong>Google Fonts</strong> supplies the typefaces on this site, which means your
