@@ -663,6 +663,36 @@ button.sc-chip:disabled {
   gap: 10px;
 }
 
+/* "Are you sure?" before the council email */
+.sc-confirm__warning {
+  padding: 14px 16px;
+  background: #fff3f3;
+  border: 1.5px solid var(--sc-red);
+  border-radius: 8px;
+}
+.sc-confirm__warning p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.sc-confirm__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  cursor: pointer;
+}
+.sc-confirm__check input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 1px 0 0;
+  accent-color: var(--sc-red);
+}
+
 /* .sc-form styles its links as underlined text; these are buttons */
 .sc-compose a.sc-btn {
   text-decoration: none;

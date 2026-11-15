@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import IdeasLayout from './IdeasLayout';
 import { ChipList } from './Chips';
 import ComposeDialog from './ComposeDialog';
+import CouncilConfirmDialog from './CouncilConfirmDialog';
 import {
   deleteIdea,
   formatDate,
@@ -25,6 +26,12 @@ export default function IdeaDetail() {
   const { user } = useAuth();
   const [council, setCouncil] = useState<CouncilMember | null>(null);
   const [loadingCouncil, setLoadingCouncil] = useState(false);
+  const [confirmedCouncil, setConfirmedCouncil] = useState(false); // asked again each time
+
+  function closeCouncil() {
+    setCouncil(null);
+    setConfirmedCouncil(false);
+  }
 
   async function onSendToCouncil() {
     setLoadingCouncil(true);
@@ -140,7 +147,11 @@ export default function IdeaDetail() {
         </article>
       )}
 
-      {idea && user && council && (
+      {idea && user && council && !confirmedCouncil && (
+        <CouncilConfirmDialog council={council} onConfirm={() => setConfirmedCouncil(true)} onClose={closeCouncil} />
+      )}
+
+      {idea && user && council && confirmedCouncil && (
         <ComposeDialog
           to={council.email}
           title={`Email ${council.salutation}`}
@@ -157,7 +168,7 @@ export default function IdeaDetail() {
             if (r.ok) setIdea(r.data.idea);
             return r.ok;
           }}
-          onClose={() => setCouncil(null)}
+          onClose={closeCouncil}
         />
       )}
     </IdeasLayout>
