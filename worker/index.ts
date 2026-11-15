@@ -751,10 +751,10 @@ const POLISH_SCHEMA = (() => {
   return obj({ first: version, second: version });
 })();
 
-const POLISH_PROMPT = `Write two polished versions of the idea.
+const POLISH_PROMPT = `You will be presented an idea for an ordinance for the LA City Council. Write two polished versions of the idea. 
 "first": clearer and more concise, in plain everyday language.
 "second": more formal and specific, suited to a letter to a council office.
-For both: keep the writer's meaning, proposals, numbers, and position; fix grammar and spelling; keep each part about as long as the original or shorter.
+For both: keep the writer's meaning, proposals, numbers, and position; fix grammar and spelling; keep each part about as long as the original or shorter. Do not summarize, shorten the content, or convert paragraphs into bullet points.
 If a part is empty in the original, return it empty. Leave the title alone.
 In "changes", list 2 to 4 short notes on what you changed, each under 15 words.`;
 
