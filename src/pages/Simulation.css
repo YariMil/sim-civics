@@ -234,3 +234,174 @@
   .sc-sim__tab { font-size: 17px; padding: 12px 20px; }
   .sc-leader { padding: 18px; }
 }
+
+/* ═══ About the Simulation tab (SimulationAbout.tsx) ═══ */
+.sc-about__placeholder {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px dashed currentColor;
+  border-radius: 4px;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ── How it works ── */
+.sc-about__steps {
+  list-style: none;
+  margin-top: 32px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+}
+.sc-about__step {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 22px;
+  background: #fff;
+  border-radius: 8px;
+  color: #1e1e1e;
+}
+.sc-about__step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--sc-red-tint);
+  color: #8f2a2a;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+}
+.sc-about__step-title {
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--sc-blue);
+}
+.sc-about__step-text {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* ── Pictures ── */
+.sc-about__gallery {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+}
+.sc-about__figure { margin: 0; }
+.sc-about__photo-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.sc-about__photo-btn:hover { border-color: var(--sc-red); }
+.sc-about__photo-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.sc-about__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.sc-about__photo--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px dashed rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.sc-about__caption {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sc-about__lightbox {
+  max-width: min(1100px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+}
+.sc-about__lightbox::backdrop { background: rgba(0, 0, 0, 0.75); }
+.sc-about__lightbox figure { margin: 0; }
+.sc-about__lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  margin: 0 auto;
+}
+.sc-about__lightbox figcaption { margin-top: 10px; color: #333; }
+.sc-about__lightbox-close {
+  margin-top: 12px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background: var(--sc-blue);
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Stats ── */
+.sc-about__stats {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 20px;
+}
+.sc-about__stat {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  border-top: 6px solid var(--sc-red);
+  color: #1e1e1e;
+}
+.sc-about__stat-value {
+  order: -1;
+  margin: 0;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-size: max(40px, calc(var(--u) * 80));
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--sc-blue);
+}
+.sc-about__stat-label {
+  margin-top: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: #333;
+}
+.sc-about__stat-note {
+  margin: 6px 0 0;
+  font-size: 14px;
+  color: #55606f;
+}

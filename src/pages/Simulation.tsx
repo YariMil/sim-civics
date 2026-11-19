@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { FileText, Users } from 'lucide-react';
+import { FileText, Info, Users } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
 import { documents, uploadedDate, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
+import SimulationAbout from './SimulationAbout';
 import './Simulation.css';
 
 type FilterOption = 'all' | DocCategory;
@@ -15,7 +16,7 @@ const filterOptions: { value: FilterOption; label: string }[] = [
 
 export default function Simulation() {
   const [filter, setFilter] = useState<FilterOption>('all');
-  const [activeTab, setActiveTab] = useState<'bulletin' | 'leadership'>('bulletin');
+  const [activeTab, setActiveTab] = useState<'bulletin' | 'leadership' | 'about'>('bulletin');
 
   const filtered = filter === 'all'
     ? documents
@@ -60,6 +61,15 @@ export default function Simulation() {
             >
               <Users size={18} aria-hidden="true" />
               Leadership Roster
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'about'}
+              className={`sc-sim__tab ${activeTab === 'about' ? 'sc-sim__tab--active' : ''}`}
+              onClick={() => setActiveTab('about')}
+            >
+              <Info size={18} aria-hidden="true" />
+              About the Simulation
             </button>
           </div>
 
@@ -128,6 +138,9 @@ export default function Simulation() {
               </div>
             </section>
           )}
+
+          {/* ── ABOUT THE SIMULATION ── */}
+          {activeTab === 'about' && <SimulationAbout />}
         </div>
       </main>
     </>
