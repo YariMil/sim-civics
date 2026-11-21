@@ -17,6 +17,13 @@ function Text({ value, fallback }: { value: string; fallback: string }) {
   return value ? <>{value}</> : <span className="sc-about__placeholder">{fallback}</span>;
 }
 
+// Muted red → green. `pct` is 0-100; when lower is better the scale is flipped,
+// so the colour always reflects how good the value is for the city.
+function statColor(pct: number, higherIsBetter: boolean) {
+  const good = higherIsBetter ? pct : 100 - pct;
+  return `hsl(${good * 1.2}, 38%, 50%)`;
+}
+
 // "By the Numbers" — shown on the Simulation page right under the overview, above the tabs,
 // so every visitor sees it.
 export function SimulationStats() {
@@ -28,17 +35,34 @@ export function SimulationStats() {
       </p>
 
       <dl className="sc-about__stats">
-        {stats.map((stat, i) => (
-          <div key={i} className="sc-about__stat">
-            <dt className="sc-about__stat-label">
-              <Text value={stat.label} fallback="What this counts" />
-            </dt>
-            <dd className="sc-about__stat-value">
-              <Text value={stat.value} fallback="00" />
-            </dd>
-            {stat.note && <dd className="sc-about__stat-note">{stat.note}</dd>}
-          </div>
-        ))}
+        {stats.map((stat, i) => {
+          const n = Number.parseFloat(stat.value);
+          const pct = Number.isFinite(n) ? Math.min(100, Math.max(0, n)) : 0;
+          return (
+            <div key={i} className="sc-about__stat">
+              <dt className="sc-about__stat-label">
+                <Text value={stat.label} fallback="Stat name" />
+              </dt>
+              <dd className="sc-about__stat-value">
+                <Text value={stat.value} fallback="00" />
+              </dd>
+              <dd className="sc-about__stat-track">
+                <div
+                  className="sc-about__stat-bar"
+                  role="meter"
+                  aria-label={stat.label || 'Stat'}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={pct}
+                  style={{ width: `${pct}%`, background: statColor(pct, stat.higherIsBetter) }}
+                />
+              </dd>
+              <dd className="sc-about__stat-desc">
+                <Text value={stat.description} fallback="What this stat measures." />
+              </dd>
+            </div>
+          );
+        })}
       </dl>
     </section>
   );

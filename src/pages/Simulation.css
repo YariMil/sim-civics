@@ -381,27 +381,37 @@
   padding: 24px;
   background: #fff;
   border-radius: 8px;
-  border-top: 6px solid var(--sc-red);
   color: #1e1e1e;
 }
+.sc-about__stat-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #333;
+}
 .sc-about__stat-value {
-  order: -1;
-  margin: 0;
+  margin: 6px 0 0;
   font-family: 'Inclusive Sans', system-ui, sans-serif;
-  font-size: max(40px, calc(var(--u) * 80));
+  font-size: max(36px, calc(var(--u) * 64));
   line-height: 1;
   letter-spacing: -0.03em;
   color: var(--sc-blue);
 }
-.sc-about__stat-label {
-  margin-top: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-weight: 600;
-  font-size: 15px;
-  color: #333;
+.sc-about__stat-track {
+  margin: 14px 0 0;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6e8ec;
+  overflow: hidden;
 }
-.sc-about__stat-note {
-  margin: 6px 0 0;
+.sc-about__stat-bar {
+  height: 100%;
+  border-radius: inherit;
+}
+.sc-about__stat-desc {
+  margin: 12px 0 0;
   font-size: 14px;
+  line-height: 1.45;
   color: #55606f;
 }

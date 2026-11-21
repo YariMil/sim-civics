@@ -20,9 +20,10 @@ export interface SimulationPicture {
 }
 
 export interface SimulationStat {
-  value: string;    // the big number, e.g. '42' or '3 years'
-  label: string;    // what it counts, e.g. 'Ordinances passed'
-  note?: string;    // optional small line underneath
+  value: string;           // the number on the 0-100 scale, e.g. '45'
+  label: string;           // the stat's name, e.g. 'Crime'
+  higherIsBetter: boolean; // true: the bar goes red at 0 to green at 100. false (e.g. Crime): green at 0 to red at 100
+  description: string;     // a short explanation of what the stat measures
 }
 
 // ── How it works ──
@@ -48,10 +49,22 @@ export const pictures: SimulationPicture[] = [
 export const statsIntro = 'Current statistics of the city. All stats are placed on a 0-100 scale. 0 means extremely low or weak depending on the statistic (eg. 0 Economy means a nonfunctioning economy) and 100 means extremely high or strong depending on the statistic (eg. 100 Economy means an extremely robust one). High statistics aren\'t always good; a 100 on crime, for example, means a very unsafe city. Ordinance increase or decrease stats by multiples of 5. Some stats are tied together: a high tax rate, for example, leads to economic downturn over time.';
 
 export const stats: SimulationStat[] = [
-  { value: '25', label: 'Crime' },
-  { value: '50', label: 'Ease of Living' },
-  { value: '50', label: 'Environment' },
-  { value: '45', label: 'Economy' },
-  {value: '60', label: 'Average Tax Rate'},
-  {value: '55', label: 'Education'}
+  { value: '25', label: 'Crime',
+    higherIsBetter: false,
+    description: 'How much crime the city has, from violent crime to theft and vandalism.' },
+  { value: '50', label: 'Ease of Living',
+    higherIsBetter: true,
+    description: 'How easy daily life is for residents: housing, transit, services and cost of living.' },
+  { value: '50', label: 'Environment',
+    higherIsBetter: true,
+    description: 'The health of the city\'s air, water, parks and green spaces.' },
+  { value: '45', label: 'Economy',
+    higherIsBetter: true,
+    description: 'How strong the local economy is: jobs, wages and business activity.' },
+  {value: '60', label: 'Average Tax Rate',
+    higherIsBetter: false,
+    description: 'How heavily residents and businesses are taxed on average. High taxes slow the economy over time.' },
+  {value: '55', label: 'Education',
+    higherIsBetter: true,
+    description: 'The quality of and access to the city\'s schools and learning programs.' }
 ];
