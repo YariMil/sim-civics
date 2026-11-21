@@ -35,7 +35,7 @@ export const leadershipPositions: LeadershipPosition[] = [
     title: 'Deputy Mayor',
     subtitle: 'Council Leadership',
     description: 'Acts in the Mayor\'s absence. Assists Speaker of the Council with scheduling. Elected by council members',
-    assignee: 'Boyan Manolov',
+    assignee: 'Quinn Harris',
     order: 2,
   },
   {
