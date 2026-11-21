@@ -10,11 +10,38 @@ import {
   type SimulationPicture,
 } from '../data/simulationAbout';
 
-// The "About the Simulation" tab. All text and pictures come from src/data/simulationAbout.ts;
+// The "About the Simulation" tab (plus the stats block shown above the tabs). All text and pictures come from src/data/simulationAbout.ts;
 // anything left empty there shows as a placeholder.
 
 function Text({ value, fallback }: { value: string; fallback: string }) {
   return value ? <>{value}</> : <span className="sc-about__placeholder">{fallback}</span>;
+}
+
+// "By the Numbers" — shown on the Simulation page right under the overview, above the tabs,
+// so every visitor sees it.
+export function SimulationStats() {
+  return (
+    <section aria-labelledby="sc-about-stats" className="sc-sim__section">
+      <h2 id="sc-about-stats" className="sc-sim__heading">Current City Statistics</h2>
+      <p className="sc-sim__sub">
+        <Text value={statsIntro} fallback="A line introducing the stats." />
+      </p>
+
+      <dl className="sc-about__stats">
+        {stats.map((stat, i) => (
+          <div key={i} className="sc-about__stat">
+            <dt className="sc-about__stat-label">
+              <Text value={stat.label} fallback="What this counts" />
+            </dt>
+            <dd className="sc-about__stat-value">
+              <Text value={stat.value} fallback="00" />
+            </dd>
+            {stat.note && <dd className="sc-about__stat-note">{stat.note}</dd>}
+          </div>
+        ))}
+      </dl>
+    </section>
+  );
 }
 
 export default function SimulationAbout() {
@@ -83,28 +110,6 @@ export default function SimulationAbout() {
             </figure>
           ))}
         </div>
-      </section>
-
-      {/* ── STATS ── */}
-      <section aria-labelledby="sc-about-stats" className="sc-sim__section">
-        <h2 id="sc-about-stats" className="sc-sim__heading">By the Numbers</h2>
-        <p className="sc-sim__sub">
-          <Text value={statsIntro} fallback="A line introducing the stats." />
-        </p>
-
-        <dl className="sc-about__stats">
-          {stats.map((stat, i) => (
-            <div key={i} className="sc-about__stat">
-              <dt className="sc-about__stat-label">
-                <Text value={stat.label} fallback="What this counts" />
-              </dt>
-              <dd className="sc-about__stat-value">
-                <Text value={stat.value} fallback="00" />
-              </dd>
-              {stat.note && <dd className="sc-about__stat-note">{stat.note}</dd>}
-            </div>
-          ))}
-        </dl>
       </section>
 
       {/* Enlarged picture */}

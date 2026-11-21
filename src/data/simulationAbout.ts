@@ -44,12 +44,14 @@ export const pictures: SimulationPicture[] = [
   { src: '/public/images/simulation/Meeting2.jpg', alt: '', caption: '10/29/26 Meeting' },
 ];
 
-// ── Stats ──
-export const statsIntro = '';
+// ── Stats ── (shown under the overview at the top of the Simulation page, above the tabs)
+export const statsIntro = 'Current statistics of the city. All stats are placed on a 0-100 scale. 0 means extremely low or weak depending on the statistic (eg. 0 Economy means a nonfunctioning economy) and 100 means extremely high or strong depending on the statistic (eg. 100 Economy means an extremely robust one). High statistics aren\'t always good; a 100 on crime, for example, means a very unsafe city. Ordinance increase or decrease stats by multiples of 5. Some stats are tied together: a high tax rate, for example, leads to economic downturn over time.';
 
 export const stats: SimulationStat[] = [
-  { value: '', label: '' },
-  { value: '', label: '' },
-  { value: '', label: '' },
-  { value: '', label: '' },
+  { value: '25', label: 'Crime' },
+  { value: '50', label: 'Ease of Living' },
+  { value: '50', label: 'Environment' },
+  { value: '45', label: 'Economy' },
+  {value: '60', label: 'Average Tax Rate'},
+  {value: '55', label: 'Education'}
 ];

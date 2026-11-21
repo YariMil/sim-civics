@@ -3,7 +3,7 @@ import { FileText, Info, Users } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
 import { documents, uploadedDate, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
-import SimulationAbout from './SimulationAbout';
+import SimulationAbout, { SimulationStats } from './SimulationAbout';
 import './Simulation.css';
 
 type FilterOption = 'all' | DocCategory;
@@ -41,6 +41,9 @@ export default function Simulation() {
               All materials are published as soon as they become available.
             </p>
           </div>
+
+          {/* ── STATS (visible on every tab) ── */}
+          <SimulationStats />
 
           {/* Tab switcher */}
           <div className="sc-sim__tabs" role="tablist" aria-label="Simulation sections">
