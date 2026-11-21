@@ -50,4 +50,3 @@ temp/
 # Other stuff
 .wrangler/
 .dev.vars
-/public/images/simulation

@@ -53,9 +53,9 @@ export const latestMeetingPhoto: SimulationPicture = {
 export const picturesIntro = 'As part of meetings, we usually record pictures of the starts of our meetings to record attendance. Here are some of them.';
 
 export const pictures: SimulationPicture[] = [
-  { src: '/public/images/simulation/Meeting1.jpg', alt: '', caption: 'Meeting Last March 2025'},
-  { src: '/public/images/simulation/Meeting4.jpg', alt: '', caption: '10/19/26 Meeting' },
-  { src: '/public/images/simulation/Meeting2.jpg', alt: '', caption: '10/29/26 Meeting' },
+  { src: '/images/simulation/Meeting1.jpg', alt: '', caption: 'Meeting Last March 2025'},
+  { src: '/images/simulation/Meeting4.jpg', alt: '', caption: '10/19/26 Meeting' },
+  { src: '/images/simulation/Meeting2.jpg', alt: '', caption: '10/29/26 Meeting' },
 ];
 
 // ── Stats ── (shown under the overview at the top of the Simulation page, above the tabs)
