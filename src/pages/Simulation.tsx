@@ -37,8 +37,8 @@ export default function Simulation() {
             <div className="sc-sim__intro">
               <p>Council Bulletin Board</p>
               <p>
-                Sim-Civics began as a city council simulation club at Harvard-Westlake. That simulation is
-                still ongoing! This page documents all the documents and agendas for the simulation session. 
+                Sim-Civics began as a student-run city council simulation club at Harvard-Westlake. That simulation is
+                still ongoing! This page documents all the documents and agendas for the simulation session in the city of Wimbishville. 
                 All materials are published as soon as they become available.
               </p>
             </div>

@@ -72,7 +72,7 @@ function statColor(pct: number, higherIsBetter: boolean) {
 export function SimulationStats() {
   return (
     <section aria-labelledby="sc-about-stats" className="sc-sim__section">
-      <h2 id="sc-about-stats" className="sc-sim__heading">Current City Statistics</h2>
+      <h2 id="sc-about-stats" className="sc-sim__heading">Current Simulated City Statistics</h2>
       <p className="sc-sim__sub">
         <Text value={statsIntro} fallback="A line introducing the stats." />
       </p>

@@ -122,7 +122,7 @@ export default function Home() {
           </div>
 
           <p className="sc-home__about-text">
-            Sim-Civics was started by a group of 3 individuals (Yaroslav Milakin, Hal Craig, and
+            Sim-Civics was started by a group of 3 young students (Yaroslav Milakin, Hal Craig, and
             Ethan Bai) who saw a big gap in civic education: Modern curricula barely cover local
             government and how it works! Given that local government affects everything from taxes
             to the stop signs placed around your block, we wanted to create a place where people can
