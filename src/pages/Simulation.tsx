@@ -3,7 +3,7 @@ import { FileText, Info, Users } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
 import { documents, uploadedDate, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
-import SimulationAbout, { SimulationStats } from './SimulationAbout';
+import SimulationAbout, { LatestMeetingPhoto, SimulationStats } from './SimulationAbout';
 import './Simulation.css';
 
 type FilterOption = 'all' | DocCategory;
@@ -33,13 +33,16 @@ export default function Simulation() {
 
       <main className="sc-sim">
         <div className="sc-sim__inner">
-          <div className="sc-sim__intro">
-            <p>Council Bulletin Board</p>
-            <p>
-              Sim-Civics began as a city council simulation club at Harvard-Westlake. That simulation is
-              still ongoing! This page documents all the documents and agendas for the simulation session. 
-              All materials are published as soon as they become available.
-            </p>
+          <div className="sc-sim__hero">
+            <div className="sc-sim__intro">
+              <p>Council Bulletin Board</p>
+              <p>
+                Sim-Civics began as a city council simulation club at Harvard-Westlake. That simulation is
+                still ongoing! This page documents all the documents and agendas for the simulation session. 
+                All materials are published as soon as they become available.
+              </p>
+            </div>
+            <LatestMeetingPhoto />
           </div>
 
           {/* ── STATS (visible on every tab) ── */}

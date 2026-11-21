@@ -1,5 +1,17 @@
 import { useRef, useState } from 'react';
-import { ImageIcon } from 'lucide-react';
+import {
+  ArrowRight,
+  Camera,
+  FilePen,
+  ImageIcon,
+  Landmark,
+  MessagesSquare,
+  RotateCcw,
+  Stamp,
+  TrendingUp,
+  Vote,
+  type LucideIcon,
+} from 'lucide-react';
 import {
   howItWorksIntro,
   howItWorksSteps,
@@ -7,7 +19,9 @@ import {
   pictures,
   statsIntro,
   stats,
+  latestMeetingPhoto,
   type SimulationPicture,
+  type StepIcon,
 } from '../data/simulationAbout';
 
 // The "About the Simulation" tab (plus the stats block shown above the tabs). All text and pictures come from src/data/simulationAbout.ts;
@@ -15,6 +29,35 @@ import {
 
 function Text({ value, fallback }: { value: string; fallback: string }) {
   return value ? <>{value}</> : <span className="sc-about__placeholder">{fallback}</span>;
+}
+
+const stepIcons: Record<StepIcon, LucideIcon> = {
+  submit: FilePen,
+  debate: MessagesSquare,
+  vote: Vote,
+  sign: Stamp,
+  stats: TrendingUp,
+  council: Landmark,
+};
+
+// Framed photo from the latest meeting, shown beside the page intro.
+export function LatestMeetingPhoto() {
+  const pic = latestMeetingPhoto;
+  return (
+    <figure className="sc-sim__hero-photo">
+      <div className="sc-sim__hero-frame">
+        {pic.src ? (
+          <img src={pic.src} alt={pic.alt} className="sc-sim__hero-img" />
+        ) : (
+          <div className="sc-sim__hero-img sc-sim__hero-img--empty" aria-hidden="true">
+            <Camera size={40} />
+            <span>Latest meeting photo</span>
+          </div>
+        )}
+      </div>
+      {pic.caption && <figcaption className="sc-sim__hero-caption">{pic.caption}</figcaption>}
+    </figure>
+  );
 }
 
 // Muted red → green. `pct` is 0-100; when lower is better the scale is flipped,
@@ -86,21 +129,43 @@ export default function SimulationAbout() {
           <Text value={howItWorksIntro} fallback="Intro paragraph about how the simulation works." />
         </p>
 
-        <ol className="sc-about__steps">
-          {howItWorksSteps.map((step, i) => (
-            <li key={i} className="sc-about__step">
-              <span className="sc-about__step-num" aria-hidden="true">{i + 1}</span>
-              <div>
-                <h3 className="sc-about__step-title">
-                  <Text value={step.title} fallback={`Step ${i + 1} title`} />
-                </h3>
-                <p className="sc-about__step-text">
-                  <Text value={step.text} fallback="What happens in this step." />
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
+        <div className="sc-about__flow">
+          <ol className="sc-about__steps">
+            {howItWorksSteps.map((step, i) => {
+              const Icon = stepIcons[step.icon] ?? Landmark;
+              return (
+                <li key={i} className="sc-about__step">
+                  <div className="sc-about__step-badge" aria-hidden="true">
+                    <Icon size={34} strokeWidth={1.75} />
+                    <span className="sc-about__step-num">{i + 1}</span>
+                  </div>
+                  <h3 className="sc-about__step-title">
+                    <Text value={step.title} fallback={`Step ${i + 1} title`} />
+                  </h3>
+                  <p className="sc-about__step-text">
+                    <Text value={step.text} fallback="What happens in this step." />
+                  </p>
+                  {i < howItWorksSteps.length - 1 && (
+                    <span className="sc-about__step-arrow" aria-hidden="true">
+                      <ArrowRight size={38} strokeWidth={2.25} />
+                    </span>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+
+          {/* Loop back from the last step to the first: the process repeats */}
+          {howItWorksSteps.length > 1 && (
+            <div className="sc-about__loop">
+              <span className="sc-about__loop-line" aria-hidden="true" />
+              <span className="sc-about__loop-label">
+                <RotateCcw size={18} strokeWidth={2.25} aria-hidden="true" />
+                Repeat: back to step 1 for the next ordinance
+              </span>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* ── PICTURES ── */}
