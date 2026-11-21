@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { FileText, Users } from 'lucide-react';
+import { FileText, Info, Users } from 'lucide-react';
 import DocumentCard from '../components/DocumentCard';
 import { documents, uploadedDate, type DocCategory } from '../data/documents';
 import { leadershipPositions, getInitials } from '../data/leadership';
+import SimulationAbout, { LatestMeetingPhoto, SimulationStats } from './SimulationAbout';
 import './Simulation.css';
 
 type FilterOption = 'all' | DocCategory;
@@ -15,7 +16,7 @@ const filterOptions: { value: FilterOption; label: string }[] = [
 
 export default function Simulation() {
   const [filter, setFilter] = useState<FilterOption>('all');
-  const [activeTab, setActiveTab] = useState<'bulletin' | 'leadership'>('bulletin');
+  const [activeTab, setActiveTab] = useState<'bulletin' | 'leadership' | 'about'>('bulletin');
 
   const filtered = filter === 'all'
     ? documents
@@ -32,14 +33,20 @@ export default function Simulation() {
 
       <main className="sc-sim">
         <div className="sc-sim__inner">
-          <div className="sc-sim__intro">
-            <p>Council Bulletin Board</p>
-            <p>
-              Sim-Civics began as a city council simulation club at Harvard-Westlake. That simulation is
-              still ongoing! This page documents all the documents and agendas for the simulation session. 
-              All materials are published as soon as they become available.
-            </p>
+          <div className="sc-sim__hero">
+            <div className="sc-sim__intro">
+              <p>Council Bulletin Board</p>
+              <p>
+                Sim-Civics began as a city council simulation club at Harvard-Westlake. That simulation is
+                still ongoing! This page documents all the documents and agendas for the simulation session. 
+                All materials are published as soon as they become available.
+              </p>
+            </div>
+            <LatestMeetingPhoto />
           </div>
+
+          {/* ── STATS (visible on every tab) ── */}
+          <SimulationStats />
 
           {/* Tab switcher */}
           <div className="sc-sim__tabs" role="tablist" aria-label="Simulation sections">
@@ -60,6 +67,15 @@ export default function Simulation() {
             >
               <Users size={18} aria-hidden="true" />
               Leadership Roster
+            </button>
+            <button
+              role="tab"
+              aria-selected={activeTab === 'about'}
+              className={`sc-sim__tab ${activeTab === 'about' ? 'sc-sim__tab--active' : ''}`}
+              onClick={() => setActiveTab('about')}
+            >
+              <Info size={18} aria-hidden="true" />
+              About the Simulation
             </button>
           </div>
 
@@ -128,6 +144,9 @@ export default function Simulation() {
               </div>
             </section>
           )}
+
+          {/* ── ABOUT THE SIMULATION ── */}
+          {activeTab === 'about' && <SimulationAbout />}
         </div>
       </main>
     </>

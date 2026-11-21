@@ -27,6 +27,53 @@
   letter-spacing: -0.03em;
 }
 
+/* Intro + latest meeting photo side by side */
+.sc-sim__hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: max(32px, calc(var(--u) * 80));
+}
+.sc-sim__hero .sc-sim__intro { flex: 1 1 0; }
+.sc-sim__hero-photo {
+  flex: 0 1 min(44%, 500px);
+  margin: 0;
+}
+.sc-sim__hero-frame {
+  padding: 10px;
+  background: #fff;
+  border: 4px solid #b86a6a; /* muted red */
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 20, 60, 0.25);
+}
+.sc-sim__hero-img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.sc-sim__hero-img--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: #f1e6e6;
+  color: #9a6464;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 15px;
+}
+.sc-sim__hero-caption {
+  margin-top: 10px;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+}
+@media (max-width: 800px) {
+  .sc-sim__hero { flex-direction: column; }
+  .sc-sim__hero-photo { flex: none; width: 100%; }
+}
+
 /* ── Tabs ── */
 .sc-sim__tabs {
   display: flex;
@@ -233,4 +280,301 @@
 @media (max-width: 800px) {
   .sc-sim__tab { font-size: 17px; padding: 12px 20px; }
   .sc-leader { padding: 18px; }
+}
+
+/* ═══ About the Simulation tab (SimulationAbout.tsx) ═══ */
+.sc-about__placeholder {
+  display: inline-block;
+  padding: 0 6px;
+  border: 1px dashed currentColor;
+  border-radius: 4px;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ── How it works ── */
+.sc-about__steps {
+  list-style: none;
+  margin-top: 36px;
+  padding: 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 260px);
+  justify-content: start;
+  gap: var(--arrow-gap);
+}
+.sc-about__step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 18px 22px;
+  background: #fff;
+  border-radius: 12px;
+  color: #1e1e1e;
+}
+.sc-about__step-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--sc-blue-tint);
+  color: var(--sc-blue);
+}
+.sc-about__step-num {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: #b86a6a;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+}
+.sc-about__step-title {
+  margin-top: 18px;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--sc-blue);
+}
+.sc-about__step-text {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #333;
+}
+/* Arrow sits in the gap between this step and the next */
+.sc-about__step-arrow {
+  position: absolute;
+  top: 50%; /* vertically centred on the card */
+  right: calc(var(--arrow-gap) / -2);
+  transform: translate(50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--sc-red-tint);
+  color: #9a4f4f;
+  box-shadow: 0 4px 12px rgba(0, 20, 60, 0.25);
+}
+@media (max-width: 1100px) {
+  .sc-about__steps {
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    max-width: 480px;
+  }
+  .sc-about__step-arrow {
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: calc(var(--arrow-gap) / -2);
+    transform: translate(-50%, 50%) rotate(90deg);
+  }
+}
+
+/* Loop-back arrow: from under step 4, along the bottom, up into step 1 */
+.sc-about__flow {
+  --arrow-gap: 92px;
+  --loop-color: #e2a9a9; /* muted red, readable on the blue */
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 16px;
+}
+.sc-about__loop {
+  position: relative;
+  height: 96px;
+  margin-top: 10px;
+}
+.sc-about__loop-line {
+  position: absolute;
+  top: 14px; /* room for the arrowhead */
+  bottom: 22px;
+  /* centre of the first card to centre of the last card (4 cards, 3 gaps) */
+  left: calc((100% - 3 * var(--arrow-gap)) / 8);
+  right: calc((100% - 3 * var(--arrow-gap)) / 8);
+  border: 4px solid var(--loop-color);
+  border-top: none;
+  border-radius: 0 0 22px 22px;
+}
+/* Arrowhead pointing up into step 1 */
+.sc-about__loop-line::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: -4px;
+  transform: translateX(-50%);
+  margin-left: 2px;
+  border: 11px solid transparent;
+  border-top: none;
+  border-bottom: 16px solid var(--loop-color);
+}
+.sc-about__loop-label {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--sc-red-tint);
+  color: #8a4545;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(0, 20, 60, 0.25);
+}
+@media (max-width: 1100px) {
+  /* Stacked steps: no room for a loop line, so just show the repeat marker */
+  .sc-about__flow { --arrow-gap: 96px; width: auto; max-width: 480px; }
+  .sc-about__loop { height: auto; margin-top: 24px; text-align: center; }
+  .sc-about__loop-line { display: none; }
+  .sc-about__loop-label {
+    position: static;
+    transform: none;
+    white-space: normal;
+    text-align: left;
+  }
+}
+
+/* ── Pictures ── */
+.sc-about__gallery {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 20px;
+}
+.sc-about__figure { margin: 0; }
+.sc-about__photo-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  background: none;
+  overflow: hidden;
+  cursor: zoom-in;
+}
+.sc-about__photo-btn:hover { border-color: var(--sc-red); }
+.sc-about__photo-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+.sc-about__photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+}
+.sc-about__photo--empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px dashed rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+}
+.sc-about__caption {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.sc-about__lightbox {
+  max-width: min(1100px, calc(100vw - 32px));
+  max-height: calc(100vh - 32px);
+  margin: auto;
+  padding: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+}
+.sc-about__lightbox::backdrop { background: rgba(0, 0, 0, 0.75); }
+.sc-about__lightbox figure { margin: 0; }
+.sc-about__lightbox img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(100vh - 160px);
+  margin: 0 auto;
+}
+.sc-about__lightbox figcaption { margin-top: 10px; color: #333; }
+.sc-about__lightbox-close {
+  margin-top: 12px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background: var(--sc-blue);
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ── Stats ── */
+.sc-about__stats {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 20px;
+}
+.sc-about__stat {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  background: #fff;
+  border-radius: 8px;
+  color: #1e1e1e;
+}
+.sc-about__stat-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.2;
+  color: #333;
+}
+.sc-about__stat-value {
+  margin: 6px 0 0;
+  font-family: 'Inclusive Sans', system-ui, sans-serif;
+  font-size: max(36px, calc(var(--u) * 64));
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--sc-blue);
+}
+.sc-about__stat-track {
+  margin: 14px 0 0;
+  height: 10px;
+  border-radius: 999px;
+  background: #e6e8ec;
+  overflow: hidden;
+}
+.sc-about__stat-bar {
+  height: 100%;
+  border-radius: inherit;
+}
+.sc-about__stat-desc {
+  margin: 12px 0 0;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #55606f;
 }
