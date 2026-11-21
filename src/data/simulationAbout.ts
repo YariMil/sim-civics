@@ -39,9 +39,9 @@ export const howItWorksSteps: HowItWorksStep[] = [
 export const picturesIntro = 'As part of meetings, we usually record pictures of the starts of our meetings to record attendance. Here are some of them.';
 
 export const pictures: SimulationPicture[] = [
-  { src: '/simulation/Meeting1.jpg', alt: '', caption: '' },
-  { src: 'Meeting2.jpg', alt: '', caption: '' },
-  { src: 'Meeting3.jpg', alt: '', caption: '' },
+  { src: '/public/images/simulation/Meeting1.jpg', alt: '', caption: 'Meeting Last March 2025'},
+  { src: '/public/images/simulation/Meeting4.jpg', alt: '', caption: '10/19/26 Meeting' },
+  { src: '/public/images/simulation/Meeting2.jpg', alt: '', caption: '10/29/26 Meeting' },
 ];
 
 // ── Stats ──
